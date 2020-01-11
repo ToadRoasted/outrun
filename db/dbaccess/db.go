@@ -13,6 +13,8 @@ import (
 var db *sql.DB
 var DatabaseIsBusy = false
 
+// TODO: Reimplement all the database access functions here for MySQL.
+
 func Set(bucket, key string, value []byte) error {
 	CheckIfDBSet()
 	/*value = Compress(value) // compress the input first
@@ -60,7 +62,7 @@ func Delete(bucket, key string) error {
 
 func ForEachKey(bucket string, each func(k, v []byte) error) error {
 	CheckIfDBSet()
-	/*err := db.View(func(tx *bolt.Tx) error {
+	/*err := db.View(func(tx *sql.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		err2 := b.ForEach(each)
 		return err2
