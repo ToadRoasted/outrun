@@ -3,7 +3,7 @@ package netobj
 import (
     "time"
 
-    "github.com/KaoNinjaratzu/outrun/obj"
+    "github.com/Mtbcooler/outrun/obj"
 )
 
 type MileageMapState struct {

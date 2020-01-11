@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/KaoNinjaratzu/outrun/enums"
+	"github.com/Mtbcooler/outrun/enums"
 )
 
 type OperatorMessage struct {

@@ -1,7 +1,7 @@
 package netobj
 
 import (
-    "github.com/KaoNinjaratzu/outrun/logic/roulette"
+    "github.com/Mtbcooler/outrun/logic/roulette"
 )
 
 type ChaoRouletteGroup struct {

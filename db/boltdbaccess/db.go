@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/KaoNinjaratzu/outrun/db/dbaccess"
+	"github.com/Mtbcooler/outrun/db/dbaccess"
 
 	bolt "go.etcd.io/bbolt"
 
-	"github.com/KaoNinjaratzu/outrun/consts"
+	"github.com/Mtbcooler/outrun/consts"
 )
 
 var db *bolt.DB

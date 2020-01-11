@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/KaoNinjaratzu/outrun/enums"
+	"github.com/Mtbcooler/outrun/enums"
 )
 
 var CharacterMap = map[string]string{ // TODO: move to consts?

@@ -1,7 +1,7 @@
 package netobj
 
 import (
-	"github.com/KaoNinjaratzu/outrun/config/gameconf"
+	"github.com/Mtbcooler/outrun/config/gameconf"
 )
 
 type PlayerVarious struct {

@@ -4,9 +4,9 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/KaoNinjaratzu/outrun/config"
-	"github.com/KaoNinjaratzu/outrun/enums"
-	"github.com/KaoNinjaratzu/outrun/obj"
+	"github.com/Mtbcooler/outrun/config"
+	"github.com/Mtbcooler/outrun/enums"
+	"github.com/Mtbcooler/outrun/obj"
 )
 
 /*

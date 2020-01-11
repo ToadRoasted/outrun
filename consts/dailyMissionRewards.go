@@ -1,6 +1,6 @@
 package consts
 
-import "github.com/KaoNinjaratzu/outrun/enums"
+import "github.com/Mtbcooler/outrun/enums"
 
 // Change these to alter the item types and counts for each day
 var DailyMissionRewards = []int64{

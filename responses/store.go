@@ -1,9 +1,9 @@
 package responses
 
 import (
-    "github.com/KaoNinjaratzu/outrun/netobj"
-    "github.com/KaoNinjaratzu/outrun/obj"
-    "github.com/KaoNinjaratzu/outrun/responses/responseobjs"
+    "github.com/Mtbcooler/outrun/netobj"
+    "github.com/Mtbcooler/outrun/obj"
+    "github.com/Mtbcooler/outrun/responses/responseobjs"
 )
 
 type RedStarExchangeListResponse struct {

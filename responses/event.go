@@ -2,8 +2,8 @@ package responses
 
 import (
 
-    "github.com/KaoNinjaratzu/outrun/obj"
-    "github.com/KaoNinjaratzu/outrun/responses/responseobjs"
+    "github.com/Mtbcooler/outrun/obj"
+    "github.com/Mtbcooler/outrun/responses/responseobjs"
 )
 
 type EventListResponse struct {

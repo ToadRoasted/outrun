@@ -3,7 +3,7 @@ package rpcobj
 import (
     "strconv"
 
-    "github.com/KaoNinjaratzu/outrun/db"
+    "github.com/Mtbcooler/outrun/db"
 )
 
 func (t *Toolbox) GetUsername(uid string, reply *ToolboxReply) error {

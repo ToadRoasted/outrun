@@ -1,7 +1,7 @@
 package constobjs
 
 import (
-    "github.com/KaoNinjaratzu/outrun/obj"
+    "github.com/Mtbcooler/outrun/obj"
 )
 
 var DefaultInformations = []obj.Information{

@@ -1,6 +1,6 @@
 package constobjs
 
-import "github.com/KaoNinjaratzu/outrun/obj"
+import "github.com/Mtbcooler/outrun/obj"
 
 var DefaultLeagueDataMode0 = obj.NewLeagueData(
     0,

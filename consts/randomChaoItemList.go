@@ -1,6 +1,6 @@
 package consts
 
-import "github.com/KaoNinjaratzu/outrun/enums"
+import "github.com/Mtbcooler/outrun/enums"
 
 type PrizeInfo struct {
 	AppearanceChance float64 // % chance for it to be chosen to be in wheel by the server

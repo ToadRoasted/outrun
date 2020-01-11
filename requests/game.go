@@ -1,6 +1,6 @@
 package requests
 
-import "github.com/KaoNinjaratzu/outrun/netobj"
+import "github.com/Mtbcooler/outrun/netobj"
 
 type QuickPostGameResultsRequest struct {
 	Base
