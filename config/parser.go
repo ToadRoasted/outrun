@@ -29,10 +29,10 @@ var Defaults = map[string]interface{}{
 	"DSilenceGameConfigErrors":     false,
 	"DCampaignConfigFilename":      "campaign_config.json",
 	"DSilenceCampaignConfigErrors": false,
-	"DMySQLServerAddress":          "localhost:3306",
-	"DMySQLUsername":               "root",
-	"DMySQLPassword":               "Qy88%!@8pAaQ",
-	"DMySQLDatabaseName":           "MySQL80",
+	"DMySQLServerAddress":          "",
+	"DMySQLUsername":               "outrun",
+	"DMySQLPassword":               "FoundDeadYetAgainInMiami",
+	"DMySQLDatabaseName":           "outrun",
 }
 
 var CFile ConfigFile
