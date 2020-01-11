@@ -3,6 +3,7 @@ package dbaccess
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -77,11 +78,17 @@ func ForEachLogic(each func(tx *sql.Tx) error) error {
 
 func CheckIfDBSet() {
 	if db == nil {
+		log.Println("Connecting to MySQL database...")
 		sqldb, err := sql.Open("mysql", config.CFile.MySQLUsername+":"+config.CFile.MySQLPassword+"@"+config.CFile.MySQLServerAddress+"/"+config.CFile.MySQLDatabaseName)
 		if err != nil {
 			panic(err)
 		}
+		err = sqldb.Ping()
+		if err != nil {
+			panic(err)
+		}
 		db = sqldb
+		log.Println("Successfully connected to database!")
 	}
 }
 

@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Mtbcooler/outrun/db/dbaccess"
+
 	"github.com/Mtbcooler/outrun/bgtasks"
 	"github.com/Mtbcooler/outrun/config"
 	"github.com/Mtbcooler/outrun/config/campaignconf"
@@ -124,6 +126,8 @@ func main() {
 	} else {
 		log.Printf("[INFO] Campaign config file (%s) loaded\n", config.CFile.CampaignConfigFilename)
 	}
+
+	dbaccess.CheckIfDBSet() // make sure we can connect to the mysql database
 
 	if config.CFile.EnableRPC {
 		orpc.Start()
