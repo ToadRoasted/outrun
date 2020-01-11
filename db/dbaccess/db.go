@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/Mtbcooler/outrun/config"
+	_ "github.com/go-sql-driver/mysql"
 
-	mysql "github.com/go-sql-driver/mysql"
+	"github.com/Mtbcooler/outrun/config"
 )
 
-var db *mysql.DB
+var db *sql.DB
 var DatabaseIsBusy = false
 
 func Set(bucket, key string, value []byte) error {
@@ -68,7 +68,7 @@ func ForEachKey(bucket string, each func(k, v []byte) error) error {
 	return nil
 }
 
-func ForEachLogic(each func(tx *bolt.Tx) error) error {
+func ForEachLogic(each func(tx *sql.Tx) error) error {
 	CheckIfDBSet()
 	/*err := db.View(each)
 	return err*/

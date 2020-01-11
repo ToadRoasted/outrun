@@ -1,4 +1,4 @@
-package dbaccess
+package boltdbaccess
 
 import (
 	"errors"
@@ -80,4 +80,11 @@ func CheckIfDBSet() {
 		}
 		db = bdb
 	}
+}
+
+func CloseDB() error {
+	if db != nil {
+		return db.Close()
+	}
+	return errors.New("cannot close database if it's not set!")
 }
