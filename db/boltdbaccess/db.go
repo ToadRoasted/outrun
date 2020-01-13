@@ -4,8 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/Mtbcooler/outrun/db/dbaccess"
-
 	bolt "go.etcd.io/bbolt"
 
 	"github.com/Mtbcooler/outrun/consts"
@@ -16,7 +14,7 @@ var DatabaseIsBusy = false
 
 func Set(bucket, key string, value []byte) error {
 	CheckIfDBSet()
-	value = dbaccess.Compress(value) // compress the input first
+	value = Compress(value) // compress the input first
 	err := db.Update(func(tx *bolt.Tx) error {
 		bucket, err := tx.CreateBucketIfNotExists([]byte(bucket))
 		if err != nil {
@@ -42,7 +40,7 @@ func Get(bucket, key string) ([]byte, error) {
 		}
 		return nil
 	})
-	result, derr := dbaccess.Decompress(value) // decompress the result
+	result, derr := Decompress(value) // decompress the result
 	if derr != nil {
 		return result, derr
 	}
@@ -86,5 +84,5 @@ func CloseDB() error {
 	if db != nil {
 		return db.Close()
 	}
-	return errors.New("cannot close database if it's not set!")
+	return errors.New("cannot close database if it's not set")
 }

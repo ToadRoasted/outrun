@@ -1,4 +1,4 @@
-package dbaccess
+package boltdbaccess
 
 import (
 	"bytes"
