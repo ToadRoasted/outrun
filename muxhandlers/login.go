@@ -94,7 +94,7 @@ func Login(helper *helper.Helper) {
 		if request.Password == logic.GenerateLoginPasskey(player) {
 			baseInfo.StatusCode = status.OK
 			baseInfo.SetErrorMessage(emess.OK)
-			sid, err := db.AssignSessionID(uid)
+			sid, err := db.BoltAssignSessionID(uid)
 			if err != nil {
 				helper.InternalErr("Error assigning session ID", err)
 				return
@@ -363,7 +363,7 @@ func Migration(helper *helper.Helper) {
 				helper.InternalErr("Error saving player", err)
 				return
 			}
-			sid, err := db.AssignSessionID(migratePlayer.ID)
+			sid, err := db.BoltAssignSessionID(migratePlayer.ID)
 			if err != nil {
 				helper.InternalErr("Error assigning session ID", err)
 				return

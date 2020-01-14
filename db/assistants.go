@@ -111,12 +111,38 @@ func NewAccount() netobj.Player {
 }
 
 func SavePlayer(player netobj.Player) error {
-	j, err := json.Marshal(player)
+	playerInfo := netobj.PlayerInfo{
+		player.ID,
+		player.Username,
+		player.Password,
+		player.MigrationPassword,
+		player.UserPassword,
+		player.Key,
+		player.LastLogin,
+	}
+	err := dbaccess.Set(consts.DBMySQLTableCorePlayerInfo, player.ID, playerInfo)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBBucketPlayers, player.ID, j)
+	err = dbaccess.Set(consts.DBMySQLTablePlayerStates, player.ID, player.PlayerState)
+	if err != nil {
+		return err
+	}
+	err = dbaccess.Set(consts.DBMySQLTableMileageMapStates, player.ID, player.MileageMapState)
+	if err != nil {
+		return err
+	}
+	err = dbaccess.Set(consts.DBMySQLTableOptionUserResults, player.ID, player.OptionUserResult)
+	if err != nil {
+		return err
+	}
+	err = dbaccess.Set(consts.DBMySQLTableRouletteInfos, player.ID, player.RouletteInfo)
+	if err != nil {
+		return err
+	}
+	err = dbaccess.Set(consts.DBMySQLTableLoginBonusStates, player.ID, player.LoginBonusState)
 	return err
+	// TODO: Add in the rest of the saving!
 }
 
 func BoltSavePlayer(player netobj.Player) error {
@@ -129,12 +155,7 @@ func BoltSavePlayer(player netobj.Player) error {
 }
 
 func GetPlayer(uid string) (netobj.Player, error) {
-	var player netobj.Player
-	playerData, err := dbaccess.Get(consts.DBBucketPlayers, uid)
-	if err != nil {
-		return constnetobjs.BlankPlayer, err
-	}
-	err = json.Unmarshal(playerData, &player)
+	player, err := dbaccess.GetPlayerFromDB(uid)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
@@ -155,16 +176,8 @@ func BoltGetPlayer(uid string) (netobj.Player, error) {
 }
 
 func GetPlayerBySessionID(sid string) (netobj.Player, error) {
-	sidResult, err := dbaccess.Get(consts.DBBucketSessionIDs, sid)
-	if err != nil {
-		return constnetobjs.BlankPlayer, err
-	}
-	uid, _ := ParseSIDEntry(sidResult)
-	player, err := GetPlayer(uid)
-	if err != nil {
-		return constnetobjs.BlankPlayer, err
-	}
-	return player, nil
+	// TODO: Implement this!
+	return constnetobjs.BlankPlayer, nil
 }
 
 func BoltGetPlayerBySessionID(sid string) (netobj.Player, error) {
@@ -181,14 +194,8 @@ func BoltGetPlayerBySessionID(sid string) (netobj.Player, error) {
 }
 
 func AssignSessionID(uid string) (string, error) {
-	uidB := []byte(uid)
-	hash := md5.Sum(uidB)
-	hashStr := fmt.Sprintf("%x", hash)
-	sid := fmt.Sprintf(SessionIDSchema, hashStr)
-	value := fmt.Sprintf("%s/%s", uid, time.Now().Unix()) // register the time that the session ID was assigned
-	valueB := []byte(value)
-	err := dbaccess.Set(consts.DBBucketSessionIDs, sid, valueB)
-	return sid, err
+	// TODO: Implement this!
+	return "", nil
 }
 
 func BoltAssignSessionID(uid string) (string, error) {
@@ -218,12 +225,8 @@ func IsValidSessionTime(sessionTime int64) bool {
 }
 
 func IsValidSessionID(sid []byte) (bool, error) {
-	sidResult, err := dbaccess.Get(consts.DBBucketSessionIDs, string(sid))
-	if err != nil {
-		return false, err
-	}
-	_, sessionTime := ParseSIDEntry(sidResult)
-	return IsValidSessionTime(sessionTime), err
+	// TODO: Implement this!
+	return false, nil
 }
 
 func BoltIsValidSessionID(sid []byte) (bool, error) {
@@ -236,7 +239,7 @@ func BoltIsValidSessionID(sid []byte) (bool, error) {
 }
 
 func PurgeSessionID(sid string) error {
-	err := dbaccess.Delete(consts.DBBucketSessionIDs, sid)
+	err := dbaccess.Delete(consts.DBMySQLTableSessionIDs, sid)
 	return err
 }
 

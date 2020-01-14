@@ -11,6 +11,7 @@ import (
 	"github.com/Mtbcooler/outrun/config/gameconf"
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
+	"github.com/Mtbcooler/outrun/db/boltdbaccess"
 	"github.com/Mtbcooler/outrun/db/dbaccess"
 	"github.com/Mtbcooler/outrun/logic"
 	"github.com/Mtbcooler/outrun/netobj"
@@ -205,8 +206,9 @@ func (t *Toolbox) Debug_UsernameSearch(username string, reply *ToolboxReply) err
 	return nil
 }
 
+// TODO: Convert this to using the MySQL database!
 func (t *Toolbox) Debug_RawPlayer(uid string, reply *ToolboxReply) error {
-	playerSrc, err := dbaccess.Get(consts.DBBucketPlayers, uid)
+	playerSrc, err := boltdbaccess.Get(consts.DBBucketPlayers, uid)
 	if err != nil {
 		reply.Status = StatusOtherError
 		reply.Info = err.Error()

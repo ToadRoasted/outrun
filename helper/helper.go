@@ -180,7 +180,7 @@ func (r *Helper) GetCallingPlayer() (netobj.Player, error) {
 		return constnetobjs.BlankPlayer, err
 	}
 	sid := request.SessionID
-	player, err := db.GetPlayerBySessionID(sid)
+	player, err := db.BoltGetPlayerBySessionID(sid)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}

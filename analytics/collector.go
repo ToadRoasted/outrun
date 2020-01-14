@@ -9,8 +9,10 @@ import (
 	"github.com/Mtbcooler/outrun/analytics/factors"
 	"github.com/Mtbcooler/outrun/config"
 	"github.com/Mtbcooler/outrun/consts"
-	"github.com/Mtbcooler/outrun/db/dbaccess"
+	"github.com/Mtbcooler/outrun/db/boltdbaccess"
 )
+
+// TODO: Convert this to using the MySQL database ASAP!
 
 func Store(pid string, atype int, value ...int64) (bool, error) {
 	if !config.CFile.EnableAnalytics {
@@ -20,7 +22,7 @@ func Store(pid string, atype int, value ...int64) (bool, error) {
 		log.Println("analytics.Store", pid, atype, value)
 	}
 	found := true
-	data, err := dbaccess.Get(consts.DBBucketAnalytics, pid)
+	data, err := boltdbaccess.Get(consts.DBBucketAnalytics, pid)
 	var aggret anobj.Aggret
 	if err != nil {
 		// player isn't found, so make a new Aggret
@@ -86,7 +88,7 @@ func Store(pid string, atype int, value ...int64) (bool, error) {
 	if err != nil {
 		return found, err
 	}
-	err = dbaccess.Set(consts.DBBucketAnalytics, pid, jdata)
+	err = boltdbaccess.Set(consts.DBBucketAnalytics, pid, jdata)
 	if err != nil {
 		return found, err
 	}
@@ -96,7 +98,7 @@ func Store(pid string, atype int, value ...int64) (bool, error) {
 
 func Get(pid string, atype int) (int64, bool, error) {
 	found := true
-	data, err := dbaccess.Get(consts.DBBucketAnalytics, pid)
+	data, err := boltdbaccess.Get(consts.DBBucketAnalytics, pid)
 	var aggret anobj.Aggret
 	if err != nil {
 		// player isn't found, so make a new Aggret
