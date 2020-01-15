@@ -5,14 +5,16 @@ import (
 
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
-	"github.com/Mtbcooler/outrun/db/dbaccess"
+	"github.com/Mtbcooler/outrun/db/boltdbaccess"
 	"github.com/Mtbcooler/outrun/netobj"
 )
+
+// TODO: Make these use the MySQL database instead!
 
 func FindPlayersByPassword(password string, silent bool) ([]netobj.Player, error) {
 	playerIDs := []string{}
 	players := []netobj.Player{}
-	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+	boltdbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})
@@ -35,7 +37,7 @@ func FindPlayersByPassword(password string, silent bool) ([]netobj.Player, error
 func FindPlayersByMigrationPassword(password string, silent bool) ([]netobj.Player, error) {
 	playerIDs := []string{}
 	players := []netobj.Player{}
-	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+	boltdbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})

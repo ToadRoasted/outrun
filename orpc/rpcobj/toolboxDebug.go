@@ -12,13 +12,14 @@ import (
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
 	"github.com/Mtbcooler/outrun/db/boltdbaccess"
-	"github.com/Mtbcooler/outrun/db/dbaccess"
 	"github.com/Mtbcooler/outrun/logic"
 	"github.com/Mtbcooler/outrun/netobj"
 	"github.com/Mtbcooler/outrun/netobj/constnetobjs"
 	"github.com/Mtbcooler/outrun/obj"
 	"github.com/Mtbcooler/outrun/obj/constobjs"
 )
+
+// TODO: Some of these are still using the BoltDB database in places, which WILL cause problems!
 
 func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
@@ -34,7 +35,7 @@ func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error
 
 func (t *Toolbox) Debug_GetAllPlayerIDs(nothing bool, reply *ToolboxReply) error {
 	playerIDs := []string{}
-	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+	boltdbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})
@@ -180,7 +181,7 @@ func (t *Toolbox) Debug_MigrateUser(uidToUID string, reply *ToolboxReply) error 
 
 func (t *Toolbox) Debug_UsernameSearch(username string, reply *ToolboxReply) error {
 	playerIDs := []string{}
-	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+	boltdbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})
@@ -388,7 +389,7 @@ func (t *Toolbox) Debug_FixWerehogRedRings(uids string, reply *ToolboxReply) err
 // This code ain't pretty, and takes a long time to execute depending on how many players are in the database!
 func (t *Toolbox) Debug_SendOperatorMessageToAll(args SendOperatorMessageToAllArgs, reply *ToolboxReply) error {
 	playerIDs := []string{}
-	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+	boltdbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})

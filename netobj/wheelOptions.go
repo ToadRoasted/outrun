@@ -14,17 +14,17 @@ import (
 )
 
 type WheelOptions struct {
-	Items                []string   `json:"items"`
-	Item                 []int64    `json:"item"`
-	ItemWeight           []int64    `json:"itemWeight"`
-	ItemWon              int64      `json:"itemWon"`
-	NextFreeSpin         int64      `json:"nextFreeSpin"` // midnight (start of next day)
-	SpinCost             int64      `json:"spinCost"`
-	RouletteRank         int64      `json:"rouletteRank"`
-	NumRouletteToken     int64      `json:"numRouletteToken"`
-	NumJackpotRing       int64      `json:"numJackpotRing"`
-	NumRemainingRoulette int64      `json:"numRemainingRoulette"`
-	ItemList             []obj.Item `json:"itemList"`
+	Items                []string   `json:"items" db:"items"`
+	Item                 []int64    `json:"item" db:"item"`
+	ItemWeight           []int64    `json:"itemWeight" db:"item_weight"`
+	ItemWon              int64      `json:"itemWon" db:"item_won"`
+	NextFreeSpin         int64      `json:"nextFreeSpin" db:"next_free_spin"` // midnight (start of next day)
+	SpinCost             int64      `json:"spinCost" db:"spin_cost"`
+	RouletteRank         int64      `json:"rouletteRank" db:"roulette_rank"`
+	NumRouletteToken     int64      `json:"numRouletteToken" db:"num_roulette_token"`
+	NumJackpotRing       int64      `json:"numJackpotRing" db:"num_jackpot_ring"`
+	NumRemainingRoulette int64      `json:"numRemainingRoulette" db:"num_remaining_roulette"`
+	ItemList             []obj.Item `json:"itemList" db:"item_list"`
 }
 
 func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank, freeSpins int64) WheelOptions {

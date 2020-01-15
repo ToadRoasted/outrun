@@ -112,7 +112,6 @@ func NewAccount() netobj.Player {
 
 func SavePlayer(player netobj.Player) error {
 	playerInfo := netobj.PlayerInfo{
-		player.ID,
 		player.Username,
 		player.Password,
 		player.MigrationPassword,

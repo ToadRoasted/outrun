@@ -5,12 +5,12 @@ import (
 )
 
 type LoginBonusState struct {
-	CurrentFirstLoginBonusDay int64 `json:"currentFirstLoginBonusDay"` // this doesn't get reset when the login bonus resets
-	CurrentLoginBonusDay      int64 `json:"currentLoginBonusDay"`
-	LastLoginBonusTime        int64 `json:"lastLoginBonusTime"`
-	NextLoginBonusTime        int64 `json:"nextLoginBonusTime"`
-	LoginBonusStartTime       int64 `json:"loginBonusStartTime"`
-	LoginBonusEndTime         int64 `json:"loginBonusEndTime"`
+	CurrentFirstLoginBonusDay int64 `json:"currentFirstLoginBonusDay" db:"current_start_dash_bonus_day"` // this doesn't get reset when the login bonus resets
+	CurrentLoginBonusDay      int64 `json:"currentLoginBonusDay" db:"current_login_bonus_day"`
+	LastLoginBonusTime        int64 `json:"lastLoginBonusTime" db:"last_login_bonus_time"`
+	NextLoginBonusTime        int64 `json:"nextLoginBonusTime" db:"next_login_bonus_time"`
+	LoginBonusStartTime       int64 `json:"loginBonusStartTime" db:"login_bonus_start_time"`
+	LoginBonusEndTime         int64 `json:"loginBonusEndTime" db:"login_bonus_end_time"`
 }
 
 func NewLoginBonusState(cflbd, clbd, llbt, nlbt, lbst, lbet int64) LoginBonusState {

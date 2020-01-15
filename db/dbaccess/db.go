@@ -1,16 +1,16 @@
 package dbaccess
 
 import (
-	"database/sql"
 	"errors"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/Mtbcooler/outrun/config"
 )
 
-var db *sql.DB
+var db *sqlx.DB
 var DatabaseIsBusy = false
 
 func Set(table, id string, value interface{}) error {
@@ -28,6 +28,11 @@ func Set(table, id string, value interface{}) error {
 		return nil
 	})
 	return err*/
+	/*tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()*/
 
 	return nil
 }
@@ -42,29 +47,32 @@ func Get(table, id string) (interface{}, error) {
 	return values, nil
 }
 
+func GetNamed(table, id string, t interface{}) (interface{}, error) {
+	CheckIfDBSet()
+	var values interface{}
+	stmt, err := db.PrepareNamed("SELECT * FROM " + table + " WHERE id = " + id)
+	if err != nil {
+		return nil, err
+	}
+	err = stmt.QueryRow(t).Scan(&values)
+	if err != nil {
+		return nil, err
+	}
+	_ = stmt.Close()
+	return values, nil
+}
+
 func Delete(table, id string) error {
 	CheckIfDBSet()
 	_, err := db.Exec("DELETE FROM ? WHERE id = ?", table, id)
 	return err
 }
 
-func ForEachKey(bucket string, each func(k, v []byte) error) error {
-	CheckIfDBSet()
-	// TODO: Reimplement if possible
-	return nil
-}
-
-func ForEachLogic(each func(tx *sql.Tx) error) error {
-	CheckIfDBSet()
-	// TODO: Reimplement if possible
-	return nil
-}
-
 func CheckIfDBSet() {
 	if db == nil {
 		log.Println("Connecting to MySQL database...")
 
-		sqldb, err := sql.Open("mysql", config.CFile.MySQLUsername+":"+config.CFile.MySQLPassword+"@"+config.CFile.MySQLServerAddress+"/"+config.CFile.MySQLDatabaseName)
+		sqldb, err := sqlx.Open("mysql", config.CFile.MySQLUsername+":"+config.CFile.MySQLPassword+"@"+config.CFile.MySQLServerAddress+"/"+config.CFile.MySQLDatabaseName)
 		if err != nil {
 			log.Println("Failed to open a connection! Check your MySQL settings in config.json for any errors.")
 			panic(err)

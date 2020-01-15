@@ -8,17 +8,17 @@ import (
 )
 
 type ChaoWheelOptions struct {
-	Rarity               []int64        `json:"rarity"`
-	ItemWeight           []int64        `json:"itemWeight"`
-	CampaignList         []obj.Campaign `json:"campaignList"`
-	SpinCost             int64          `json:"spinCost"`
-	ChaoRouletteType     int64          `json:"chaoRouletteType"` // value from enums.ChaoWheelType*
-	NumSpecialEgg        int64          `json:"numSpecialEgg"`
-	RouletteAvailable    int64          `json:"rouletteAvailable"`    // flag
-	NumChaoRouletteToken int64          `json:"numChaoRouletteToken"` // number of premium roulette tickets
-	NumChaoRoulette      int64          `json:"numChaoRoulette"`      // == 0 --> chaoWheelOptions.IsTutorial
-	StartTime            int64          `json:"startTime"`            // TODO: Is this needed?
-	EndTime              int64          `json:"endTime"`              // TODO: Is this needed?
+	Rarity               []int64        `json:"rarity" db:"rarity"`
+	ItemWeight           []int64        `json:"itemWeight" db:"item_weight"`
+	CampaignList         []obj.Campaign `json:"campaignList" db:"campaign_list"`
+	SpinCost             int64          `json:"spinCost" db:"spin_cost"`
+	ChaoRouletteType     int64          `json:"chaoRouletteType" db:"chao_roulette_type"` // value from enums.ChaoWheelType*
+	NumSpecialEgg        int64          `json:"numSpecialEgg" db:"num_special_egg"`
+	RouletteAvailable    int64          `json:"rouletteAvailable" db:"roulette_available"`         // flag
+	NumChaoRouletteToken int64          `json:"numChaoRouletteToken" db:"num_chao_roulette_token"` // number of premium roulette tickets
+	NumChaoRoulette      int64          `json:"numChaoRoulette" db:"num_chao_roulette"`            // == 0 --> chaoWheelOptions.IsTutorial
+	StartTime            int64          `json:"startTime" db:"start_time"`                         // TODO: Is this needed?
+	EndTime              int64          `json:"endTime" db:"end_time"`                             // TODO: Is this needed?
 }
 
 func NewChaoWheelOptions(rarity, itemWeight []int64, campaignList []obj.Campaign, spinCost, chaoRouletteType, numSpecialEgg, rouletteAvailable, numChaoRouletteToken, numChaoRoulette, startTime, endTime int64) ChaoWheelOptions {
