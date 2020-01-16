@@ -1,6 +1,7 @@
 package dbaccess
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"strings"
@@ -34,8 +35,8 @@ func Set(table, column, id string, value interface{}) error {
 
 func SetPlayerInfo(table, id string, value netobj.PlayerInfo) error {
 	CheckIfDBSet()
-	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login)\n"+
-		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login)",
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login, characters, chao)\n"+
+		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login, :characters, :chao)",
 		value)
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
@@ -115,8 +116,10 @@ func Get(table, column, id string) (interface{}, error) {
 
 func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	CheckIfDBSet()
-	values := netobj.PlayerInfo{"", "", "", "", "", 0}
+	values := netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}
 	var id2 int64
+	var characters []byte
+	var chao []byte
 	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
 		&values.Username,
 		&values.Password,
@@ -124,9 +127,19 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 		&values.UserPassword,
 		&values.Key,
 		&values.LastLogin,
+		&characters,
+		&chao,
 	)
 	if err != nil {
-		return netobj.PlayerInfo{"", "", "", "", "", 0}, err
+		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
+	}
+	err = json.Unmarshal(characters, &values.CharacterState)
+	if err != nil {
+		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
+	}
+	err = json.Unmarshal(chao, &values.ChaoState)
+	if err != nil {
+		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
 	}
 	return values, nil
 }
@@ -173,6 +186,7 @@ func GetPlayerState(table, id string) (netobj.PlayerState, error) {
 		&values.NextNumDailyChallenge,
 		&values.LeagueHighScore,
 		&values.QuickLeagueHighScore,
+		&values.LeagueResetTime,
 	)
 	if err != nil {
 		return netobj.DefaultPlayerState(), err

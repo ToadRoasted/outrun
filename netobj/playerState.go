@@ -57,6 +57,7 @@ type PlayerState struct {
 	NextNumDailyChallenge  int64      `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
 	LeagueHighScore        int64      `json:"leagueHighScore" db:"league_high_score"`
 	QuickLeagueHighScore   int64      `json:"quickLeagueHighScore" db:"quick_league_high_score"`
+	LeagueResetTime        int64      `json:"leagueResetTime" db:"league_reset_time"`
 }
 
 type SqlCompatiblePlayerState struct {
@@ -98,6 +99,7 @@ type SqlCompatiblePlayerState struct {
 	NextNumDailyChallenge  int64  `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
 	LeagueHighScore        int64  `json:"leagueHighScore" db:"league_high_score"`
 	QuickLeagueHighScore   int64  `json:"quickLeagueHighScore" db:"quick_league_high_score"`
+	LeagueResetTime        int64  `json:"leagueResetTime" db:"league_reset_time"`
 }
 
 func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerState {
@@ -142,6 +144,7 @@ func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerSt
 		ps.NextNumDailyChallenge,
 		ps.LeagueHighScore,
 		ps.QuickLeagueHighScore,
+		ps.LeagueResetTime,
 	}
 }
 
@@ -188,6 +191,7 @@ func SQLCompatiblePlayerStateToPlayerState(ps SqlCompatiblePlayerState) PlayerSt
 		ps.NextNumDailyChallenge,
 		ps.LeagueHighScore,
 		ps.QuickLeagueHighScore,
+		ps.LeagueResetTime,
 	}
 }
 
@@ -239,6 +243,7 @@ func DefaultPlayerState() PlayerState {
 	nextNumDailyChallenge := int64(1)
 	leagueHighScore := int64(0)
 	quickLeagueHighScore := int64(0)
+	leagueResetTime := now.EndOfWeek().UTC().Unix()
 	return PlayerState{
 		items,
 		equippedItemIDs,
@@ -277,5 +282,6 @@ func DefaultPlayerState() PlayerState {
 		nextNumDailyChallenge,
 		leagueHighScore,
 		quickLeagueHighScore,
+		leagueResetTime,
 	}
 }

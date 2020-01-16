@@ -118,6 +118,8 @@ func SavePlayer(player netobj.Player) error {
 		player.UserPassword,
 		player.Key,
 		player.LastLogin,
+		player.CharacterState,
+		player.ChaoState,
 	}
 	err := dbaccess.SetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, player.ID, playerInfo)
 	if err != nil {

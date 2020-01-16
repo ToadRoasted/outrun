@@ -20,8 +20,6 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	characterstate := netobj.DefaultCharacterState() // TODO: REPLACE ME! FOR TESTING ONLY!
-	chaostate := constnetobjs.DefaultChaoState()     // TODO: REPLACE ME! FOR TESTING ONLY!
 	mileagemapstate, err := GetMileageMapState(consts.DBMySQLTableMileageMapStates, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
@@ -37,12 +35,12 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 	}
 	allowedCharacters := []string{}
 	allowedChao := []string{}
-	for _, chao := range chaostate {
+	for _, chao := range playerinfo.ChaoState {
 		if chao.Level < 10 { // not max level
 			allowedChao = append(allowedChao, chao.ID)
 		}
 	}
-	for _, character := range characterstate {
+	for _, character := range playerinfo.CharacterState {
 		if character.Star < 10 { // not max star
 			allowedCharacters = append(allowedCharacters, character.ID)
 		}
@@ -60,8 +58,8 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 		playerinfo.UserPassword,
 		playerinfo.Key,
 		playerstate,
-		characterstate,
-		chaostate,
+		playerinfo.CharacterState,
+		playerinfo.ChaoState,
 		mileagemapstate,
 		[]netobj.MileageFriend{},
 		netobj.DefaultPlayerVarious(),
