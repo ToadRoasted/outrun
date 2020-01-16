@@ -119,27 +119,27 @@ func SavePlayer(player netobj.Player) error {
 		player.Key,
 		player.LastLogin,
 	}
-	err := dbaccess.Set(consts.DBMySQLTableCorePlayerInfo, player.ID, playerInfo)
+	err := dbaccess.SetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, player.ID, playerInfo)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBMySQLTablePlayerStates, player.ID, player.PlayerState)
+	err = dbaccess.SetPlayerState(consts.DBMySQLTablePlayerStates, player.ID, player.PlayerState)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBMySQLTableMileageMapStates, player.ID, player.MileageMapState)
+	err = dbaccess.SetMileageMapState(consts.DBMySQLTableMileageMapStates, player.ID, player.MileageMapState)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBMySQLTableOptionUserResults, player.ID, player.OptionUserResult)
+	err = dbaccess.SetOptionUserResult(consts.DBMySQLTableOptionUserResults, player.ID, player.OptionUserResult)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBMySQLTableRouletteInfos, player.ID, player.RouletteInfo)
+	err = dbaccess.SetRouletteInfo(consts.DBMySQLTableRouletteInfos, player.ID, player.RouletteInfo)
 	if err != nil {
 		return err
 	}
-	err = dbaccess.Set(consts.DBMySQLTableLoginBonusStates, player.ID, player.LoginBonusState)
+	err = dbaccess.SetLoginBonusState(consts.DBMySQLTableLoginBonusStates, player.ID, player.LoginBonusState)
 	return err
 	// TODO: Add in the rest of the saving!
 }
@@ -204,7 +204,7 @@ func BoltAssignSessionID(uid string) (string, error) {
 	sid := fmt.Sprintf(SessionIDSchema, hashStr)
 	value := fmt.Sprintf("%s/%s", uid, time.Now().Unix()) // register the time that the session ID was assigned
 	valueB := []byte(value)
-	err := dbaccess.Set(consts.DBBucketSessionIDs, sid, valueB)
+	err := boltdbaccess.Set(consts.DBBucketSessionIDs, sid, valueB)
 	return sid, err
 }
 

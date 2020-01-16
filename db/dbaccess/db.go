@@ -3,6 +3,11 @@ package dbaccess
 import (
 	"errors"
 	"log"
+	"strings"
+
+	"github.com/Mtbcooler/outrun/consts"
+
+	"github.com/Mtbcooler/outrun/netobj"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -13,58 +18,246 @@ import (
 var db *sqlx.DB
 var DatabaseIsBusy = false
 
-func Set(table, id string, value interface{}) error {
-	CheckIfDBSet()
-	/*value = Compress(value) // compress the input first
-	err := db.Update(func(tx *bolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists([]byte(bucket))
-		if err != nil {
-			return err
-		}
-		err = bucket.Put([]byte(key), value)
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	return err*/
-	/*tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()*/
-
-	return nil
+type BaseSQLData struct {
+	ID string `db:"id"`
 }
 
-func Get(table, id string) (interface{}, error) {
+func Set(table, column, id string, value interface{}) error {
 	CheckIfDBSet()
-	var values interface{}
-	err := db.QueryRow("SELECT * FROM ? WHERE id = ?", table, id).Scan(&values)
+	result, err := db.Exec("REPLACE INTO `?` (id, ?) VALUES (?, ?)", table, column, id, value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] Set operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetPlayerInfo(table, id string, value netobj.PlayerInfo) error {
+	CheckIfDBSet()
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login)\n"+
+		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login)",
+		value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetPlayerInfo operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetPlayerState(table, id string, value netobj.PlayerState) error {
+	CheckIfDBSet()
+	sqldata := netobj.PlayerStateToSQLCompatiblePlayerState(value)
+	result, err := db.NamedExec("REPLACE INTO `"+table+"` "+strings.Replace(consts.SQLPlayerStatesInsertTypeSchema, ":id", id, 1), sqldata)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetPlayerState operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetMileageMapState(table, id string, value netobj.MileageMapState) error {
+	CheckIfDBSet()
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, map_distance, num_boss_attack, stage_distance, stage_max_score, episode, chapter, point, stage_total_score, chapter_start_time)\n"+
+		"VALUES ("+id+", :map_distance, :num_boss_attack, :stage_distance, :stage_max_score, :episode, :chapter, :point, :stage_total_score, :chapter_start_time)",
+		value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetMileageMapState operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetOptionUserResult(table, id string, value netobj.OptionUserResult) error {
+	CheckIfDBSet()
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, high_total_score, high_quick_total_score, total_rings, total_red_rings, chao_roulette_spin_count, roulette_spin_count, num_jackpots, best_jackpot, support)\n"+
+		"VALUES ("+id+", :high_total_score, :high_quick_total_score, :total_rings, :total_red_rings, :chao_roulette_spin_count, :roulette_spin_count, :num_jackpots, :best_jackpot, :support)",
+		value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetOptionUserResult operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetRouletteInfo(table, id string, value netobj.RouletteInfo) error {
+	CheckIfDBSet()
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, roulette_period_end, roulette_count_in_period, got_jackpot_this_period)\n"+
+		"VALUES ("+id+", :roulette_period_end, :roulette_count_in_period, :got_jackpot_this_period)",
+		value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetRouletteInfo operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetLoginBonusState(table, id string, value netobj.LoginBonusState) error {
+	CheckIfDBSet()
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, current_start_dash_bonus_day, current_login_bonus_day, last_login_bonus_time, next_login_bonus_time, login_bonus_start_time, login_bonus_end_time)\n"+
+		"VALUES ("+id+", :current_start_dash_bonus_day, :current_login_bonus_day, :last_login_bonus_time, :next_login_bonus_time, :login_bonus_start_time, :login_bonus_end_time)",
+		value)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetLoginBonusState operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func Get(table, column, id string) (interface{}, error) {
+	CheckIfDBSet()
+	var value interface{}
+	err := db.QueryRow("SELECT "+column+" FROM `"+table+"` WHERE id = ?", id).Scan(&value)
 	if err != nil {
 		return nil, err
+	}
+	return value, nil
+}
+
+func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
+	CheckIfDBSet()
+	values := netobj.PlayerInfo{"", "", "", "", "", 0}
+	var id2 int64
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.Username,
+		&values.Password,
+		&values.MigrationPassword,
+		&values.UserPassword,
+		&values.Key,
+		&values.LastLogin,
+	)
+	if err != nil {
+		return netobj.PlayerInfo{"", "", "", "", "", 0}, err
 	}
 	return values, nil
 }
 
-func GetNamed(table, id string, t interface{}) (interface{}, error) {
+func GetPlayerState(table, id string) (netobj.PlayerState, error) {
 	CheckIfDBSet()
-	var values interface{}
-	stmt, err := db.PrepareNamed("SELECT * FROM " + table + " WHERE id = " + id)
+	values := netobj.PlayerStateToSQLCompatiblePlayerState(netobj.DefaultPlayerState())
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(
+		&values.ID,
+		&values.Items,
+		&values.EquippedItemIDs,
+		&values.MainCharaID,
+		&values.SubCharaID,
+		&values.MainChaoID,
+		&values.SubChaoID,
+		&values.NumRings,
+		&values.NumBuyRings,
+		&values.NumRedRings,
+		&values.NumBuyRedRings,
+		&values.Energy,
+		&values.EnergyBuy,
+		&values.EnergyRenewsAt,
+		&values.MumMessages,
+		&values.RankingLeague,
+		&values.QuickRankingLeague,
+		&values.NumRouletteTicket,
+		&values.NumChaoRouletteTicket,
+		&values.ChaoEggs,
+		&values.HighScore,
+		&values.TimedHighScore,
+		&values.TotalDistance,
+		&values.HighDistance,
+		&values.DailyMissionID,
+		&values.DailyMissionEndTime,
+		&values.DailyChallengeValue,
+		&values.DailyChallengeComplete,
+		&values.NumDailyChallenge,
+		&values.NumPlaying,
+		&values.Animals,
+		&values.Rank,
+		&values.DailyChalCatNum,
+		&values.DailyChalSetNum,
+		&values.DailyChalPosNum,
+		&values.NextNumDailyChallenge,
+		&values.LeagueHighScore,
+		&values.QuickLeagueHighScore,
+	)
 	if err != nil {
-		return nil, err
+		return netobj.DefaultPlayerState(), err
 	}
-	err = stmt.QueryRow(t).Scan(&values)
+	return netobj.SQLCompatiblePlayerStateToPlayerState(values), nil
+}
+
+func GetMileageMapState(table, id string) (netobj.MileageMapState, error) {
+	CheckIfDBSet()
+	values := netobj.DefaultMileageMapState()
+	var id2 int64
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.MapDistance,
+		&values.NumBossAttack,
+		&values.StageDistance,
+		&values.StageMaxScore,
+		&values.Episode,
+		&values.Chapter,
+		&values.Point,
+		&values.StageTotalScore,
+		&values.ChapterStartTime,
+	)
 	if err != nil {
-		return nil, err
+		return netobj.DefaultMileageMapState(), err
 	}
-	_ = stmt.Close()
+	return values, nil
+}
+
+func GetOptionUserResult(table, id string) (netobj.OptionUserResult, error) {
+	CheckIfDBSet()
+	values := netobj.DefaultOptionUserResult()
+	var id2 int64
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.TotalSumHighScore,
+		&values.QuickTotalSumHighScore,
+		&values.NumTakeAllRings,
+		&values.NumTakeAllRedRings,
+		&values.NumChaoRoulette,
+		&values.NumItemRoulette,
+		&values.NumJackpot,
+		&values.NumMaximumJackpotRings,
+		&values.NumSupport,
+	)
+	if err != nil {
+		return netobj.DefaultOptionUserResult(), err
+	}
+	return values, nil
+}
+
+func GetRouletteInfo(table, id string) (netobj.RouletteInfo, error) {
+	CheckIfDBSet()
+	values := netobj.DefaultRouletteInfo()
+	var id2 int64
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.RoulettePeriodEnd,
+		&values.RouletteCountInPeriod,
+		&values.GotJackpotThisPeriod,
+	)
+	if err != nil {
+		return netobj.DefaultRouletteInfo(), err
+	}
+	return values, nil
+}
+
+func GetLoginBonusState(table, id string) (netobj.LoginBonusState, error) {
+	CheckIfDBSet()
+	values := netobj.DefaultLoginBonusState(0)
+	var id2 int64
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.CurrentFirstLoginBonusDay,
+		&values.CurrentLoginBonusDay,
+		&values.LastLoginBonusTime,
+		&values.NextLoginBonusTime,
+		&values.LoginBonusStartTime,
+		&values.LoginBonusEndTime,
+	)
+	if err != nil {
+		return netobj.DefaultLoginBonusState(0), err
+	}
 	return values, nil
 }
 
 func Delete(table, id string) error {
 	CheckIfDBSet()
-	_, err := db.Exec("DELETE FROM ? WHERE id = ?", table, id)
+	_, err := db.Exec("DELETE FROM `"+table+"` WHERE id = ?", id)
 	return err
 }
 

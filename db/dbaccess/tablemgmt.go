@@ -1,7 +1,7 @@
 package dbaccess
 
 import (
-	"reflect"
+	"log"
 
 	"github.com/Mtbcooler/outrun/config/eventconf"
 	"github.com/Mtbcooler/outrun/consts"
@@ -12,44 +12,29 @@ import (
 )
 
 func GetPlayerFromDB(id string) (netobj.Player, error) {
-	var playerinfo netobj.PlayerInfo
-	var playerstate netobj.PlayerState
-	var characterstate []netobj.Character
-	var chaostate []netobj.Chao
-	var mileagemapstate netobj.MileageMapState
-	var optionuserresult netobj.OptionUserResult
-	var wheeloptions netobj.WheelOptions
-	var rouletteinfo netobj.RouletteInfo
-	var chaoroulettedata netobj.ChaoRouletteGroup
-	var loginbonusstate netobj.LoginBonusState
-	playerinfoI, err := GetNamed(consts.DBMySQLTableCorePlayerInfo, id, reflect.TypeOf(playerinfo))
+	playerinfo, err := GetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	playerinfo = playerinfoI.(netobj.PlayerInfo)
-	playerstateI, err := GetNamed(consts.DBMySQLTablePlayerStates, id, reflect.TypeOf(playerstate))
+	playerstate, err := GetPlayerState(consts.DBMySQLTablePlayerStates, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	playerstate = playerstateI.(netobj.PlayerState)
-	characterstate = netobj.DefaultCharacterState() // TODO: REPLACE ME! FOR TESTING ONLY!
-	chaostate = constnetobjs.DefaultChaoState()     // TODO: REPLACE ME! FOR TESTING ONLY!
-	mileagemapstateI, err := GetNamed(consts.DBMySQLTableMileageMapStates, id, reflect.TypeOf(mileagemapstate))
+	characterstate := netobj.DefaultCharacterState() // TODO: REPLACE ME! FOR TESTING ONLY!
+	chaostate := constnetobjs.DefaultChaoState()     // TODO: REPLACE ME! FOR TESTING ONLY!
+	mileagemapstate, err := GetMileageMapState(consts.DBMySQLTableMileageMapStates, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	mileagemapstate = mileagemapstateI.(netobj.MileageMapState)
-	optionuserresultI, err := GetNamed(consts.DBMySQLTableOptionUserResults, id, reflect.TypeOf(optionuserresult))
+	optionuserresult, err := GetOptionUserResult(consts.DBMySQLTableOptionUserResults, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	optionuserresult = optionuserresultI.(netobj.OptionUserResult)
-	wheeloptions = netobj.DefaultWheelOptions(playerstate.NumRouletteTicket, 0, enums.WheelRankNormal, 5) // TODO: REPLACE ME! FOR TESTING ONLY!
-	rouletteinfoI, err := GetNamed(consts.DBMySQLTableRouletteInfos, id, reflect.TypeOf(rouletteinfo))
+	wheeloptions := netobj.DefaultWheelOptions(playerstate.NumRouletteTicket, 0, enums.WheelRankNormal, 5) // TODO: REPLACE ME! FOR TESTING ONLY!
+	rouletteinfo, err := GetRouletteInfo(consts.DBMySQLTableRouletteInfos, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	rouletteinfo = rouletteinfoI.(netobj.RouletteInfo)
 	allowedCharacters := []string{}
 	allowedChao := []string{}
 	for _, chao := range chaostate {
@@ -62,12 +47,11 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 			allowedCharacters = append(allowedCharacters, character.ID)
 		}
 	}
-	chaoroulettedata = netobj.DefaultChaoRouletteGroup(playerstate, allowedCharacters, allowedChao) // TODO: REPLACE ME! FOR TESTING ONLY!
-	loginbonusstateI, err := GetNamed(consts.DBMySQLTableLoginBonusStates, id, reflect.TypeOf(loginbonusstate))
+	chaoroulettedata := netobj.DefaultChaoRouletteGroup(playerstate, allowedCharacters, allowedChao) // TODO: REPLACE ME! FOR TESTING ONLY!
+	loginbonusstate, err := GetLoginBonusState(consts.DBMySQLTableLoginBonusStates, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	loginbonusstate = loginbonusstateI.(netobj.LoginBonusState)
 	player := netobj.NewPlayer(
 		id,
 		playerinfo.Username,
@@ -91,4 +75,40 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 		loginbonusstate,
 	)
 	return player, nil
+}
+
+func InitializeTablesIfNecessary() error {
+	log.Println("[INFO] Initializing tables... (1/7)")
+	_, err := db.Exec(consts.SQLAnalyticsSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (2/7)")
+	_, err = db.Exec(consts.SQLCorePlayerInfoSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (3/7)")
+	_, err = db.Exec(consts.SQLPlayerStatesSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (4/7)")
+	_, err = db.Exec(consts.SQLMileageMapStatesSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (5/7)")
+	_, err = db.Exec(consts.SQLOptionUserResultsSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (6/7)")
+	_, err = db.Exec(consts.SQLRouletteInfosSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (7/7)")
+	_, err = db.Exec(consts.SQLLoginBonusStatesSchema)
+	return err
 }

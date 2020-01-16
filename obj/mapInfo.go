@@ -8,10 +8,10 @@ const (
 )
 
 type MapInfo struct {
-	MapDistance   int64 `json:"mapDistance"`   // used sparingly in game...?
-	NumBossAttack int64 `json:"numBossAttack"` // TODO: number of boss fights? Check how often this is used in game
-	StageDistance int64 `json:"stageDistance"` // TODO: discover use
-	StageMaxScore int64 `json:"stageMaxScore"` // TODO: discover use
+	MapDistance   int64 `json:"mapDistance" db:"map_distance"`      // used sparingly in game...?
+	NumBossAttack int64 `json:"numBossAttack" db:"num_boss_attack"` // TODO: number of boss fights? Check how often this is used in game
+	StageDistance int64 `json:"stageDistance" db:"stage_distance"`  // TODO: discover use
+	StageMaxScore int64 `json:"stageMaxScore" db:"stage_max_score"` // TODO: discover use
 }
 
 func DefaultMapInfo() MapInfo {

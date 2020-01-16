@@ -5,6 +5,6 @@ type PlayerInfo struct {
 	Password          string `json:"password" db:"password"`
 	MigrationPassword string `json:"migrationPassword" db:"migrate_password"` // used in migration
 	UserPassword      string `json:"userPassword" db:"user_password"`         // used in migration
-	Key               string `json:"key" db:"key"`
+	Key               string `json:"key" db:"player_key"`
 	LastLogin         int64  `json:"lastLogin" db:"last_login"`
 }

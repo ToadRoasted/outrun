@@ -131,6 +131,10 @@ func main() {
 	}
 
 	dbaccess.CheckIfDBSet() // make sure we can connect to the mysql database
+	err = dbaccess.InitializeTablesIfNecessary()
+	if err != nil {
+		log.Printf("[WARN] Failed to initialize database; there may be problems! (%s)\n", err)
+	}
 
 	if config.CFile.EnableRPC {
 		orpc.Start()
