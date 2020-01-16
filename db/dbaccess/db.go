@@ -1,7 +1,6 @@
 package dbaccess
 
 import (
-	"encoding/json"
 	"errors"
 	"log"
 	"strings"
@@ -119,8 +118,6 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	CheckIfDBSet()
 	values := netobj.StoredPlayerInfo{"", "", "", "", "", 0, []byte{}, []byte{}}
 	var id2 int64
-	var characters []byte
-	var chao []byte
 	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
 		&values.Username,
 		&values.Password,
@@ -131,14 +128,6 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 		&values.CharacterState,
 		&values.ChaoState,
 	)
-	if err != nil {
-		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
-	}
-	err = json.Unmarshal(characters, &values.CharacterState)
-	if err != nil {
-		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
-	}
-	err = json.Unmarshal(chao, &values.ChaoState)
 	if err != nil {
 		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
 	}
