@@ -25,7 +25,7 @@ const (
 	CharaTypeTikal
 	CharaTypeMephiles
 	CharaTypePSISilver
-	CharaTypeAmitieAmy
+	CharaTypeAmitieAmy = iota + 301000 - 1 // 300021 is not the correct ID for Amitie Amy.
 	CharaTypeGothicAmy
 	CharaTypeHalloweenShadow
 	CharaTypeHalloweenRouge
