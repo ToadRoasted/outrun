@@ -35,9 +35,10 @@ func Set(table, column, id string, value interface{}) error {
 
 func SetPlayerInfo(table, id string, value netobj.PlayerInfo) error {
 	CheckIfDBSet()
+	convertedValue := netobj.PlayerInfoToStoredPlayerInfo(value)
 	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login, characters, chao)\n"+
 		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login, :characters, :chao)",
-		value)
+		convertedValue)
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
 		log.Printf("[DEBUG] SetPlayerInfo operation complete; %v rows affected\n", rowsAffected)
@@ -116,7 +117,7 @@ func Get(table, column, id string) (interface{}, error) {
 
 func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	CheckIfDBSet()
-	values := netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}
+	values := netobj.StoredPlayerInfo{"", "", "", "", "", 0, []byte{}, []byte{}}
 	var id2 int64
 	var characters []byte
 	var chao []byte
@@ -127,8 +128,8 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 		&values.UserPassword,
 		&values.Key,
 		&values.LastLogin,
-		&characters,
-		&chao,
+		&values.CharacterState,
+		&values.ChaoState,
 	)
 	if err != nil {
 		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
@@ -141,7 +142,7 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	if err != nil {
 		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
 	}
-	return values, nil
+	return netobj.StoredPlayerInfoToPlayerInfo(values), nil
 }
 
 func GetPlayerState(table, id string) (netobj.PlayerState, error) {
