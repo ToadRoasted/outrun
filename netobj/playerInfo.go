@@ -1,6 +1,9 @@
 package netobj
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"log"
+)
 
 type PlayerInfo struct {
 	Username          string      `json:"username" db:"username"`
@@ -25,8 +28,14 @@ type StoredPlayerInfo struct {
 }
 
 func PlayerInfoToStoredPlayerInfo(pli PlayerInfo) StoredPlayerInfo {
-	characterstate, _ := json.Marshal(pli.CharacterState)
-	chaostate, _ := json.Marshal(pli.ChaoState)
+	characterstate, err := json.Marshal(pli.CharacterState)
+	if err != nil {
+		log.Printf("[WARN] Couldn't marshal character state: %s\n", err)
+	}
+	chaostate, err := json.Marshal(pli.ChaoState)
+	if err != nil {
+		log.Printf("[WARN] Couldn't marshal chao state: %s\n", err)
+	}
 	return StoredPlayerInfo{
 		pli.Username,
 		pli.Password,
@@ -42,8 +51,14 @@ func PlayerInfoToStoredPlayerInfo(pli PlayerInfo) StoredPlayerInfo {
 func StoredPlayerInfoToPlayerInfo(pli StoredPlayerInfo) PlayerInfo {
 	var characterstate []Character
 	var chaostate []Chao
-	json.Unmarshal(pli.CharacterState, characterstate)
-	json.Unmarshal(pli.ChaoState, chaostate)
+	err := json.Unmarshal(pli.CharacterState, &characterstate)
+	if err != nil {
+		log.Printf("[WARN] Couldn't unmarshal character state: %s\n", err)
+	}
+	err = json.Unmarshal(pli.ChaoState, &chaostate)
+	if err != nil {
+		log.Printf("[WARN] Couldn't unmarshal chao state: %s\n", err)
+	}
 	return PlayerInfo{
 		pli.Username,
 		pli.Password,
