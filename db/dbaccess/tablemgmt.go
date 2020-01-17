@@ -76,37 +76,42 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 }
 
 func InitializeTablesIfNecessary() error {
-	log.Println("[INFO] Initializing tables... (1/7)")
+	log.Println("[INFO] Initializing tables... (1/8)")
 	_, err := db.Exec(consts.SQLAnalyticsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (2/7)")
+	log.Println("[INFO] Initializing tables... (2/8)")
 	_, err = db.Exec(consts.SQLCorePlayerInfoSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (3/7)")
+	log.Println("[INFO] Initializing tables... (3/8)")
 	_, err = db.Exec(consts.SQLPlayerStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (4/7)")
+	log.Println("[INFO] Initializing tables... (4/8)")
 	_, err = db.Exec(consts.SQLMileageMapStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (5/7)")
+	log.Println("[INFO] Initializing tables... (5/8)")
 	_, err = db.Exec(consts.SQLOptionUserResultsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (6/7)")
+	log.Println("[INFO] Initializing tables... (6/8)")
 	_, err = db.Exec(consts.SQLRouletteInfosSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (7/7)")
+	log.Println("[INFO] Initializing tables... (7/8)")
 	_, err = db.Exec(consts.SQLLoginBonusStatesSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (8/8)")
+	_, err = db.Exec(consts.SQLOperatorMessagesSchema)
 	return err
 }

@@ -31,8 +31,8 @@ func WeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode, ltype, param, st
 }
 
 func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) WeeklyLeaderboardOptionsResponse {
-	startTime := now.BeginningOfDay().UTC().Unix()
-	resetTime := startTime + 86400 // + 1 Day
+	startTime := now.BeginningOfWeek().UTC().Unix()
+	resetTime := now.EndOfWeek().UTC().Unix()
 	//ltype := int64(1)
 	ltype := int64(0)
 	//param := int64(0)
@@ -68,7 +68,7 @@ func WeeklyLeaderboardEntries(base responseobjs.BaseInfo, pe obj.LeaderboardEntr
 	return out
 }
 
-func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, player netobj.Player, mode int64) WeeklyLeaderboardEntriesResponse {
+func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, player netobj.Player, mode, ltype int64) WeeklyLeaderboardEntriesResponse {
 	startTime := now.BeginningOfWeek().UTC().Unix()
 	resetTime := now.EndOfWeek().UTC().Unix()
 	myEntry := conversion.PlayerToLeaderboardEntry(player, mode)
@@ -81,7 +81,7 @@ func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, player netobj.P
 		resetTime,
 		1,
 		mode,
-		0,
+		1,
 		[]obj.LeaderboardEntry{
 			myEntry,
 		},

@@ -74,6 +74,10 @@ func checkArgs() bool {
 			fmt.Printf("Outrun %s\n", meta.Version)
 			return true
 		}
+		if args[0] == "--migrate" {
+			fmt.Println("Unimplemented argument")
+			return true
+		}
 		fmt.Println("Unknown given arguments")
 		return true
 	}
@@ -133,7 +137,7 @@ func main() {
 	dbaccess.CheckIfDBSet() // make sure we can connect to the mysql database
 	err = dbaccess.InitializeTablesIfNecessary()
 	if err != nil {
-		log.Printf("[WARN] Failed to initialize database; there may be problems! (%s)\n", err)
+		log.Printf("[WARN] Failed to initialize tables; there may be problems! (%s)\n", err)
 	}
 
 	if config.CFile.EnableRPC {
@@ -224,7 +228,7 @@ func SetupShutdownHandler() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println("Shutting down...")
+		fmt.Println("\nShutting down...")
 		dbaccess.CloseDB()
 		boltdbaccess.CloseDB()
 		os.Exit(0)

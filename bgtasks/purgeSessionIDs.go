@@ -9,6 +9,6 @@ import (
 func PurgeSessionIDs() {
 	for true {
 		time.Sleep(10 * time.Minute)
-		db.PurgeAllExpiredSessionIDs()
+		db.BoltPurgeAllExpiredSessionIDs()
 	}
 }

@@ -18,8 +18,9 @@ import (
 var db *sqlx.DB
 var DatabaseIsBusy = false
 
-type BaseSQLData struct {
-	ID string `db:"id"`
+type AnalyticsEntry struct {
+	PID   string `db:"pid"`
+	Param []byte `db:"param"`
 }
 
 func Set(table, column, id string, value interface{}) error {
@@ -28,6 +29,22 @@ func Set(table, column, id string, value interface{}) error {
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
 		log.Printf("[DEBUG] Set operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetAnalyticsEntry(table, pid string, value []byte) error {
+	CheckIfDBSet()
+	entry := AnalyticsEntry{
+		pid,
+		value,
+	}
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(pid, param)\n"+
+		"VALUES (:pid, :param)",
+		entry)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetAnalyticsEntry operation complete; %v rows affected\n", rowsAffected)
 	}
 	return err
 }
@@ -112,6 +129,16 @@ func Get(table, column, id string) (interface{}, error) {
 		return nil, err
 	}
 	return value, nil
+}
+
+func GetAnalyticsEntry(table, pid string) ([]byte, error) {
+	CheckIfDBSet()
+	param := []byte{}
+	err := db.QueryRow("SELECT `param` FROM `"+table+"` WHERE pid = ?", pid).Scan(&param)
+	if err != nil {
+		return []byte{}, err
+	}
+	return param, nil
 }
 
 func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
@@ -267,20 +294,20 @@ func Delete(table, id string) error {
 
 func CheckIfDBSet() {
 	if db == nil {
-		log.Println("Connecting to MySQL database...")
+		log.Println("[INFO] Connecting to MySQL database...")
 
 		sqldb, err := sqlx.Open("mysql", config.CFile.MySQLUsername+":"+config.CFile.MySQLPassword+"@"+config.CFile.MySQLServerAddress+"/"+config.CFile.MySQLDatabaseName)
 		if err != nil {
-			log.Println("Failed to open a connection! Check your MySQL settings in config.json for any errors.")
+			log.Println("[FATAL] Failed to open a connection! Check your MySQL settings in config.json for any errors.")
 			panic(err)
 		}
 		err = sqldb.Ping()
 		if err != nil {
-			log.Println("Failed to connect! Please check your MySQL settings in config.json and try again.")
+			log.Println("[FATAL] Failed to connect! Please check your MySQL settings in config.json and try again.")
 			panic(err)
 		}
 		db = sqldb
-		log.Println("Successfully connected to database!")
+		log.Println("[INFO] Successfully connected to database!")
 	}
 }
 
@@ -289,4 +316,19 @@ func CloseDB() error {
 		return db.Close()
 	}
 	return errors.New("cannot close database if it's not set!")
+}
+
+/*func GetHighScores(mode, scoretype, limit int64) {
+	CheckIfDBSet()
+	leaderboardentries := []obj.LeaderboardEntry{}
+}*/
+
+func GetNumOfPlayers() (int64, error) {
+	CheckIfDBSet()
+	playercount := int64(0)
+	err := db.QueryRow("SELECT COUNT(*) FROM `" + consts.DBMySQLTablePlayerStates + "`").Scan(&playercount)
+	if err != nil {
+		return -1, err
+	}
+	return playercount, nil
 }

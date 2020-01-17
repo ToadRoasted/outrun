@@ -28,9 +28,9 @@ const (
 
 	SQLAnalyticsSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableAnalytics + ` (
-		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		param LONGTEXT NOT NULL,
-		PRIMARY KEY (id)
+		pid VARCHAR(20) NOT NULL,
+		param JSON,
+		PRIMARY KEY (pid)
 	) ENGINE = InnoDB;`
 	SQLCorePlayerInfoSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableCorePlayerInfo + ` (
@@ -133,6 +133,15 @@ const (
 		next_login_bonus_time BIGINT UNSIGNED NOT NULL,
 		login_bonus_start_time BIGINT UNSIGNED NOT NULL,
 		login_bonus_end_time BIGINT UNSIGNED NOT NULL,
+		PRIMARY KEY (id)
+	) ENGINE = InnoDB;`
+	SQLOperatorMessagesSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableOperatorMessages + ` (
+		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		userid BIGINT UNSIGNED NOT NULL,
+		contents TEXT,
+		item JSON,
+		expire_time BIGINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(

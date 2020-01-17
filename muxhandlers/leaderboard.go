@@ -40,9 +40,11 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
+	helper.DebugOut("Mode %v, type %v", request.Mode, request.Type)
 	mode := request.Mode
+	scoretype := request.Type
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultWeeklyLeaderboardEntries(baseInfo, player, mode)
+	response := responses.DefaultWeeklyLeaderboardEntries(baseInfo, player, mode, scoretype)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

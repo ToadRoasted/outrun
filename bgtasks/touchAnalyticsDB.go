@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/Mtbcooler/outrun/consts"
-	"github.com/Mtbcooler/outrun/db/boltdbaccess"
+	"github.com/Mtbcooler/outrun/db/dbaccess"
 )
 
 func TouchAnalyticsDB() {
-	err := boltdbaccess.Set(consts.DBMySQLTableAnalytics, "touch", []byte{})
+	err := dbaccess.SetAnalyticsEntry(consts.DBMySQLTableAnalytics, "touch", []byte{})
 	if err != nil {
-		log.Println("[ERR] Unable to touch " + consts.DBBucketAnalytics + ": " + err.Error())
+		log.Println("[ERR] Unable to touch " + consts.DBMySQLTableAnalytics + ": " + err.Error())
 	}
 }
