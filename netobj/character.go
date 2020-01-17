@@ -103,14 +103,14 @@ func UnlockedCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterTikal),
 		DefaultCharacter(constobjs.CharacterMephiles),
 		DefaultCharacter(constobjs.CharacterPSISilver),
-		DefaultCharacter(constobjs.CharacterAmitieAmy),
-		DefaultCharacter(constobjs.CharacterGothicAmy),
-		DefaultCharacter(constobjs.CharacterHalloweenShadow),
-		DefaultCharacter(constobjs.CharacterHalloweenRouge),
-		DefaultCharacter(constobjs.CharacterHalloweenOmega),
-		DefaultCharacter(constobjs.CharacterXMasSonic),
-		DefaultCharacter(constobjs.CharacterXMasTails),
-		DefaultCharacter(constobjs.CharacterXMasKnuckles),
+		/*		DefaultCharacter(constobjs.CharacterAmitieAmy),
+				DefaultCharacter(constobjs.CharacterGothicAmy),
+				DefaultCharacter(constobjs.CharacterHalloweenShadow),
+				DefaultCharacter(constobjs.CharacterHalloweenRouge),
+				DefaultCharacter(constobjs.CharacterHalloweenOmega),
+				DefaultCharacter(constobjs.CharacterXMasSonic),
+				DefaultCharacter(constobjs.CharacterXMasTails),
+				DefaultCharacter(constobjs.CharacterXMasKnuckles),*/
 	}
 }
 
@@ -140,13 +140,13 @@ func DefaultCharacterState() []Character {
 		DefaultLockedCharacter(constobjs.CharacterTikal),
 		DefaultLockedCharacter(constobjs.CharacterMephiles),
 		DefaultLockedCharacter(constobjs.CharacterPSISilver),
-		DefaultRouletteLockedCharacter(constobjs.CharacterAmitieAmy),
-		DefaultRouletteLockedCharacter(constobjs.CharacterGothicAmy),
-		DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenShadow),
-		DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenRouge),
-		DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenOmega),
-		DefaultRouletteLockedCharacter(constobjs.CharacterXMasSonic),
-		DefaultRouletteLockedCharacter(constobjs.CharacterXMasTails),
-		DefaultRouletteLockedCharacter(constobjs.CharacterXMasKnuckles),
+		/*		DefaultRouletteLockedCharacter(constobjs.CharacterAmitieAmy),
+				DefaultRouletteLockedCharacter(constobjs.CharacterGothicAmy),
+				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenShadow),
+				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenRouge),
+				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenOmega),
+				DefaultRouletteLockedCharacter(constobjs.CharacterXMasSonic),
+				DefaultRouletteLockedCharacter(constobjs.CharacterXMasTails),
+				DefaultRouletteLockedCharacter(constobjs.CharacterXMasKnuckles),*/
 	}
 }
