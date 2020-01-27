@@ -203,7 +203,10 @@ func GetPlayerState(table, id string) (netobj.PlayerState, error) {
 		&values.NextNumDailyChallenge,
 		&values.LeagueHighScore,
 		&values.QuickLeagueHighScore,
+		&values.LeagueStartTime,
 		&values.LeagueResetTime,
+		&values.RankingLeagueGroup,
+		&values.QuickRankingLeagueGroup,
 	)
 	if err != nil {
 		return netobj.DefaultPlayerState(), err
@@ -315,7 +318,7 @@ func CloseDB() error {
 	if db != nil {
 		return db.Close()
 	}
-	return errors.New("cannot close database if it's not set!")
+	return errors.New("cannot close database if it's not set")
 }
 
 /*func GetHighScores(mode, scoretype, limit int64) {

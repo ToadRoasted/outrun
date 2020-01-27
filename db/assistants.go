@@ -194,6 +194,20 @@ func BoltGetPlayerBySessionID(sid string) (netobj.Player, error) {
 	return player, nil
 }
 
+func GetPlayerIDBySessionID(sid string) (string, error) {
+	// TODO: Implement this!
+	return "0", nil
+}
+
+func BoltGetPlayerIDBySessionID(sid string) (string, error) {
+	sidResult, err := boltdbaccess.Get(consts.DBBucketSessionIDs, sid)
+	if err != nil {
+		return "0", err
+	}
+	uid, _ := ParseSIDEntry(sidResult)
+	return uid, nil
+}
+
 func AssignSessionID(uid string) (string, error) {
 	// TODO: Implement this!
 	return "", nil

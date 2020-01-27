@@ -13,8 +13,6 @@ const (
 	DBMySQLTableAnalytics          = "analytics"
 	DBMySQLTableCorePlayerInfo     = "player_info"
 	DBMySQLTablePlayerStates       = "player_states"
-	DBMySQLTableCharacterStates    = "player_characters"
-	DBMySQLTableChaoStates         = "player_chao"
 	DBMySQLTableMileageMapStates   = "player_mileage"
 	DBMySQLTableOptionUserResults  = "player_user_results"
 	DBMySQLTableLastWheelOptions   = "player_roulette_options"
@@ -24,6 +22,7 @@ const (
 	DBMySQLTablePersonalEvents     = "player_personal_events"
 	DBMySQLTableMessages           = "player_messages"
 	DBMySQLTableOperatorMessages   = "player_operator_messages"
+	DBMySQLTableRankingLeagueData  = "ranking_league_data"
 	DBMySQLTableSessionIDs         = "session_ids"
 
 	SQLAnalyticsSchema = `
@@ -85,7 +84,10 @@ const (
 		dm_nextcont INTEGER,
 		league_high_score INTEGER,
 		quick_league_high_score INTEGER,
+		league_start_time BIGINT UNSIGNED NOT NULL,
 		league_reset_time BIGINT UNSIGNED NOT NULL,
+		ranking_league_group INTEGER,
+		quick_ranking_league_group INTEGER,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
 	SQLMileageMapStatesSchema = `
@@ -144,6 +146,16 @@ const (
 		expire_time BIGINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
+	SQLRankingLeagueDataSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableRankingLeagueData + ` (
+		league_id INT UNSIGNED NOT NULL,
+		group_id INT UNSIGNED NOT NULL,
+		start_time BIGINT UNSIGNED NOT NULL,
+		reset_time BIGINT UNSIGNED NOT NULL,
+		league_player_count INTEGER,
+		group_player_count INTEGER,
+		PRIMARY KEY (group_id)
+	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(
 		id,
 		items,
@@ -183,7 +195,10 @@ const (
 		dm_nextcont,
 		league_high_score,
 		quick_league_high_score,
-		league_reset_time
+		league_start_time,
+		league_reset_time,
+		ranking_league_group,
+		quick_ranking_league_group
 	)
 	VALUES (
 		:id,
@@ -224,6 +239,9 @@ const (
 		:dm_nextcont,
 		:league_high_score,
 		:quick_league_high_score,
-		:league_reset_time
+		:league_start_time,
+		:league_reset_time,
+		:ranking_league_group,
+		:quick_ranking_league_group
 	)`
 )

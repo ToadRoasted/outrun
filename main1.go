@@ -75,6 +75,7 @@ func checkArgs() bool {
 			return true
 		}
 		if args[0] == "--migrate" {
+			// migrates the BoltDB database to MySQL
 			fmt.Println("Unimplemented argument")
 			return true
 		}
@@ -170,6 +171,7 @@ func main() {
 	router.HandleFunc(prefix+"/login/getInformation/", h(muxhandlers.GetInformation, LogExecutionTime))
 	router.HandleFunc(prefix+"/Leaderboard/getWeeklyLeaderboardOptions/", h(muxhandlers.GetWeeklyLeaderboardOptions, LogExecutionTime))
 	router.HandleFunc(prefix+"/Leaderboard/getLeagueData/", h(muxhandlers.GetLeagueData, LogExecutionTime))
+	router.HandleFunc(prefix+"/Leaderboard/getLeagueOperatorData/", h(muxhandlers.GetLeagueOperatorData, LogExecutionTime))
 	router.HandleFunc(prefix+"/Leaderboard/getWeeklyLeaderboardEntries/", h(muxhandlers.GetWeeklyLeaderboardEntries, LogExecutionTime))
 	router.HandleFunc(prefix+"/Player/setUserName/", h(muxhandlers.SetUsername, LogExecutionTime))
 	router.HandleFunc(prefix+"/login/getTicker/", h(muxhandlers.GetTicker, LogExecutionTime))
@@ -229,6 +231,7 @@ func SetupShutdownHandler() {
 	go func() {
 		<-c
 		fmt.Println("\nShutting down...")
+
 		dbaccess.CloseDB()
 		boltdbaccess.CloseDB()
 		os.Exit(0)

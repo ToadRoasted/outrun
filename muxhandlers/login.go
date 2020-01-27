@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Mtbcooler/outrun/enums"
+
 	"github.com/Mtbcooler/outrun/analytics"
 	"github.com/Mtbcooler/outrun/analytics/factors"
 	"github.com/Mtbcooler/outrun/config/gameconf"
@@ -69,7 +71,9 @@ func Login(helper *helper.Helper) {
 		baseInfo.SetErrorMessage(emess.BadPassword)
 		player, err := db.GetPlayer(uid)
 		if err != nil {
-			//helper.InternalErr("Error getting player", err)
+			helper.InternalErr("Error getting player", err)
+			// TODO: Actually check to see if the player exists. If it does, return Error ID -500 (InternalServerError) instead of MissingPlayer
+
 			// likely account that wasn't found, so let's tell them that:
 			response := responses.LoginCheckKey(baseInfo, "")
 			baseInfo.StatusCode = status.MissingPlayer
@@ -115,6 +119,7 @@ func Login(helper *helper.Helper) {
 			}
 			analytics.Store(player.ID, factors.AnalyticTypeLogins)
 		} else {
+			// Looks like the credentials don't match what's in the database!
 			baseInfo.StatusCode = status.InvalidPassword
 			baseInfo.SetErrorMessage(emess.BadPassword)
 			helper.DebugOut("Incorrect passkey sent: \"%s\"", request.Password)
@@ -153,7 +158,9 @@ func GetInformation(helper *helper.Helper) {
 			helper.DebugOut(newInfo.Param)
 		}
 	}
-	operatorInfos := []obj.OperatorInformation{}
+	operatorInfos := []obj.OperatorInformation{
+		obj.LeagueOperatorInformation(1, 1, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
+	}
 	numOpUnread := int64(len(operatorInfos))
 	response := responses.Information(baseInfo, infos, operatorInfos, numOpUnread)
 	err := helper.SendResponse(response)

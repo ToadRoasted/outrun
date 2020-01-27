@@ -189,3 +189,17 @@ func (r *Helper) GetCallingPlayer() (netobj.Player, error) {
 	}
 	return player, nil
 }
+func (r *Helper) GetCallingPlayerID() (string, error) {
+	recv := r.GetGameRequest()
+	var request requests.Base
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		return "0", err
+	}
+	sid := request.SessionID
+	uid, err := db.BoltGetPlayerIDBySessionID(sid)
+	if err != nil {
+		return "0", err
+	}
+	return uid, nil
+}

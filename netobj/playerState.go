@@ -20,86 +20,92 @@ Notes:
 */
 
 type PlayerState struct {
-	Items                  []obj.Item `json:"items" db:"items,"`                 // items owned
-	EquippedItemIDs        []string   `json:"equipItemList" db:"equipped_items"` // default is list of 3 "-1"s. look to be item ids
-	MainCharaID            string     `json:"mainCharaID" db:"mainchara_id"`
-	SubCharaID             string     `json:"subCharaID" db:"subchara_id"`
-	MainChaoID             string     `json:"mainChaoID" db:"mainchao_id"`
-	SubChaoID              string     `json:"subChaoID" db:"subchao_id"`
-	NumRings               int64      `json:"numRings,string" db:"num_rings"`                      // number of rings
-	NumBuyRings            int64      `json:"numBuyRings,string" db:"num_buy_rings"`               // number of rings purchased
-	NumRedRings            int64      `json:"numRedRings,string" db:"num_red_rings"`               // number of red rings
-	NumBuyRedRings         int64      `json:"numBuyRedRings,string" db:"num_buy_red_rings"`        // number of red rings purchased
-	Energy                 int64      `json:"energy,string" db:"energy"`                           // energy/'lives'
-	EnergyBuy              int64      `json:"energyBuy,string" db:"energy_buy"`                    // ?
-	EnergyRenewsAt         int64      `json:"energyRenewsAt" db:"energy_renews_at"`                // does 0 mean it is instant?
-	MumMessages            int64      `json:"mumMessages" db:"num_messages"`                       // number of unread messages
-	RankingLeague          int64      `json:"rankingLeague,string" db:"ranking_league"`            // 'league index'
-	QuickRankingLeague     int64      `json:"quickRankingLeague,string" db:"quick_ranking_league"` // same as above, but for timed mode
-	NumRouletteTicket      int64      `json:"numRouletteTicket,string" db:"num_roulette_ticket"`
-	NumChaoRouletteTicket  int64      `json:"numChaoRouletteTicket" db:"num_chao_roulette_ticket"` // This isn't a requirement from the game for PlayerState, but is useful to have here
-	ChaoEggs               int64      `json:"chaoEggs" db:"chao_eggs"`                             // Same as above
-	HighScore              int64      `json:"totalHighScore,string" db:"high_score"`
-	TimedHighScore         int64      `json:"quickTotalHighScore,string" db:"quick_high_score"`
-	TotalDistance          int64      `json:"totalDistance,string" db:"total_distance"`
-	HighDistance           int64      `json:"maximumDistance,string" db:"best_distance"` // high distance in one go?
-	DailyMissionID         int64      `json:"dailyMissionId,string" db:"daily_mission_id"`
-	DailyMissionEndTime    int64      `json:"dailyMissionEndTime" db:"daily_mission_end_time"` // 11:59 pm of current day
-	DailyChallengeValue    int64      `json:"dailyChallengeValue" db:"daily_challenge_value"`  // internally listed as ProgressStatus... Current day of the challenge?
-	DailyChallengeComplete int64      `json:"dailyChallengeComplete" db:"daily_challenge_complete"`
-	NumDailyChallenge      int64      `json:"numDailyChalCont" db:"num_daily_chal_cont"`
-	NumPlaying             int64      `json:"numPlaying,string" db:"num_plays"` // ?
-	Animals                int64      `json:"numAnimals,string" db:"num_animals"`
-	Rank                   int64      `json:"numRank,string" db:"rank"`
-	DailyChalCatNum        int64      `json:"ORN_dailyChalCatNum,string" db:"dm_cat"`
-	DailyChalSetNum        int64      `json:"ORN_dailyChalSetNum,string" db:"dm_set"`
-	DailyChalPosNum        int64      `json:"ORN_dailyChalPosNum,string" db:"dm_pos"`
-	NextNumDailyChallenge  int64      `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
-	LeagueHighScore        int64      `json:"leagueHighScore" db:"league_high_score"`
-	QuickLeagueHighScore   int64      `json:"quickLeagueHighScore" db:"quick_league_high_score"`
-	LeagueResetTime        int64      `json:"leagueResetTime" db:"league_reset_time"`
+	Items                   []obj.Item `json:"items" db:"items,"`                 // items owned
+	EquippedItemIDs         []string   `json:"equipItemList" db:"equipped_items"` // default is list of 3 "-1"s. look to be item ids
+	MainCharaID             string     `json:"mainCharaID" db:"mainchara_id"`
+	SubCharaID              string     `json:"subCharaID" db:"subchara_id"`
+	MainChaoID              string     `json:"mainChaoID" db:"mainchao_id"`
+	SubChaoID               string     `json:"subChaoID" db:"subchao_id"`
+	NumRings                int64      `json:"numRings,string" db:"num_rings"`                      // number of rings
+	NumBuyRings             int64      `json:"numBuyRings,string" db:"num_buy_rings"`               // number of rings purchased
+	NumRedRings             int64      `json:"numRedRings,string" db:"num_red_rings"`               // number of red rings
+	NumBuyRedRings          int64      `json:"numBuyRedRings,string" db:"num_buy_red_rings"`        // number of red rings purchased
+	Energy                  int64      `json:"energy,string" db:"energy"`                           // energy/'lives'
+	EnergyBuy               int64      `json:"energyBuy,string" db:"energy_buy"`                    // ?
+	EnergyRenewsAt          int64      `json:"energyRenewsAt" db:"energy_renews_at"`                // does 0 mean it is instant?
+	MumMessages             int64      `json:"mumMessages" db:"num_messages"`                       // number of unread messages
+	RankingLeague           int64      `json:"rankingLeague,string" db:"ranking_league"`            // 'league index'
+	QuickRankingLeague      int64      `json:"quickRankingLeague,string" db:"quick_ranking_league"` // same as above, but for timed mode
+	NumRouletteTicket       int64      `json:"numRouletteTicket,string" db:"num_roulette_ticket"`
+	NumChaoRouletteTicket   int64      `json:"numChaoRouletteTicket" db:"num_chao_roulette_ticket"` // This isn't a requirement from the game for PlayerState, but is useful to have here
+	ChaoEggs                int64      `json:"chaoEggs" db:"chao_eggs"`                             // Same as above
+	HighScore               int64      `json:"totalHighScore,string" db:"high_score"`
+	TimedHighScore          int64      `json:"quickTotalHighScore,string" db:"quick_high_score"`
+	TotalDistance           int64      `json:"totalDistance,string" db:"total_distance"`
+	HighDistance            int64      `json:"maximumDistance,string" db:"best_distance"` // high distance in one go?
+	DailyMissionID          int64      `json:"dailyMissionId,string" db:"daily_mission_id"`
+	DailyMissionEndTime     int64      `json:"dailyMissionEndTime" db:"daily_mission_end_time"` // 11:59 pm of current day
+	DailyChallengeValue     int64      `json:"dailyChallengeValue" db:"daily_challenge_value"`  // internally listed as ProgressStatus... Current day of the challenge?
+	DailyChallengeComplete  int64      `json:"dailyChallengeComplete" db:"daily_challenge_complete"`
+	NumDailyChallenge       int64      `json:"numDailyChalCont" db:"num_daily_chal_cont"`
+	NumPlaying              int64      `json:"numPlaying,string" db:"num_plays"` // ?
+	Animals                 int64      `json:"numAnimals,string" db:"num_animals"`
+	Rank                    int64      `json:"numRank,string" db:"rank"`
+	DailyChalCatNum         int64      `json:"ORN_dailyChalCatNum,string" db:"dm_cat"`
+	DailyChalSetNum         int64      `json:"ORN_dailyChalSetNum,string" db:"dm_set"`
+	DailyChalPosNum         int64      `json:"ORN_dailyChalPosNum,string" db:"dm_pos"`
+	NextNumDailyChallenge   int64      `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
+	LeagueHighScore         int64      `json:"leagueHighScore" db:"league_high_score"`
+	QuickLeagueHighScore    int64      `json:"quickLeagueHighScore" db:"quick_league_high_score"`
+	LeagueStartTime         int64      `json:"leagueStartTime" db:"league_start_time"`
+	LeagueResetTime         int64      `json:"leagueResetTime" db:"league_reset_time"`
+	RankingLeagueGroup      int64      `json:"rankingLeagueGroup,string" db:"ranking_league_group"`
+	QuickRankingLeagueGroup int64      `json:"quickRankingLeagueGroup,string" db:"quick_ranking_league_group"`
 }
 
 type SqlCompatiblePlayerState struct {
-	ID                     int64  `db:"id"`
-	Items                  []byte `json:"items" db:"items"`                  // items owned
-	EquippedItemIDs        []byte `json:"equipItemList" db:"equipped_items"` // default is list of 3 "-1"s. look to be item ids
-	MainCharaID            string `json:"mainCharaID" db:"mainchara_id"`
-	SubCharaID             string `json:"subCharaID" db:"subchara_id"`
-	MainChaoID             string `json:"mainChaoID" db:"mainchao_id"`
-	SubChaoID              string `json:"subChaoID" db:"subchao_id"`
-	NumRings               int64  `json:"numRings,string" db:"num_rings"`                      // number of rings
-	NumBuyRings            int64  `json:"numBuyRings,string" db:"num_buy_rings"`               // number of rings purchased
-	NumRedRings            int64  `json:"numRedRings,string" db:"num_red_rings"`               // number of red rings
-	NumBuyRedRings         int64  `json:"numBuyRedRings,string" db:"num_buy_red_rings"`        // number of red rings purchased
-	Energy                 int64  `json:"energy,string" db:"energy"`                           // energy/'lives'
-	EnergyBuy              int64  `json:"energyBuy,string" db:"energy_buy"`                    // ?
-	EnergyRenewsAt         int64  `json:"energyRenewsAt" db:"energy_renews_at"`                // does 0 mean it is instant?
-	MumMessages            int64  `json:"mumMessages" db:"num_messages"`                       // number of unread messages
-	RankingLeague          int64  `json:"rankingLeague,string" db:"ranking_league"`            // 'league index'
-	QuickRankingLeague     int64  `json:"quickRankingLeague,string" db:"quick_ranking_league"` // same as above, but for timed mode
-	NumRouletteTicket      int64  `json:"numRouletteTicket,string" db:"num_roulette_ticket"`
-	NumChaoRouletteTicket  int64  `json:"numChaoRouletteTicket" db:"num_chao_roulette_ticket"` // This isn't a requirement from the game for PlayerState, but is useful to have here
-	ChaoEggs               int64  `json:"chaoEggs" db:"chao_eggs"`                             // Same as above
-	HighScore              int64  `json:"totalHighScore,string" db:"high_score"`
-	TimedHighScore         int64  `json:"quickTotalHighScore,string" db:"quick_high_score"`
-	TotalDistance          int64  `json:"totalDistance,string" db:"total_distance"`
-	HighDistance           int64  `json:"maximumDistance,string" db:"best_distance"` // high distance in one go?
-	DailyMissionID         int64  `json:"dailyMissionId,string" db:"daily_mission_id"`
-	DailyMissionEndTime    int64  `json:"dailyMissionEndTime" db:"daily_mission_end_time"` // 11:59 pm of current day
-	DailyChallengeValue    int64  `json:"dailyChallengeValue" db:"daily_challenge_value"`  // internally listed as ProgressStatus... Current day of the challenge?
-	DailyChallengeComplete int64  `json:"dailyChallengeComplete" db:"daily_challenge_complete"`
-	NumDailyChallenge      int64  `json:"numDailyChalCont" db:"num_daily_chal_cont"`
-	NumPlaying             int64  `json:"numPlaying,string" db:"num_plays"` // ?
-	Animals                int64  `json:"numAnimals,string" db:"num_animals"`
-	Rank                   int64  `json:"numRank,string" db:"rank"`
-	DailyChalCatNum        int64  `json:"ORN_dailyChalCatNum,string" db:"dm_cat"`
-	DailyChalSetNum        int64  `json:"ORN_dailyChalSetNum,string" db:"dm_set"`
-	DailyChalPosNum        int64  `json:"ORN_dailyChalPosNum,string" db:"dm_pos"`
-	NextNumDailyChallenge  int64  `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
-	LeagueHighScore        int64  `json:"leagueHighScore" db:"league_high_score"`
-	QuickLeagueHighScore   int64  `json:"quickLeagueHighScore" db:"quick_league_high_score"`
-	LeagueResetTime        int64  `json:"leagueResetTime" db:"league_reset_time"`
+	ID                      int64  `db:"id"`
+	Items                   []byte `json:"items" db:"items"`                  // items owned
+	EquippedItemIDs         []byte `json:"equipItemList" db:"equipped_items"` // default is list of 3 "-1"s. look to be item ids
+	MainCharaID             string `json:"mainCharaID" db:"mainchara_id"`
+	SubCharaID              string `json:"subCharaID" db:"subchara_id"`
+	MainChaoID              string `json:"mainChaoID" db:"mainchao_id"`
+	SubChaoID               string `json:"subChaoID" db:"subchao_id"`
+	NumRings                int64  `json:"numRings,string" db:"num_rings"`                      // number of rings
+	NumBuyRings             int64  `json:"numBuyRings,string" db:"num_buy_rings"`               // number of rings purchased
+	NumRedRings             int64  `json:"numRedRings,string" db:"num_red_rings"`               // number of red rings
+	NumBuyRedRings          int64  `json:"numBuyRedRings,string" db:"num_buy_red_rings"`        // number of red rings purchased
+	Energy                  int64  `json:"energy,string" db:"energy"`                           // energy/'lives'
+	EnergyBuy               int64  `json:"energyBuy,string" db:"energy_buy"`                    // ?
+	EnergyRenewsAt          int64  `json:"energyRenewsAt" db:"energy_renews_at"`                // does 0 mean it is instant?
+	MumMessages             int64  `json:"mumMessages" db:"num_messages"`                       // number of unread messages
+	RankingLeague           int64  `json:"rankingLeague,string" db:"ranking_league"`            // 'league index'
+	QuickRankingLeague      int64  `json:"quickRankingLeague,string" db:"quick_ranking_league"` // same as above, but for timed mode
+	NumRouletteTicket       int64  `json:"numRouletteTicket,string" db:"num_roulette_ticket"`
+	NumChaoRouletteTicket   int64  `json:"numChaoRouletteTicket" db:"num_chao_roulette_ticket"` // This isn't a requirement from the game for PlayerState, but is useful to have here
+	ChaoEggs                int64  `json:"chaoEggs" db:"chao_eggs"`                             // Same as above
+	HighScore               int64  `json:"totalHighScore,string" db:"high_score"`
+	TimedHighScore          int64  `json:"quickTotalHighScore,string" db:"quick_high_score"`
+	TotalDistance           int64  `json:"totalDistance,string" db:"total_distance"`
+	HighDistance            int64  `json:"maximumDistance,string" db:"best_distance"` // high distance in one go?
+	DailyMissionID          int64  `json:"dailyMissionId,string" db:"daily_mission_id"`
+	DailyMissionEndTime     int64  `json:"dailyMissionEndTime" db:"daily_mission_end_time"` // 11:59 pm of current day
+	DailyChallengeValue     int64  `json:"dailyChallengeValue" db:"daily_challenge_value"`  // internally listed as ProgressStatus... Current day of the challenge?
+	DailyChallengeComplete  int64  `json:"dailyChallengeComplete" db:"daily_challenge_complete"`
+	NumDailyChallenge       int64  `json:"numDailyChalCont" db:"num_daily_chal_cont"`
+	NumPlaying              int64  `json:"numPlaying,string" db:"num_plays"` // ?
+	Animals                 int64  `json:"numAnimals,string" db:"num_animals"`
+	Rank                    int64  `json:"numRank,string" db:"rank"`
+	DailyChalCatNum         int64  `json:"ORN_dailyChalCatNum,string" db:"dm_cat"`
+	DailyChalSetNum         int64  `json:"ORN_dailyChalSetNum,string" db:"dm_set"`
+	DailyChalPosNum         int64  `json:"ORN_dailyChalPosNum,string" db:"dm_pos"`
+	NextNumDailyChallenge   int64  `json:"ORN_nextNumDailyChalCont" db:"dm_nextcont"`
+	LeagueHighScore         int64  `json:"leagueHighScore" db:"league_high_score"`
+	QuickLeagueHighScore    int64  `json:"quickLeagueHighScore" db:"quick_league_high_score"`
+	LeagueStartTime         int64  `json:"leagueStartTime" db:"league_start_time"`
+	LeagueResetTime         int64  `json:"leagueResetTime" db:"league_reset_time"`
+	RankingLeagueGroup      int64  `json:"rankingLeagueGroup,string" db:"ranking_league_group"`
+	QuickRankingLeagueGroup int64  `json:"quickRankingLeagueGroup,string" db:"quick_ranking_league_group"`
 }
 
 func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerState {
@@ -144,7 +150,10 @@ func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerSt
 		ps.NextNumDailyChallenge,
 		ps.LeagueHighScore,
 		ps.QuickLeagueHighScore,
+		ps.LeagueStartTime,
 		ps.LeagueResetTime,
+		ps.RankingLeagueGroup,
+		ps.QuickRankingLeagueGroup,
 	}
 }
 
@@ -191,7 +200,10 @@ func SQLCompatiblePlayerStateToPlayerState(ps SqlCompatiblePlayerState) PlayerSt
 		ps.NextNumDailyChallenge,
 		ps.LeagueHighScore,
 		ps.QuickLeagueHighScore,
+		ps.LeagueStartTime,
 		ps.LeagueResetTime,
+		ps.RankingLeagueGroup,
+		ps.QuickRankingLeagueGroup,
 	}
 }
 
@@ -243,7 +255,10 @@ func DefaultPlayerState() PlayerState {
 	nextNumDailyChallenge := int64(1)
 	leagueHighScore := int64(0)
 	quickLeagueHighScore := int64(0)
+	leagueStartTime := now.BeginningOfWeek().UTC().Unix()
 	leagueResetTime := now.EndOfWeek().UTC().Unix()
+	rankingLeagueGroup := int64(0)
+	quickRankingLeagueGroup := int64(0)
 	return PlayerState{
 		items,
 		equippedItemIDs,
@@ -282,6 +297,9 @@ func DefaultPlayerState() PlayerState {
 		nextNumDailyChallenge,
 		leagueHighScore,
 		quickLeagueHighScore,
+		leagueStartTime,
 		leagueResetTime,
+		rankingLeagueGroup,
+		quickRankingLeagueGroup,
 	}
 }

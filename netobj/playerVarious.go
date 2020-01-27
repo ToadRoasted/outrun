@@ -4,12 +4,14 @@ import (
 	"github.com/Mtbcooler/outrun/config/gameconf"
 )
 
+// universal for all players
+
 type PlayerVarious struct {
-	CmSkipCount          int64 `json:"cmSkipCount"` // no clear purpose
+	CmSkipCount          int64 `json:"cmSkipCount"`
 	EnergyRecoveryMax    int64 `json:"energyRecoveryMax"`
-	EnergyRecoveryTime   int64 `json:"energyRecveryTime"` // time until...?
-	OnePlayCmCount       int64 `json:"onePlayCmCount"`
-	OnePlayContinueCount int64 `json:"onePlayContinueCount"`
+	EnergyRecoveryTime   int64 `json:"energyRecveryTime"`
+	OnePlayCmCount       int64 `json:"onePlayCmCount"`       // max. free continues? (unused in 2.0.3)
+	OnePlayContinueCount int64 `json:"onePlayContinueCount"` // max. continues
 	IsPurchased          int64 `json:"isPurchased"`
 }
 

@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"github.com/Mtbcooler/outrun/enums"
 	"github.com/Mtbcooler/outrun/logic/conversion"
 	"github.com/Mtbcooler/outrun/netobj"
 	"github.com/Mtbcooler/outrun/obj"
@@ -76,7 +77,7 @@ func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, player netobj.P
 		base,
 		//obj.DefaultLeaderboardEntry(uid),
 		myEntry,
-		-1,
+		5,
 		startTime,
 		resetTime,
 		1,
@@ -112,4 +113,47 @@ func DefaultLeagueData(base responseobjs.BaseInfo, mode int64) LeagueDataRespons
 		leagueData = constobjs.DefaultLeagueDataMode1
 	}
 	return LeagueData(base, leagueData, mode)
+}
+
+type LeagueOperatorDataResponse struct {
+	BaseResponse
+	LeagueList []obj.LeagueData `json:"leagueOperatorList"`
+	LeagueID   int64            `json:"leagueId"`
+}
+
+func LeagueOperatorData(base responseobjs.BaseInfo, leagueList []obj.LeagueData, leagueId int64) LeagueOperatorDataResponse {
+	baseResponse := NewBaseResponse(base)
+	out := LeagueOperatorDataResponse{
+		baseResponse,
+		leagueList,
+		leagueId,
+	}
+	return out
+}
+
+func DefaultLeagueOperatorData(base responseobjs.BaseInfo, leagueId int64) LeagueOperatorDataResponse {
+	leagueList := []obj.LeagueData{
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueF_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueF],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueF_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueE_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueE],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueE_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueD_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueD],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueD_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueC_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueC],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueC_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueB_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueB],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueB_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueA_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueA],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueA_P],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueS_M],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueS],
+		constobjs.LeagueDataDefinitions[enums.RankingLeagueS_P],
+	}
+	return LeagueOperatorData(base, leagueList, leagueId)
 }
