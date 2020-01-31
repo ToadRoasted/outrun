@@ -3,7 +3,11 @@ package dbaccess
 import (
 	"log"
 	"strconv"
+	"time"
 
+	"github.com/jinzhu/now"
+
+	"github.com/Mtbcooler/outrun/config"
 	"github.com/Mtbcooler/outrun/enums"
 
 	"github.com/Mtbcooler/outrun/consts"
@@ -86,6 +90,11 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	var uid, username, mainchara, subchara, mainchao, subchao, charasjson, chaojson string
 	var highscore, league, rank, lastlogin int64
 	var currentEntry obj.LeaderboardEntry
+	_, resetTime, err := GetStartAndEndTimesForLeague(league, 0)
+	if err != nil {
+		rows.Close()
+		return nil, nil, err
+	}
 	index := offset
 	for rows.Next() {
 		err = rows.Scan(&uid, &highscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
@@ -107,7 +116,7 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 			highscore,
 			0,
 			0,
-			0,
+			resetTime,
 			rank,
 			lastlogin,
 			TryAtoi(mainchara),
@@ -220,6 +229,11 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 				rows.Close()
 				return nil, err
 			}
+			_, resetTime, err := GetStartAndEndTimesForLeague(league, 0)
+			if err != nil {
+				rows.Close()
+				return nil, err
+			}
 			myEntry = obj.NewLeaderboardEntry(
 				uid,
 				username,
@@ -229,7 +243,7 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 				highscore,
 				0,
 				0,
-				0,
+				resetTime,
 				rank,
 				lastlogin,
 				TryAtoi(mainchara),
@@ -268,4 +282,140 @@ func TryAtoi(toconvert string) int64 {
 	}
 	result, _ := strconv.Atoi(toconvert)
 	return int64(result)
+}
+
+func GetStartAndEndTimesForLeague(leagueid, groupid int64) (int64, int64, error) {
+	CheckIfDBSet()
+	var starttime, endtime int64
+	err := db.QueryRow("SELECT start_time, reset_time FROM `"+consts.DBMySQLTableRankingLeagueData+"` WHERE league_id = ? AND group_id = ?", leagueid, groupid).Scan(&starttime, &endtime)
+	if err != nil {
+		return 0, 0, err
+	}
+	return starttime, endtime, nil
+}
+
+func SetRankingLeagueData(leagueid, groupid, starttime, endtime, leagueplayercount, groupplayercount int64) error {
+	CheckIfDBSet()
+	result, err := db.Exec("REPLACE INTO `"+consts.DBMySQLTableRankingLeagueData+"`(league_id, group_id, start_time, reset_time, league_player_count, group_player_count)\n"+
+		"VALUES (?,?,?,?,?,?)",
+		leagueid, groupid, starttime, endtime, leagueplayercount, groupplayercount)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetRankingLeagueData operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func ResetAllRankingLeagueData() error {
+	CheckIfDBSet()
+	rowsAffected := int64(0)
+	result, err := db.Exec("DROP TABLE `" + consts.DBMySQLTableRankingLeagueData + "`")
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ = result.RowsAffected()
+		log.Printf("[DEBUG] Ranking League data wiped; %v rows affected\n", rowsAffected)
+	}
+	if err != nil {
+		return err
+	}
+	result, err = db.Exec(consts.SQLRankingLeagueDataSchema)
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ = result.RowsAffected()
+		log.Printf("[DEBUG] Ranking League data table created; %v rows affected\n", rowsAffected)
+	}
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueF_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueF, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueF_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueE_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueE, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueE_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueD_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueD, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueD_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueC_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueC, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueC_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueB_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueB, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueB_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueA_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueA, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueA_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueS_M, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueS, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	if err != nil {
+		return err
+	}
+	err = SetRankingLeagueData(enums.RankingLeagueS_P, 0, time.Now().UTC().Unix(), now.EndOfWeek().UTC().Unix(), 50, 50)
+	return err
+}
+
+func ClearLeagueHighScores() error {
+	CheckIfDBSet()
+	rowsAffected := int64(0)
+	result, err := db.Exec("UPDATE `" + consts.DBMySQLTablePlayerStates + "` league_high_scores = 0, quick_league_high_scores = 0")
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ = result.RowsAffected()
+		log.Printf("[DEBUG] ClearLeagueHighScores operation completed; %v rows affected\n", rowsAffected)
+	}
+	return err
 }

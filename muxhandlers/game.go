@@ -14,6 +14,7 @@ import (
 	"github.com/Mtbcooler/outrun/config/gameconf"
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
+	"github.com/Mtbcooler/outrun/db/dbaccess"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/enums"
 	"github.com/Mtbcooler/outrun/helper"
@@ -347,7 +348,12 @@ func QuickPostGameResults(helper *helper.Helper) {
 		if request.Score > playerTimedHighScore {
 			player.PlayerState.TimedHighScore = request.Score
 		}
-		if time.Now().UTC().Unix() <= player.PlayerState.LeagueResetTime {
+		_, leagueresettime, err := dbaccess.GetStartAndEndTimesForLeague(player.PlayerState.RankingLeague, player.PlayerState.RankingLeagueGroup)
+		if err != nil {
+			helper.InternalErr("Error getting league reset time (try restarting Outrun or sending the ResetRankingData RPC command)", err)
+			return
+		}
+		if time.Now().UTC().Unix() < leagueresettime {
 			playerTimedLeagueHighScore := player.PlayerState.QuickLeagueHighScore
 			if request.Score > playerTimedLeagueHighScore {
 				player.PlayerState.QuickLeagueHighScore = request.Score
@@ -610,7 +616,12 @@ func PostGameResults(helper *helper.Helper) {
 		if request.Score > playerHighScore {
 			player.PlayerState.HighScore = request.Score
 		}
-		if time.Now().UTC().Unix() <= player.PlayerState.LeagueResetTime {
+		_, leagueresettime, err := dbaccess.GetStartAndEndTimesForLeague(player.PlayerState.RankingLeague, player.PlayerState.RankingLeagueGroup)
+		if err != nil {
+			helper.InternalErr("Error getting league reset time (try restarting Outrun or sending the ResetRankingData RPC command)", err)
+			return
+		}
+		if time.Now().UTC().Unix() < leagueresettime {
 			playerLeagueHighScore := player.PlayerState.LeagueHighScore
 			if request.Score > playerLeagueHighScore {
 				player.PlayerState.LeagueHighScore = request.Score

@@ -13,6 +13,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Mtbcooler/outrun/enums"
+
 	"github.com/Mtbcooler/outrun/db/boltdbaccess"
 	"github.com/Mtbcooler/outrun/db/dbaccess"
 
@@ -139,6 +141,19 @@ func main() {
 	err = dbaccess.InitializeTablesIfNecessary()
 	if err != nil {
 		log.Printf("[WARN] Failed to initialize tables; there may be problems! (%s)\n", err)
+	} else {
+		leaguestarttime, leagueendtime, err := dbaccess.GetStartAndEndTimesForLeague(enums.RankingLeagueF_M, 0)
+		if err != nil {
+			log.Println("[INFO] Ranking league data failed to load; resetting...")
+			err = dbaccess.ResetAllRankingLeagueData()
+			if err != nil {
+				log.Printf("[WARN] Failed to reset ranking league data; there may be problems! (%s)\n", err)
+			}
+		} else {
+			if leagueendtime > time.Now().UTC().Unix() {
+				log.Printf("[WARN] League reset time has passed! %v - %v\n", leaguestarttime, leagueendtime)
+			}
+		}
 	}
 
 	if config.CFile.EnableRPC {

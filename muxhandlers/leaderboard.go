@@ -2,6 +2,7 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/Mtbcooler/outrun/consts"
 
@@ -36,10 +37,21 @@ func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
 		return
 	}
 	mode := request.Mode
+	rankingleague := playerState.RankingLeague
+	rankingleaguegroup := playerState.RankingLeagueGroup
+	if mode == 1 {
+		rankingleague = playerState.QuickRankingLeague
+		rankingleaguegroup = playerState.QuickRankingLeagueGroup
+	}
+	leaguestarttime, leagueendtime, err := dbaccess.GetStartAndEndTimesForLeague(rankingleague, rankingleaguegroup)
+	if err != nil {
+		helper.InternalErr("Error getting league start and end times (try restarting Outrun or sending the ResetRankingData RPC command)", err)
+		return
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultWeeklyLeaderboardOptions(baseInfo, mode)
-	response.StartTime = playerState.LeagueStartTime
-	response.ResetTime = playerState.LeagueResetTime
+	response.StartTime = leaguestarttime
+	response.ResetTime = leagueendtime
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -68,33 +80,43 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 	helper.DebugOut("Mode %v, type %v", request.Mode, request.Type)
 	mode := request.Mode
 	lbtype := request.Type
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	/*response := responses.DefaultWeeklyLeaderboardEntries(baseInfo, player, mode, scoretype)
-	response.StartTime = player.PlayerState.LeagueStartTime
-	response.ResetTime = player.PlayerState.LeagueResetTime*/
+	rankingleague := playerState.RankingLeague
+	rankingleaguegroup := playerState.RankingLeagueGroup
+	if mode == 1 {
+		rankingleague = playerState.QuickRankingLeague
+		rankingleaguegroup = playerState.QuickRankingLeagueGroup
+	}
+	leaguestarttime, leagueendtime, err := dbaccess.GetStartAndEndTimesForLeague(rankingleague, rankingleaguegroup)
+	if err != nil {
+		helper.InternalErr("Error getting league start and end times (try restarting Outrun or sending the ResetRankingData RPC command)", err)
+		return
+	}
 	var myEntry interface{}
 	entryList := []obj.LeaderboardEntry{}
 	entryCount := int64(0)
 	if lbtype == 4 || lbtype == 5 {
 		// TODO: Then what?
 	} else {
-		entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, 20, uid)
-		if err != nil {
-			helper.InternalErr("Error getting high score table", err)
-			return
-		}
-		entryCount, err = dbaccess.GetNumOfPlayers()
-		if err != nil {
-			helper.InternalErr("Error getting number of players", err)
-			return
+		if lbtype == 6 || lbtype == 7 || time.Now().UTC().Unix() < leagueendtime {
+			entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, 10, uid)
+			if err != nil {
+				helper.InternalErr("Error getting high score table", err)
+				return
+			}
+			entryCount, err = dbaccess.GetNumOfPlayers()
+			if err != nil {
+				helper.InternalErr("Error getting number of players", err)
+				return
+			}
 		}
 	}
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.WeeklyLeaderboardEntries(
 		baseInfo,
 		myEntry,
 		-1,
-		playerState.LeagueStartTime,
-		playerState.LeagueResetTime,
+		leaguestarttime,
+		leagueendtime,
 		request.First,
 		mode,
 		entryCount,

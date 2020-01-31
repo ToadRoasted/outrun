@@ -7,6 +7,7 @@ import (
 
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
+	"github.com/Mtbcooler/outrun/db/dbaccess"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/helper"
 	"github.com/Mtbcooler/outrun/requests"
@@ -59,6 +60,11 @@ func GetPlayerState(helper *helper.Helper) {
 		player.PlayerState.DailyChallengeComplete = int64(0)
 		player.PlayerState.DailyMissionEndTime = now.EndOfDay().UTC().Unix() + 1
 		helper.DebugOut("New daily mission ID: %v", player.PlayerState.DailyMissionID)
+	}
+	player.PlayerState.LeagueStartTime, player.PlayerState.LeagueResetTime, err = dbaccess.GetStartAndEndTimesForLeague(player.PlayerState.RankingLeague, player.PlayerState.RankingLeagueGroup)
+	if err != nil {
+		helper.InternalErr("Error getting league start and end times (try restarting Outrun or sending the ResetRankingData RPC command)", err)
+		return
 	}
 	err = db.SavePlayer(player)
 	if err != nil {
