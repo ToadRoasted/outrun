@@ -83,8 +83,8 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	if err != nil {
 		return []obj.LeaderboardEntry{}, nil, err
 	}
-	var uid, username, charasjson, chaojson string
-	var highscore, league, rank, mainchara, subchara, mainchao, subchao, lastlogin int64
+	var uid, username, mainchara, subchara, mainchao, subchao, charasjson, chaojson string
+	var highscore, league, rank, lastlogin int64
 	var currentEntry obj.LeaderboardEntry
 	index := offset
 	for rows.Next() {
@@ -110,13 +110,13 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 			0,
 			rank,
 			lastlogin,
-			mainchara,
+			TryAtoi(mainchara),
 			0,
-			subchara,
+			TryAtoi(subchara),
 			0,
-			mainchao,
+			TryAtoi(mainchao),
 			0,
-			subchao,
+			TryAtoi(subchao),
 			0,
 			enums.LangEnglish,
 			league,
@@ -205,8 +205,8 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 	if err != nil {
 		return nil, err
 	}
-	var uid, username, charasjson, chaojson string
-	var highscore, league, rank, mainchara, subchara, mainchao, subchao, lastlogin int64
+	var uid, username, mainchara, subchara, mainchao, subchao, charasjson, chaojson string
+	var highscore, league, rank, lastlogin int64
 	index := 0
 	for rows.Next() {
 		err = rows.Scan(&uid, &highscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
@@ -232,13 +232,13 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 				0,
 				rank,
 				lastlogin,
-				mainchara,
+				TryAtoi(mainchara),
 				0,
-				subchara,
+				TryAtoi(subchara),
 				0,
-				mainchao,
+				TryAtoi(mainchao),
 				0,
-				subchao,
+				TryAtoi(subchao),
 				0,
 				enums.LangEnglish,
 				league,
@@ -260,4 +260,12 @@ func GetNumOfPlayers() (int64, error) {
 		return -1, err
 	}
 	return playercount, nil
+}
+
+func TryAtoi(toconvert string) int64 {
+	if toconvert == "empty" {
+		return -1
+	}
+	result, _ := strconv.Atoi(toconvert)
+	return int64(result)
 }

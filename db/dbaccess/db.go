@@ -163,6 +163,27 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	return netobj.StoredPlayerInfoToPlayerInfo(values), nil
 }
 
+func GetPlayerInfoFromMigrationPass(table, pass string) (netobj.PlayerInfo, string, error) {
+	CheckIfDBSet()
+	values := netobj.StoredPlayerInfo{"", "", "", "", "", 0, 0, []byte{}, []byte{}}
+	var pid string
+	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE migrate_password = ?", pass).Scan(&pid,
+		&values.Username,
+		&values.Password,
+		&values.MigrationPassword,
+		&values.UserPassword,
+		&values.Key,
+		&values.LastLogin,
+		&values.Language,
+		&values.CharacterState,
+		&values.ChaoState,
+	)
+	if err != nil {
+		return netobj.PlayerInfo{"", "", "", "", "", 0, 0, []netobj.Character{}, []netobj.Chao{}}, "", err
+	}
+	return netobj.StoredPlayerInfoToPlayerInfo(values), pid, nil
+}
+
 func GetPlayerState(table, id string) (netobj.PlayerState, error) {
 	CheckIfDBSet()
 	values := netobj.PlayerStateToSQLCompatiblePlayerState(netobj.DefaultPlayerState())

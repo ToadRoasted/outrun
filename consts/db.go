@@ -155,7 +155,7 @@ const (
 		reset_time BIGINT UNSIGNED NOT NULL,
 		league_player_count INTEGER,
 		group_player_count INTEGER,
-		PRIMARY KEY (group_id)
+		PRIMARY KEY (league_id)
 	) ENGINE = InnoDB;`
 	SQLSessionIDsSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableSessionIDs + ` (
