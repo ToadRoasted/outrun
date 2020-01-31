@@ -150,8 +150,8 @@ func main() {
 				log.Printf("[WARN] Failed to reset ranking league data; there may be problems! (%s)\n", err)
 			}
 		} else {
-			if leagueendtime > time.Now().UTC().Unix() {
-				log.Printf("[WARN] League reset time has passed! %v - %v\n", leaguestarttime, leagueendtime)
+			if time.Now().UTC().Unix() > leagueendtime {
+				log.Printf("[WARN] League reset time has passed! %v - %v (Now: %v)\n", leaguestarttime, leagueendtime, time.Now().UTC().Unix())
 			}
 		}
 	}
