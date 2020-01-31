@@ -5,7 +5,7 @@ import (
 )
 
 func (t *Toolbox) CalculateAndResetRankingData(nothing bool, reply *ToolboxReply) error {
-	err := dbaccess.ResetRankingData()
+	err := dbaccess.ResetAllRankingLeagueData()
 	if err != nil {
 		reply.Status = StatusOtherError
 		reply.Info = "unable to reset ranking data: " + err.Error()

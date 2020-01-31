@@ -412,7 +412,7 @@ func ResetAllRankingLeagueData() error {
 func ClearLeagueHighScores() error {
 	CheckIfDBSet()
 	rowsAffected := int64(0)
-	result, err := db.Exec("UPDATE `" + consts.DBMySQLTablePlayerStates + "` league_high_scores = 0, quick_league_high_scores = 0")
+	result, err := db.Exec("UPDATE `" + consts.DBMySQLTablePlayerStates + "` SET league_high_score = 0, quick_league_high_score = 0")
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ = result.RowsAffected()
 		log.Printf("[DEBUG] ClearLeagueHighScores operation completed; %v rows affected\n", rowsAffected)
