@@ -20,7 +20,7 @@ Notes:
 */
 
 type PlayerState struct {
-	Items                   []obj.Item `json:"items" db:"items,"`                 // items owned
+	Items                   []obj.Item `json:"items" db:"items"`                  // items owned
 	EquippedItemIDs         []string   `json:"equipItemList" db:"equipped_items"` // default is list of 3 "-1"s. look to be item ids
 	MainCharaID             string     `json:"mainCharaID" db:"mainchara_id"`
 	SubCharaID              string     `json:"subCharaID" db:"subchara_id"`

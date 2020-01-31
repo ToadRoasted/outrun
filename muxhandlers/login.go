@@ -159,8 +159,11 @@ func GetInformation(helper *helper.Helper) {
 		}
 	}
 	operatorInfos := []obj.OperatorInformation{
-		obj.LeagueOperatorInformation(1, 1, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
+		obj.LeagueOperatorInformation(0, 46, 39, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF, 50, 0),
+		obj.NewOperatorInformation(1, "100060000,420,9001,0"),
+		obj.LeagueOperatorInformation(2, 1, 1, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
 	}
+
 	numOpUnread := int64(len(operatorInfos))
 	response := responses.Information(baseInfo, infos, operatorInfos, numOpUnread)
 	err := helper.SendResponse(response)

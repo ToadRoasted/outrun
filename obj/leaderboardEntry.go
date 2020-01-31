@@ -3,6 +3,8 @@ package obj
 import (
 	"strconv"
 	"time"
+
+	"github.com/Mtbcooler/outrun/enums"
 )
 
 type LeaderboardEntry struct {
@@ -28,9 +30,10 @@ type LeaderboardEntry struct {
 	Language          int64  `json:"language"` // enums.Lang*
 	League            int64  `json:"league"`
 	MaxScore          int64  `json:"maxScore"`
+	UserData          int64  `json:"userData"`
 }
 
-func NewLeaderboardEntry(fid, n, url string, g, eo, rs, rc, ise, et, nr, lt, cid, cl, schid, schl, mcid, mcl, scid, scl, lang, league, maxScore int64) LeaderboardEntry {
+func NewLeaderboardEntry(fid, n, url string, g, eo, rs, rc, ise, et, nr, lt, cid, cl, schid, schl, mcid, mcl, scid, scl, lang, league, maxScore, ud int64) LeaderboardEntry {
 	return LeaderboardEntry{
 		fid,
 		n,
@@ -54,13 +57,14 @@ func NewLeaderboardEntry(fid, n, url string, g, eo, rs, rc, ise, et, nr, lt, cid
 		lang,
 		league,
 		maxScore,
+		ud,
 	}
 }
 
-func DefaultLeaderboardEntry(uid string) LeaderboardEntry {
+func DefaultLeaderboardEntry() LeaderboardEntry {
 	return NewLeaderboardEntry(
-		uid,
-		"",
+		"1234567890",
+		"Ghost",
 		"",
 		0,
 		1,
@@ -70,6 +74,7 @@ func DefaultLeaderboardEntry(uid string) LeaderboardEntry {
 		0,
 		0,
 		time.Now().Unix(), // this should be player.LastLogin!
+		enums.CharaTypeSonic,
 		0,
 		0,
 		0,
@@ -77,8 +82,8 @@ func DefaultLeaderboardEntry(uid string) LeaderboardEntry {
 		0,
 		0,
 		0,
-		0,
-		1,
+		enums.LangEnglish,
+		enums.RankingLeagueNone,
 		0,
 		0,
 	)

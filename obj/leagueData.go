@@ -7,8 +7,8 @@ type LeagueData struct {
 	NumDown            int64           `json:"numDown,string"`
 	NumGroupMember     int64           `json:"numGroupMember,string"`
 	NumLeagueMember    int64           `json:"numLeagueMember,string"`
-	HighScoreOperator  []OperatorScore `json:"highScoreOpe"`  // what is this used for?
-	TotalScoreOperator []OperatorScore `json:"totalScoreOpe"` // ^^^^^^^^^^^^^^^^^^^^
+	HighScoreOperator  []OperatorScore `json:"highScoreOpe"`
+	TotalScoreOperator []OperatorScore `json:"totalScoreOpe"`
 }
 
 func NewLeagueData(lid, gid, nup, ndown, ngm, nlm int64, hso, tso []OperatorScore) LeagueData {

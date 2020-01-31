@@ -1,7 +1,7 @@
 package db
 
 import (
-	"crypto/md5"
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	SessionIDSchema = "OUTRUN_%s"
+	SessionIDSchema = "REVIVAL_%s"
 )
 
 func NewAccountWithID(uid string) netobj.Player {
@@ -73,6 +73,7 @@ func NewAccountWithID(uid string) netobj.Player {
 	messages := []obj.Message{}
 	operatorMessages := []obj.OperatorMessage{}
 	loginBonusState := netobj.DefaultLoginBonusState(0)
+	language := int64(enums.LangEnglish)
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -80,6 +81,7 @@ func NewAccountWithID(uid string) netobj.Player {
 		migrationPassword,
 		userPassword,
 		key,
+		language,
 		playerState,
 		characterState,
 		chaoState,
@@ -118,6 +120,7 @@ func SavePlayer(player netobj.Player) error {
 		player.UserPassword,
 		player.Key,
 		player.LastLogin,
+		player.Language,
 		player.CharacterState,
 		player.ChaoState,
 	}
@@ -210,12 +213,16 @@ func BoltGetPlayerIDBySessionID(sid string) (string, error) {
 
 func AssignSessionID(uid string) (string, error) {
 	// TODO: Implement this!
-	return "", nil
+	datB := []byte(uid + strconv.Itoa(int(time.Now().Unix())))
+	hash := sha1.Sum(datB)
+	hashStr := fmt.Sprintf("%x", hash)
+	sid := fmt.Sprintf(SessionIDSchema, hashStr)
+	return sid, nil
 }
 
 func BoltAssignSessionID(uid string) (string, error) {
-	uidB := []byte(uid)
-	hash := md5.Sum(uidB)
+	datB := []byte(uid + strconv.Itoa(int(time.Now().Unix())))
+	hash := sha1.Sum(datB)
 	hashStr := fmt.Sprintf("%x", hash)
 	sid := fmt.Sprintf(SessionIDSchema, hashStr)
 	value := fmt.Sprintf("%s/%s", uid, time.Now().Unix()) // register the time that the session ID was assigned
@@ -251,11 +258,6 @@ func BoltIsValidSessionID(sid []byte) (bool, error) {
 	}
 	_, sessionTime := ParseSIDEntry(sidResult)
 	return IsValidSessionTime(sessionTime), err
-}
-
-func PurgeSessionID(sid string) error {
-	err := dbaccess.Delete(consts.DBMySQLTableSessionIDs, sid)
-	return err
 }
 
 func BoltPurgeSessionID(sid string) error {

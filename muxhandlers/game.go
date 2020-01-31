@@ -347,6 +347,12 @@ func QuickPostGameResults(helper *helper.Helper) {
 		if request.Score > playerTimedHighScore {
 			player.PlayerState.TimedHighScore = request.Score
 		}
+		if time.Now().UTC().Unix() <= player.PlayerState.LeagueResetTime {
+			playerTimedLeagueHighScore := player.PlayerState.QuickLeagueHighScore
+			if request.Score > playerTimedLeagueHighScore {
+				player.PlayerState.QuickLeagueHighScore = request.Score
+			}
+		}
 		helper.DebugOut("request.DailyChallengeValue: %v", request.DailyChallengeValue)
 		helper.DebugOut("request.DailyChallengeComplete: %v", request.DailyChallengeComplete)
 		if player.PlayerState.DailyChallengeComplete == 0 && request.DailyChallengeComplete == 1 {
@@ -603,6 +609,12 @@ func PostGameResults(helper *helper.Helper) {
 		playerHighScore := player.PlayerState.HighScore
 		if request.Score > playerHighScore {
 			player.PlayerState.HighScore = request.Score
+		}
+		if time.Now().UTC().Unix() <= player.PlayerState.LeagueResetTime {
+			playerLeagueHighScore := player.PlayerState.LeagueHighScore
+			if request.Score > playerLeagueHighScore {
+				player.PlayerState.LeagueHighScore = request.Score
+			}
 		}
 		helper.DebugOut("request.DailyChallengeValue: %v", request.DailyChallengeValue)
 		helper.DebugOut("request.DailyChallengeComplete: %v", request.DailyChallengeComplete)

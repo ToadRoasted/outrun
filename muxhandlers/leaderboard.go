@@ -26,6 +26,7 @@ func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
 	}
 	uid, err := helper.GetCallingPlayerID()
 	if err != nil {
+		helper.SendResponse(responses.NewBaseResponse(helper.BaseInfo(emess.OK, status.ExpiredSession)))
 		helper.InternalErr("Error getting calling player ID", err)
 		return
 	}
@@ -53,18 +54,52 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 		helper.Err("Error unmarshalling", err)
 		return
 	}
-	player, err := helper.GetCallingPlayer()
+	uid, err := helper.GetCallingPlayerID()
 	if err != nil {
-		helper.InternalErr("Error getting calling player", err)
+		helper.SendResponse(responses.NewBaseResponse(helper.BaseInfo(emess.OK, status.ExpiredSession)))
+		helper.InternalErr("Error getting calling player ID", err)
+		return
+	}
+	playerState, err := dbaccess.GetPlayerState(consts.DBMySQLTablePlayerStates, uid)
+	if err != nil {
+		helper.InternalErr("Error getting player state", err)
 		return
 	}
 	helper.DebugOut("Mode %v, type %v", request.Mode, request.Type)
 	mode := request.Mode
-	scoretype := request.Type
+	lbtype := request.Type
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultWeeklyLeaderboardEntries(baseInfo, player, mode, scoretype)
+	/*response := responses.DefaultWeeklyLeaderboardEntries(baseInfo, player, mode, scoretype)
 	response.StartTime = player.PlayerState.LeagueStartTime
-	response.ResetTime = player.PlayerState.LeagueResetTime
+	response.ResetTime = player.PlayerState.LeagueResetTime*/
+	var myEntry interface{}
+	entryList := []obj.LeaderboardEntry{}
+	entryCount := int64(0)
+	if lbtype == 4 || lbtype == 5 {
+		// TODO: Then what?
+	} else {
+		entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, 20, uid)
+		if err != nil {
+			helper.InternalErr("Error getting high score table", err)
+			return
+		}
+		entryCount, err = dbaccess.GetNumOfPlayers()
+		if err != nil {
+			helper.InternalErr("Error getting number of players", err)
+			return
+		}
+	}
+	response := responses.WeeklyLeaderboardEntries(
+		baseInfo,
+		myEntry,
+		-1,
+		playerState.LeagueStartTime,
+		playerState.LeagueResetTime,
+		request.First,
+		mode,
+		entryCount,
+		entryList,
+	)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -81,6 +116,7 @@ func GetLeagueData(helper *helper.Helper) {
 	}
 	uid, err := helper.GetCallingPlayerID()
 	if err != nil {
+		helper.SendResponse(responses.NewBaseResponse(helper.BaseInfo(emess.OK, status.ExpiredSession)))
 		helper.InternalErr("Error getting calling player ID", err)
 		return
 	}
@@ -95,9 +131,11 @@ func GetLeagueData(helper *helper.Helper) {
 		leagueData = constobjs.LeagueDataDefinitions[playerState.RankingLeague]
 		leagueData.GroupID = playerState.RankingLeagueGroup
 	} else {
-		leagueData = constobjs.LeagueDataDefinitions[playerState.QuickRankingLeague]
+		leagueData = constobjs.QuickLeagueDataDefinitions[playerState.QuickRankingLeague]
 		leagueData.GroupID = playerState.QuickRankingLeagueGroup
 	}
+	leagueData.NumGroupMember = 50
+	leagueData.NumLeagueMember = 500 // TODO: Add something to dbaccess which can determine these values!
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.LeagueData(baseInfo, leagueData, mode)
 	err = helper.SendResponse(response)
@@ -115,7 +153,7 @@ func GetLeagueOperatorData(helper *helper.Helper) {
 		return
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultLeagueOperatorData(baseInfo, 0)
+	response := responses.DefaultLeagueOperatorData(baseInfo, request.Mode)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

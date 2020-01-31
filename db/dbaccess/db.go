@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/Mtbcooler/outrun/consts"
 
@@ -52,8 +53,8 @@ func SetAnalyticsEntry(table, pid string, value []byte) error {
 func SetPlayerInfo(table, id string, value netobj.PlayerInfo) error {
 	CheckIfDBSet()
 	convertedValue := netobj.PlayerInfoToStoredPlayerInfo(value)
-	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login, characters, chao)\n"+
-		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login, :characters, :chao)",
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, username, password, migrate_password, user_password, player_key, last_login, language, characters, chao)\n"+
+		"VALUES ("+id+", :username, :password, :migrate_password, :user_password, :player_key, :last_login, :language, :characters, :chao)",
 		convertedValue)
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
@@ -143,7 +144,7 @@ func GetAnalyticsEntry(table, pid string) ([]byte, error) {
 
 func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 	CheckIfDBSet()
-	values := netobj.StoredPlayerInfo{"", "", "", "", "", 0, []byte{}, []byte{}}
+	values := netobj.StoredPlayerInfo{"", "", "", "", "", 0, 0, []byte{}, []byte{}}
 	var id2 int64
 	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
 		&values.Username,
@@ -152,11 +153,12 @@ func GetPlayerInfo(table, id string) (netobj.PlayerInfo, error) {
 		&values.UserPassword,
 		&values.Key,
 		&values.LastLogin,
+		&values.Language,
 		&values.CharacterState,
 		&values.ChaoState,
 	)
 	if err != nil {
-		return netobj.PlayerInfo{"", "", "", "", "", 0, []netobj.Character{}, []netobj.Chao{}}, err
+		return netobj.PlayerInfo{"", "", "", "", "", 0, 0, []netobj.Character{}, []netobj.Chao{}}, err
 	}
 	return netobj.StoredPlayerInfoToPlayerInfo(values), nil
 }
@@ -295,6 +297,32 @@ func Delete(table, id string) error {
 	return err
 }
 
+func PurgeSessionID(sid string) error {
+	CheckIfDBSet()
+	_, err := db.Exec("DELETE FROM `"+consts.DBMySQLTableSessionIDs+"` WHERE sid = ?", sid)
+	return err
+}
+
+func PurgeAllExpiredSessionIDs() error {
+	CheckIfDBSet()
+	rows, err := db.Query("SELECT sid FROM `"+consts.DBMySQLTableSessionIDs+"` WHERE assigned_at_time > ?", time.Now().Unix()-consts.DBSessionExpiryTime)
+	if err != nil {
+		return err
+	}
+	sid := ""
+	for rows.Next() {
+		err = rows.Scan(&sid)
+		if err != nil {
+			rows.Close()
+			return err
+		}
+		PurgeSessionID(sid)
+	}
+	err = rows.Err()
+	rows.Close()
+	return err
+}
+
 func CheckIfDBSet() {
 	if db == nil {
 		log.Println("[INFO] Connecting to MySQL database...")
@@ -319,19 +347,4 @@ func CloseDB() error {
 		return db.Close()
 	}
 	return errors.New("cannot close database if it's not set")
-}
-
-/*func GetHighScores(mode, scoretype, limit int64) {
-	CheckIfDBSet()
-	leaderboardentries := []obj.LeaderboardEntry{}
-}*/
-
-func GetNumOfPlayers() (int64, error) {
-	CheckIfDBSet()
-	playercount := int64(0)
-	err := db.QueryRow("SELECT COUNT(*) FROM `" + consts.DBMySQLTablePlayerStates + "`").Scan(&playercount)
-	if err != nil {
-		return -1, err
-	}
-	return playercount, nil
 }

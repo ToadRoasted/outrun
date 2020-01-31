@@ -43,8 +43,8 @@ func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) Wee
 
 type WeeklyLeaderboardEntriesResponse struct {
 	BaseResponse
-	PlayerEntry  obj.LeaderboardEntry   `json:"playerEntry"`
-	LastOffset   int64                  `json:"lastOffset"`
+	PlayerEntry  interface{}            `json:"playerEntry"`
+	LastOffset   int64                  `json:"lastOffset"` // not used?
 	StartTime    int64                  `json:"startTime"`
 	ResetTime    int64                  `json:"resetTime"`
 	StartIndex   int64                  `json:"startIndex"`
@@ -53,7 +53,7 @@ type WeeklyLeaderboardEntriesResponse struct {
 	EntriesList  []obj.LeaderboardEntry `json:"entriesList"`
 }
 
-func WeeklyLeaderboardEntries(base responseobjs.BaseInfo, pe obj.LeaderboardEntry, lo, st, rt, si, m, te int64, el []obj.LeaderboardEntry) WeeklyLeaderboardEntriesResponse {
+func WeeklyLeaderboardEntries(base responseobjs.BaseInfo, pe interface{}, lo, st, rt, si, m, te int64, el []obj.LeaderboardEntry) WeeklyLeaderboardEntriesResponse {
 	baseResponse := NewBaseResponse(base)
 	out := WeeklyLeaderboardEntriesResponse{
 		baseResponse,
@@ -72,20 +72,23 @@ func WeeklyLeaderboardEntries(base responseobjs.BaseInfo, pe obj.LeaderboardEntr
 func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, player netobj.Player, mode, ltype int64) WeeklyLeaderboardEntriesResponse {
 	startTime := now.BeginningOfWeek().UTC().Unix()
 	resetTime := now.EndOfWeek().UTC().Unix()
-	myEntry := conversion.PlayerToLeaderboardEntry(player, mode)
+	entries := []obj.LeaderboardEntry{}
+	var myEntry interface{}
+	if player.PlayerState.HighScore > 0 {
+		myEntry = conversion.PlayerToLeaderboardEntry(player, mode)
+		entries = append(entries, conversion.PlayerToLeaderboardEntry(player, mode))
+	}
 	return WeeklyLeaderboardEntries(
 		base,
 		//obj.DefaultLeaderboardEntry(uid),
 		myEntry,
-		5,
+		0,
 		startTime,
 		resetTime,
-		1,
+		0,
 		mode,
-		1,
-		[]obj.LeaderboardEntry{
-			myEntry,
-		},
+		int64(len(entries)),
+		entries,
 	)
 }
 
@@ -105,16 +108,6 @@ func LeagueData(base responseobjs.BaseInfo, leagueData obj.LeagueData, mode int6
 	return out
 }
 
-func DefaultLeagueData(base responseobjs.BaseInfo, mode int64) LeagueDataResponse {
-	var leagueData obj.LeagueData
-	if mode == 0 {
-		leagueData = constobjs.DefaultLeagueDataMode0
-	} else if mode == 1 {
-		leagueData = constobjs.DefaultLeagueDataMode1
-	}
-	return LeagueData(base, leagueData, mode)
-}
-
 type LeagueOperatorDataResponse struct {
 	BaseResponse
 	LeagueList []obj.LeagueData `json:"leagueOperatorList"`
@@ -131,7 +124,7 @@ func LeagueOperatorData(base responseobjs.BaseInfo, leagueList []obj.LeagueData,
 	return out
 }
 
-func DefaultLeagueOperatorData(base responseobjs.BaseInfo, leagueId int64) LeagueOperatorDataResponse {
+func DefaultLeagueOperatorData(base responseobjs.BaseInfo, mode int64) LeagueOperatorDataResponse {
 	leagueList := []obj.LeagueData{
 		constobjs.LeagueDataDefinitions[enums.RankingLeagueF_M],
 		constobjs.LeagueDataDefinitions[enums.RankingLeagueF],
@@ -155,5 +148,30 @@ func DefaultLeagueOperatorData(base responseobjs.BaseInfo, leagueId int64) Leagu
 		constobjs.LeagueDataDefinitions[enums.RankingLeagueS],
 		constobjs.LeagueDataDefinitions[enums.RankingLeagueS_P],
 	}
-	return LeagueOperatorData(base, leagueList, leagueId)
+	if mode != 0 {
+		leagueList = []obj.LeagueData{
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueF_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueF],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueF_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueE_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueE],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueE_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueD_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueD],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueD_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueC_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueC],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueC_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueB_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueB],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueB_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueA_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueA],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueA_P],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueS_M],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueS],
+			constobjs.QuickLeagueDataDefinitions[enums.RankingLeagueS_P],
+		}
+	}
+	return LeagueOperatorData(base, leagueList, mode)
 }

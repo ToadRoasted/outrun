@@ -70,5 +70,6 @@ func PlayerToLeaderboardEntry(player netobj.Player, mode int64) obj.LeaderboardE
 		language,
 		league,
 		maxScore,
+		0,
 	}
 }

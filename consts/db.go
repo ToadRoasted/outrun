@@ -40,6 +40,7 @@ const (
 		user_password TEXT NOT NULL,
 		player_key TEXT NOT NULL,
 		last_login BIGINT UNSIGNED NOT NULL,
+		language INTEGER NOT NULL,
 		characters JSON,
 		chao JSON,
 		PRIMARY KEY (id)
@@ -155,6 +156,13 @@ const (
 		league_player_count INTEGER,
 		group_player_count INTEGER,
 		PRIMARY KEY (group_id)
+	) ENGINE = InnoDB;`
+	SQLSessionIDsSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableSessionIDs + ` (
+		sid VARCHAR(48) NOT NULL,
+		uid BIGINT UNSIGNED NOT NULL,
+		assigned_at_time BIGINT UNSIGNED NOT NULL,
+		PRIMARY KEY (sid)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(
 		id,

@@ -62,6 +62,7 @@ var BlankPlayer = func() netobj.Player {
 	messages := []obj.Message{}
 	operatorMessages := []obj.OperatorMessage{}
 	loginBonusState := netobj.DefaultLoginBonusState(0)
+	language := int64(enums.LangEnglish)
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -69,6 +70,7 @@ var BlankPlayer = func() netobj.Player {
 		migrationPassword,
 		userPassword,
 		key,
+		language,
 		playerState,
 		characterState,
 		chaoState,

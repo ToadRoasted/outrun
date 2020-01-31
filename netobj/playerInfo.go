@@ -12,6 +12,7 @@ type PlayerInfo struct {
 	UserPassword      string      `json:"userPassword" db:"user_password"`         // used in migration
 	Key               string      `json:"key" db:"player_key"`
 	LastLogin         int64       `json:"lastLogin" db:"last_login"`
+	Language          int64       `json:"language" db:"language"`
 	CharacterState    []Character `json:"characters" db:"characters"`
 	ChaoState         []Chao      `json:"chao" db:"chao"`
 }
@@ -23,6 +24,7 @@ type StoredPlayerInfo struct {
 	UserPassword      string `json:"userPassword" db:"user_password"`         // used in migration
 	Key               string `json:"key" db:"player_key"`
 	LastLogin         int64  `json:"lastLogin" db:"last_login"`
+	Language          int64  `json:"language" db:"language"`
 	CharacterState    []byte `json:"characters" db:"characters"`
 	ChaoState         []byte `json:"chao" db:"chao"`
 }
@@ -43,6 +45,7 @@ func PlayerInfoToStoredPlayerInfo(pli PlayerInfo) StoredPlayerInfo {
 		pli.UserPassword,
 		pli.Key,
 		pli.LastLogin,
+		pli.Language,
 		characterstate,
 		chaostate,
 	}
@@ -66,6 +69,7 @@ func StoredPlayerInfoToPlayerInfo(pli StoredPlayerInfo) PlayerInfo {
 		pli.UserPassword,
 		pli.Key,
 		pli.LastLogin,
+		pli.Language,
 		characterstate,
 		chaostate,
 	}

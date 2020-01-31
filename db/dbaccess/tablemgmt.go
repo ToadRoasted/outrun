@@ -57,6 +57,7 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 		playerinfo.MigrationPassword,
 		playerinfo.UserPassword,
 		playerinfo.Key,
+		playerinfo.Language,
 		playerstate,
 		playerinfo.CharacterState,
 		playerinfo.ChaoState,
@@ -76,47 +77,52 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 }
 
 func InitializeTablesIfNecessary() error {
-	log.Println("[INFO] Initializing tables... (1/9)")
+	log.Println("[INFO] Initializing tables... (1/10)")
 	_, err := db.Exec(consts.SQLAnalyticsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (2/9)")
+	log.Println("[INFO] Initializing tables... (2/10)")
 	_, err = db.Exec(consts.SQLCorePlayerInfoSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (3/9)")
+	log.Println("[INFO] Initializing tables... (3/10)")
 	_, err = db.Exec(consts.SQLPlayerStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (4/9)")
+	log.Println("[INFO] Initializing tables... (4/10)")
 	_, err = db.Exec(consts.SQLMileageMapStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (5/9)")
+	log.Println("[INFO] Initializing tables... (5/10)")
 	_, err = db.Exec(consts.SQLOptionUserResultsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (6/9)")
+	log.Println("[INFO] Initializing tables... (6/10)")
 	_, err = db.Exec(consts.SQLRouletteInfosSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (7/9)")
+	log.Println("[INFO] Initializing tables... (7/10)")
 	_, err = db.Exec(consts.SQLLoginBonusStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (8/9)")
+	log.Println("[INFO] Initializing tables... (8/10)")
 	_, err = db.Exec(consts.SQLOperatorMessagesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (9/9)")
+	log.Println("[INFO] Initializing tables... (9/10)")
 	_, err = db.Exec(consts.SQLRankingLeagueDataSchema)
+	if err != nil {
+		return err
+	}
+	log.Println("[INFO] Initializing tables... (10/10)")
+	_, err = db.Exec(consts.SQLSessionIDsSchema)
 	return err
 }
