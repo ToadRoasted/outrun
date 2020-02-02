@@ -1,6 +1,7 @@
 package netobj
 
 import (
+	"encoding/json"
 	"log"
 	"math/rand"
 	"strconv"
@@ -19,6 +20,7 @@ type WheelOptions struct {
 	ItemWeight           []int64    `json:"itemWeight" db:"item_weight"`
 	ItemWon              int64      `json:"itemWon" db:"item_won"`
 	NextFreeSpin         int64      `json:"nextFreeSpin" db:"next_free_spin"` // midnight (start of next day)
+	SpinID               int64      `json:"spinId" db:"spin_id"`
 	SpinCost             int64      `json:"spinCost" db:"spin_cost"`
 	RouletteRank         int64      `json:"rouletteRank" db:"roulette_rank"`
 	NumRouletteToken     int64      `json:"numRouletteToken" db:"num_roulette_token"`
@@ -27,89 +29,109 @@ type WheelOptions struct {
 	ItemList             []obj.Item `json:"itemList" db:"item_list"`
 }
 
-func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank, freeSpins int64) WheelOptions {
+type SqlWheelOptions struct {
+	Items                []byte `json:"items" db:"items"`
+	Item                 []byte `json:"item" db:"item"`
+	ItemWeight           []byte `json:"itemWeight" db:"item_weight"`
+	ItemWon              int64  `json:"itemWon" db:"item_won"`
+	NextFreeSpin         int64  `json:"nextFreeSpin" db:"next_free_spin"` // midnight (start of next day)
+	SpinID               int64  `json:"spinId" db:"spin_id"`
+	SpinCost             int64  `json:"spinCost" db:"spin_cost"`
+	RouletteRank         int64  `json:"rouletteRank" db:"roulette_rank"`
+	NumRouletteToken     int64  `json:"numRouletteToken" db:"num_roulette_token"`
+	NumJackpotRing       int64  `json:"numJackpotRing" db:"num_jackpot_ring"`
+	NumRemainingRoulette int64  `json:"numRemainingRoulette" db:"num_remaining_roulette"`
+	ItemList             []byte `json:"itemList" db:"item_list"`
+}
+
+func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank, freeSpins, spinID int64) WheelOptions {
 	// TODO: Modifying this seems like a good way of figuring out what the game thinks each ID means in terms of items.
 	// const the below
 	// NOTE: Free spins occur when numRemainingRoulette > numRouletteToken
-	//items := []string{"200000", "120000", "120001", "120002", "200000", "900000", "120003", "120004"}
-	rouletteGenMode := rand.Intn(3)
-	items := []string{strconv.Itoa(enums.IDTypeItemRouletteWin)} // first item is always jackpot/big/super
-	item := []int64{1}
-	// There are currently three roulette generation modes:
-	// Mode 0: Classic mode
-	// Mode 1: Vertical dual win (based off a pattern in the OG server)
-	// Mode 2: Classic mode but with two win spots placed horizontally instead of one win spot on the top
-	chaoIDs, _ := roulette.GetRandomChaoWheelChao(0, 7)
+	items := []string{"200000", "120000", "120001", "120002", "200000", "900000", "120003", "120004"}
+	item := []int64{1, 1, 1, 1, 1, 1, 1, 1}
 	itemWeight := []int64{1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250}
-	randomItemList := consts.RandomItemListNormalWheel
-	itemAmountRange := consts.NormalWheelItemAmountRange
-	if rouletteRank == enums.WheelRankBig {
-		randomItemList = consts.RandomItemListBigWheel
-		itemAmountRange = consts.BigWheelItemAmountRange
-	}
-	if rouletteRank == enums.WheelRankSuper {
-		randomItemList = consts.RandomItemListSuperWheel
-		itemAmountRange = consts.SuperWheelItemAmountRange
-	}
-	switch rouletteGenMode {
-	case 1:
-		randomItem1 := randomItemList[rand.Intn(len(randomItemList))]
-		randomItemAmount1 := itemAmountRange[randomItem1].GetRandom()
-		randomItem2 := randomItemList[rand.Intn(len(randomItemList))]
-		randomItemAmount2 := itemAmountRange[randomItem2].GetRandom()
-		items = append(items, randomItem1)
-		item = append(item, randomItemAmount1)
-		items = append(items, randomItem2)
-		item = append(item, randomItemAmount2)
-		items = append(items, randomItem1)
-		item = append(item, randomItemAmount1)
-		if rouletteRank != enums.WheelRankSuper {
-			items = append(items, strconv.Itoa(enums.IDTypeItemRouletteWin))
-			item = append(item, 1)
-		} else {
+	if false {
+		// TODO: This is where the roulette is loaded
+	} else {
+		rouletteGenMode := rand.Intn(3)
+		items = []string{strconv.Itoa(enums.IDTypeItemRouletteWin)} // first item is always jackpot/big/super
+		item = []int64{1}
+		// There are currently three roulette generation modes:
+		// Mode 0: Classic mode
+		// Mode 1: Vertical dual win
+		// Mode 2: Classic mode but with two win spots placed horizontally instead of one win spot on the top
+		chaoIDs, _ := roulette.GetRandomChaoWheelChao(0, 7)
+		randomItemList := consts.RandomItemListNormalWheel
+		itemAmountRange := consts.NormalWheelItemAmountRange
+		if rouletteRank == enums.WheelRankBig {
+			randomItemList = consts.RandomItemListBigWheel
+			itemAmountRange = consts.BigWheelItemAmountRange
+		}
+		if rouletteRank == enums.WheelRankSuper {
+			randomItemList = consts.RandomItemListSuperWheel
+			itemAmountRange = consts.SuperWheelItemAmountRange
+		}
+		switch rouletteGenMode {
+		case 1:
+			randomItem1 := randomItemList[rand.Intn(len(randomItemList))]
+			randomItemAmount1 := itemAmountRange[randomItem1].GetRandom()
+			randomItem2 := randomItemList[rand.Intn(len(randomItemList))]
+			randomItemAmount2 := itemAmountRange[randomItem2].GetRandom()
+			items = append(items, randomItem1)
+			item = append(item, randomItemAmount1)
 			items = append(items, randomItem2)
 			item = append(item, randomItemAmount2)
+			items = append(items, randomItem1)
+			item = append(item, randomItemAmount1)
+			if rouletteRank != enums.WheelRankSuper {
+				items = append(items, strconv.Itoa(enums.IDTypeItemRouletteWin))
+				item = append(item, 1)
+			} else {
+				items = append(items, randomItem2)
+				item = append(item, randomItemAmount2)
+			}
+			items = append(items, randomItem1)
+			item = append(item, randomItemAmount1)
+			items = append(items, randomItem2)
+			item = append(item, randomItemAmount2)
+			items = append(items, randomItem1)
+			item = append(item, randomItemAmount1)
+		default:
+			for _ = range make([]byte, 7) { // loop 7 times
+				randomItem := randomItemList[rand.Intn(len(randomItemList))]
+				randomItemAmount := itemAmountRange[randomItem].GetRandom()
+				items = append(items, randomItem)
+				item = append(item, randomItemAmount)
+			}
+			if rouletteGenMode == 2 && rouletteRank == enums.WheelRankNormal {
+				randomItem := randomItemList[rand.Intn(len(randomItemList))]
+				randomItemAmount := itemAmountRange[randomItem].GetRandom()
+				items[0] = randomItem
+				item[0] = randomItemAmount
+				items[2] = strconv.Itoa(enums.IDTypeItemRouletteWin)
+				item[2] = 1
+				items[6] = strconv.Itoa(enums.IDTypeItemRouletteWin)
+				item[6] = 1
+			}
 		}
-		items = append(items, randomItem1)
-		item = append(item, randomItemAmount1)
-		items = append(items, randomItem2)
-		item = append(item, randomItemAmount2)
-		items = append(items, randomItem1)
-		item = append(item, randomItemAmount1)
-	default:
-		for _ = range make([]byte, 7) { // loop 7 times
-			randomItem := randomItemList[rand.Intn(len(randomItemList))]
-			randomItemAmount := itemAmountRange[randomItem].GetRandom()
-			items = append(items, randomItem)
-			item = append(item, randomItemAmount)
-		}
-		if rouletteGenMode == 2 && rouletteRank == enums.WheelRankNormal {
-			randomItem := randomItemList[rand.Intn(len(randomItemList))]
-			randomItemAmount := itemAmountRange[randomItem].GetRandom()
-			items[0] = randomItem
-			item[0] = randomItemAmount
-			items[2] = strconv.Itoa(enums.IDTypeItemRouletteWin)
+		// place normal eggs if needed
+		switch rouletteRank {
+		case enums.WheelRankBig:
+			items[2] = chaoIDs[1]
 			item[2] = 1
-			items[6] = strconv.Itoa(enums.IDTypeItemRouletteWin)
+			items[6] = chaoIDs[5]
 			item[6] = 1
+		case enums.WheelRankSuper:
+			items[1] = chaoIDs[0]
+			item[1] = 1
+			items[3] = chaoIDs[2]
+			item[3] = 1
+			items[5] = chaoIDs[4]
+			item[5] = 1
+			items[7] = chaoIDs[6]
+			item[7] = 1
 		}
-	}
-	// place normal eggs if needed
-	switch rouletteRank {
-	case enums.WheelRankBig:
-		items[2] = chaoIDs[1]
-		item[2] = 1
-		items[6] = chaoIDs[5]
-		item[6] = 1
-	case enums.WheelRankSuper:
-		items[1] = chaoIDs[0]
-		item[1] = 1
-		items[3] = chaoIDs[2]
-		item[3] = 1
-		items[5] = chaoIDs[4]
-		item[5] = 1
-		items[7] = chaoIDs[6]
-		item[7] = 1
 	}
 
 	//itemWon := int64(0)
@@ -132,6 +154,7 @@ func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank,
 		itemWeight,
 		itemWon,
 		nextFreeSpin,
+		spinID,
 		spinCost,
 		rouletteRank,
 		numRouletteToken,
@@ -164,6 +187,31 @@ func UpgradeWheelOptions(origWheel WheelOptions, numRouletteTicket, rouletteCoun
 	} else {
 		rouletteRank = enums.WheelRankNormal
 	}
-	newWheel := DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank, freeSpins)
+	newWheel := DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod, rouletteRank, freeSpins, origWheel.SpinID)
 	return newWheel
+}
+
+func UnmarshalWheelOptions(source SqlWheelOptions) (WheelOptions, error) {
+	var items []string
+	json.Unmarshal(source.Items, &items)
+	var item []int64
+	json.Unmarshal(source.Item, &item)
+	var itemWeight []int64
+	json.Unmarshal(source.ItemWeight, &itemWeight)
+	var itemList []obj.Item
+	json.Unmarshal(source.ItemList, &itemList)
+	return WheelOptions{
+		items,
+		item,
+		itemWeight,
+		source.ItemWon,
+		source.NextFreeSpin,
+		source.SpinID,
+		source.SpinCost,
+		source.RouletteRank,
+		source.NumRouletteToken,
+		source.NumJackpotRing,
+		source.NumRemainingRoulette,
+		itemList,
+	}, nil
 }

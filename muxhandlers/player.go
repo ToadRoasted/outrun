@@ -17,6 +17,9 @@ import (
 )
 
 func GetPlayerState(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -78,6 +81,9 @@ func GetPlayerState(helper *helper.Helper) {
 }
 
 func GetCharacterState(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -89,6 +95,9 @@ func GetCharacterState(helper *helper.Helper) {
 }
 
 func GetChaoState(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -100,6 +109,9 @@ func GetChaoState(helper *helper.Helper) {
 }
 
 func SetUsername(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.SetUsernameRequest
 	err := json.Unmarshal(recv, &request)

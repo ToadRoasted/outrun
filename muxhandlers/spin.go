@@ -23,6 +23,9 @@ import (
 )
 
 func GetWheelOptions(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -50,6 +53,9 @@ func GetWheelOptions(helper *helper.Helper) {
 }
 
 func CommitWheelSpin(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.CommitWheelSpinRequest
 	err := json.Unmarshal(recv, &request)

@@ -122,6 +122,7 @@ const (
 	SQLRouletteInfosSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableRouletteInfos + ` (
 		id BIGINT UNSIGNED NOT NULL,
+		login_roulette_id INTEGER,
 		roulette_period_end BIGINT UNSIGNED NOT NULL,
 		roulette_count_in_period INTEGER,
 		got_jackpot_this_period INTEGER,

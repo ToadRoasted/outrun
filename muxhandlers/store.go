@@ -17,6 +17,9 @@ import (
 )
 
 func GetRedStarExchangeList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.RedStarExchangeListRequest
 	err := json.Unmarshal(recv, &request)
@@ -50,6 +53,9 @@ func GetRedStarExchangeList(helper *helper.Helper) {
 }
 
 func RedStarExchange(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.RedStarExchange
 	err := json.Unmarshal(recv, &request)

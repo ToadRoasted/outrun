@@ -69,7 +69,7 @@ func DefaultGetCountry(base responseobjs.BaseInfo) GetCountryResponse {
 	return GetCountry(
 		base,
 		1,
-		"US",
+		"JP",
 	)
 }
 

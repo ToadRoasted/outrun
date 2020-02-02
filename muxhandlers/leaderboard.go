@@ -17,7 +17,12 @@ import (
 	"github.com/Mtbcooler/outrun/status"
 )
 
+// Leaderboards and league endpoints
+
 func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.LeaderboardRequest
 	err := json.Unmarshal(recv, &request)
@@ -59,6 +64,9 @@ func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
 }
 
 func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.LeaderboardEntriesRequest
 	err := json.Unmarshal(recv, &request)
@@ -129,6 +137,9 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 }
 
 func GetLeagueData(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.LeaderboardRequest
 	err := json.Unmarshal(recv, &request)
@@ -167,6 +178,9 @@ func GetLeagueData(helper *helper.Helper) {
 }
 
 func GetLeagueOperatorData(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.LeaderboardRequest
 	err := json.Unmarshal(recv, &request)

@@ -135,13 +135,13 @@ func (r *Helper) Uncatchable(msg string) {
 }
 func (r *Helper) InternalErr(msg string, err error) {
 	log.Printf(LogErrBase, PrefixErr, r.CallerName, msg, err.Error())
-	//r.RespW.WriteHeader(http.StatusBadRequest)
+	r.RespW.WriteHeader(http.StatusInternalServerError)
 	//r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.InternalServerError)))
 }
 func (r *Helper) Err(msg string, err error) {
 	log.Printf(LogErrBase, PrefixErr, r.CallerName, msg, err.Error())
-	//r.RespW.WriteHeader(http.StatusBadRequest)
+	r.RespW.WriteHeader(http.StatusBadRequest)
 	//r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
 }
@@ -153,13 +153,13 @@ func (r *Helper) ErrRespond(msg string, err error, response string) {
 }
 func (r *Helper) InternalFatal(msg string, err error) {
 	log.Fatalf(LogErrBase, PrefixErr, r.CallerName, msg, err.Error())
-	//	r.RespW.WriteHeader(http.StatusBadRequest)
+	r.RespW.WriteHeader(http.StatusInternalServerError)
 	//	r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.InternalServerError)))
 }
 func (r *Helper) Fatal(msg string, err error) {
 	log.Fatalf(LogErrBase, PrefixErr, r.CallerName, msg, err.Error())
-	//	r.RespW.WriteHeader(http.StatusBadRequest)
+	r.RespW.WriteHeader(http.StatusBadRequest)
 	//	r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
 }
@@ -170,6 +170,37 @@ func (r *Helper) InvalidRequest() {
 	//	r.RespW.WriteHeader(http.StatusBadRequest)
 	//	r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
+}
+func (r *Helper) CheckSession(sendResponseAndGenerateNewSessionIDIfNeeded bool) bool {
+	recv := r.GetGameRequest()
+	var request requests.Base
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		// likely malformed request
+		if sendResponseAndGenerateNewSessionIDIfNeeded {
+			r.RespW.WriteHeader(http.StatusBadRequest)
+			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
+		}
+		return false
+	}
+	sid := []byte(request.SessionID)
+	r.DebugOut("Session ID to check: %s", sid)
+	validsession, err := db.BoltIsValidSessionID(sid)
+	if err != nil {
+		if sendResponseAndGenerateNewSessionIDIfNeeded {
+			r.RespW.WriteHeader(http.StatusInternalServerError)
+			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.InternalServerError)))
+		}
+		return false
+	}
+	if !validsession {
+		if sendResponseAndGenerateNewSessionIDIfNeeded {
+
+			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ExpiredSession)))
+		}
+		return false
+	}
+	return true
 }
 func (r *Helper) GetCallingPlayer() (netobj.Player, error) {
 	// Powerful function to get the player directly from the response

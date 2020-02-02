@@ -11,6 +11,9 @@ import (
 )
 
 func GetEventList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)

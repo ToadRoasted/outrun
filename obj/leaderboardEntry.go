@@ -64,7 +64,7 @@ func NewLeaderboardEntry(fid, n, url string, g, eo, rs, rc, ise, et, nr, lt, cid
 func DefaultLeaderboardEntry() LeaderboardEntry {
 	return NewLeaderboardEntry(
 		"1234567890",
-		"Ghost",
+		"Someone",
 		"",
 		0,
 		1,

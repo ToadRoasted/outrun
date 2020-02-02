@@ -24,6 +24,9 @@ import (
 )
 
 func GetChaoWheelOptions(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -38,6 +41,9 @@ func GetChaoWheelOptions(helper *helper.Helper) {
 }
 
 func GetPrizeChaoWheelSpin(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	// agnostic
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPrizeChaoWheel(baseInfo)
@@ -48,6 +54,9 @@ func GetPrizeChaoWheelSpin(helper *helper.Helper) {
 }
 
 func EquipChao(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.EquipChaoRequest
 	err := json.Unmarshal(recv, &request)
@@ -141,6 +150,9 @@ completed:
 }
 
 func CommitChaoWheelSpin(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)

@@ -29,6 +29,8 @@ import (
 	"github.com/jinzhu/now"
 )
 
+//
+
 func Login(helper *helper.Helper) {
 	recv := helper.GetGameRequest()
 	var request requests.LoginRequest
@@ -106,6 +108,7 @@ func Login(helper *helper.Helper) {
 				helper.InternalErr("Error assigning session ID", err)
 				return
 			}
+			player.Language = request.Language
 			player.LastLogin = time.Now().UTC().Unix()
 			player.PlayerVarious.EnergyRecoveryMax = gameconf.CFile.EnergyRecoveryMax
 			player.PlayerVarious.EnergyRecoveryTime = gameconf.CFile.EnergyRecoveryTime
@@ -136,6 +139,9 @@ func Login(helper *helper.Helper) {
 }
 
 func GetVariousParameter(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -151,6 +157,9 @@ func GetVariousParameter(helper *helper.Helper) {
 }
 
 func GetInformation(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	infos := []obj.Information{}
 	helper.DebugOut("%v", infoconf.CFile.EnableInfos)
@@ -176,6 +185,9 @@ func GetInformation(helper *helper.Helper) {
 }
 
 func GetTicker(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -190,6 +202,9 @@ func GetTicker(helper *helper.Helper) {
 }
 
 func LoginBonus(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -222,6 +237,9 @@ func LoginBonus(helper *helper.Helper) {
 }
 
 func LoginBonusSelect(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.LoginBonusSelectRequest
 	err := json.Unmarshal(recv, &request)
@@ -284,6 +302,9 @@ func LoginBonusSelect(helper *helper.Helper) {
 }
 
 func GetCountry(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	// TODO: Should get correct country code!
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultGetCountry(baseInfo)
@@ -301,6 +322,9 @@ func GetMigrationPassword(helper *helper.Helper) {
 			final[i] = runes[rand.Intn(len(runes))]
 		}
 		return string(final)
+	}
+	if !helper.CheckSession(true) {
+		return
 	}
 	recv := helper.GetGameRequest()
 	var request requests.GetMigrationPasswordRequest

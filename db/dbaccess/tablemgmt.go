@@ -28,7 +28,7 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	wheeloptions := netobj.DefaultWheelOptions(playerstate.NumRouletteTicket, 0, enums.WheelRankNormal, 5) // TODO: REPLACE ME! FOR TESTING ONLY!
+	wheeloptions := netobj.DefaultWheelOptions(playerstate.NumRouletteTicket, 0, enums.WheelRankNormal, 5, 0) // TODO: REPLACE ME! FOR TESTING ONLY!
 	rouletteinfo, err := GetRouletteInfo(consts.DBMySQLTableRouletteInfos, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err

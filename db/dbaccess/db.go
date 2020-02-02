@@ -100,8 +100,8 @@ func SetOptionUserResult(table, id string, value netobj.OptionUserResult) error 
 
 func SetRouletteInfo(table, id string, value netobj.RouletteInfo) error {
 	CheckIfDBSet()
-	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, roulette_period_end, roulette_count_in_period, got_jackpot_this_period)\n"+
-		"VALUES ("+id+", :roulette_period_end, :roulette_count_in_period, :got_jackpot_this_period)",
+	result, err := db.NamedExec("REPLACE INTO `"+table+"`(id, login_roulette_id, roulette_period_end, roulette_count_in_period, got_jackpot_this_period)\n"+
+		"VALUES ("+id+", :login_roulette_id, :roulette_period_end, :roulette_count_in_period, :got_jackpot_this_period)",
 		value)
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
@@ -284,6 +284,7 @@ func GetRouletteInfo(table, id string) (netobj.RouletteInfo, error) {
 	values := netobj.DefaultRouletteInfo()
 	var id2 int64
 	err := db.QueryRow("SELECT * FROM `"+table+"` WHERE id = ?", id).Scan(&id2,
+		&values.LoginRouletteID,
 		&values.RoulettePeriodEnd,
 		&values.RouletteCountInPeriod,
 		&values.GotJackpotThisPeriod,

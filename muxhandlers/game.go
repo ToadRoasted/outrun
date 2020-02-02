@@ -31,6 +31,9 @@ import (
 )
 
 func GetDailyChallengeData(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting player", err)
@@ -45,6 +48,9 @@ func GetDailyChallengeData(helper *helper.Helper) {
 }
 
 func GetCostList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	// no player, agonstic
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultCostList(baseInfo)
@@ -55,6 +61,9 @@ func GetCostList(helper *helper.Helper) {
 }
 
 func GetMileageData(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting player", err)
@@ -69,6 +78,9 @@ func GetMileageData(helper *helper.Helper) {
 }
 
 func GetCampaignList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	campaignList := []obj.Campaign{}
 	if campaignconf.CFile.AllowCampaigns {
 		for _, confCampaign := range campaignconf.CFile.CurrentCampaigns {
@@ -86,6 +98,9 @@ func GetCampaignList(helper *helper.Helper) {
 }
 
 func QuickActStart(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.QuickActStartRequest
 	err := json.Unmarshal(recv, &request)
@@ -174,6 +189,9 @@ func QuickActStart(helper *helper.Helper) {
 }
 
 func ActStart(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.ActStartRequest
 	err := json.Unmarshal(recv, &request)
@@ -263,6 +281,9 @@ func ActStart(helper *helper.Helper) {
 }
 
 func ActRetry(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
@@ -297,6 +318,9 @@ func ActRetry(helper *helper.Helper) {
 }
 
 func QuickPostGameResults(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.QuickPostGameResultsRequest
 	err := json.Unmarshal(recv, &request)
@@ -550,6 +574,9 @@ func QuickPostGameResults(helper *helper.Helper) {
 }
 
 func PostGameResults(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.PostGameResultsRequest
 	err := json.Unmarshal(recv, &request)
@@ -878,6 +905,9 @@ func PostGameResults(helper *helper.Helper) {
 }
 
 func GetFreeItemList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	var response responses.FreeItemListResponse
 	if gameconf.CFile.AllItemsFree {
@@ -892,6 +922,9 @@ func GetFreeItemList(helper *helper.Helper) {
 }
 
 func GetMileageReward(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.MileageRewardRequest
 	err := json.Unmarshal(recv, &request)

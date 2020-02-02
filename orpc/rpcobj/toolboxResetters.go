@@ -91,7 +91,7 @@ func (t *Toolbox) ResetLastWheelOptions(uid string, reply *ToolboxReply) error {
 		reply.Info = "unable to get player: " + err.Error()
 		return err
 	}
-	player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod, enums.WheelRankNormal, consts.RouletteFreeSpins)
+	player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod, enums.WheelRankNormal, consts.RouletteFreeSpins, 0)
 	err = db.SavePlayer(player)
 	if err != nil {
 		reply.Status = StatusOtherError

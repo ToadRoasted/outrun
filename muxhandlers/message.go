@@ -17,6 +17,9 @@ import (
 )
 
 func GetMessageList(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("error getting calling player", err)
@@ -39,6 +42,9 @@ func GetMessageList(helper *helper.Helper) {
 }
 
 func GetMessage(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
 	data := helper.GetGameRequest()
 	var request requests.GetMessageRequest
 	err := json.Unmarshal(data, &request)

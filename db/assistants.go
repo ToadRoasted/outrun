@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -49,7 +50,7 @@ func NewAccountWithID(uid string) netobj.Player {
 	playerVarious := netobj.DefaultPlayerVarious()
 	optionUserResult := netobj.DefaultOptionUserResult()
 	rouletteInfo := netobj.DefaultRouletteInfo()
-	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod, enums.WheelRankNormal, consts.RouletteFreeSpins)
+	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod, enums.WheelRankNormal, consts.RouletteFreeSpins, 0)
 	// TODO: get rid of logic here?
 	allowedCharacters := []string{}
 	allowedChao := []string{}
@@ -225,7 +226,7 @@ func BoltAssignSessionID(uid string) (string, error) {
 	hash := sha1.Sum(datB)
 	hashStr := fmt.Sprintf("%x", hash)
 	sid := fmt.Sprintf(SessionIDSchema, hashStr)
-	value := fmt.Sprintf("%s/%s", uid, time.Now().Unix()) // register the time that the session ID was assigned
+	value := fmt.Sprintf("%s/%s", uid, strconv.Itoa(int(time.Now().Unix()))) // register the time that the session ID was assigned
 	valueB := []byte(value)
 	err := boltdbaccess.Set(consts.DBBucketSessionIDs, sid, valueB)
 	return sid, err
@@ -240,7 +241,11 @@ func ParseSIDEntry(sidResult []byte) (string, int64) {
 
 func IsValidSessionTime(sessionTime int64) bool {
 	timeNow := time.Now().Unix()
-	if sessionTime+consts.DBSessionExpiryTime < timeNow {
+	if config.CFile.DebugPrints {
+		log.Printf("[DEBUG] Session expire time: %v\n", sessionTime+consts.DBSessionExpiryTime)
+		log.Printf("[DEBUG] Current time:        %v\n", timeNow)
+	}
+	if timeNow > sessionTime+consts.DBSessionExpiryTime {
 		return false
 	}
 	return true
@@ -256,7 +261,11 @@ func BoltIsValidSessionID(sid []byte) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	if config.CFile.DebugPrints {
+		log.Printf("[DEBUG] Session ID data: \"%s\"\n", sidResult)
+	}
 	_, sessionTime := ParseSIDEntry(sidResult)
+
 	return IsValidSessionTime(sessionTime), err
 }
 
