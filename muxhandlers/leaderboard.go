@@ -104,7 +104,20 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 	entryList := []obj.LeaderboardEntry{}
 	entryCount := int64(0)
 	if lbtype == 4 || lbtype == 5 {
-		// TODO: Then what?
+		if time.Now().UTC().Unix() < leagueendtime {
+			league := playerState.RankingLeague
+			leagueGroup := playerState.RankingLeagueGroup
+			if mode == 1 {
+				league = playerState.QuickRankingLeague
+				leagueGroup = playerState.QuickRankingLeagueGroup
+			}
+			entryList, myEntry, err = dbaccess.GetLeagueHighScores(mode, lbtype, league, leagueGroup, request.First-1, request.Count, uid)
+			if err != nil {
+				helper.InternalErr("Error getting high score table", err)
+				return
+			}
+			entryCount = int64(len(entryList)) // We know for sure that the game will request 71 entries for this tab, so this shouldn't be a problem, since only 50 people should be in a league/group combination at once
+		}
 	} else {
 		if lbtype == 6 || lbtype == 7 || time.Now().UTC().Unix() < leagueendtime {
 			entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, request.Count, uid, false)
