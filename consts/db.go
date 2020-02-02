@@ -22,6 +22,7 @@ const (
 	DBMySQLTablePersonalEvents     = "player_personal_events"
 	DBMySQLTableMessages           = "player_messages"
 	DBMySQLTableOperatorMessages   = "player_operator_messages"
+	DBMySQLTableOperatorInfos      = "player_operator_infos"
 	DBMySQLTableRankingLeagueData  = "ranking_league_data"
 	DBMySQLTableSessionIDs         = "session_ids"
 
@@ -164,6 +165,13 @@ const (
 		uid BIGINT UNSIGNED NOT NULL,
 		assigned_at_time BIGINT UNSIGNED NOT NULL,
 		PRIMARY KEY (sid)
+	) ENGINE = InnoDB;`
+	SQLOperatorInfosSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableOperatorInfos + ` (
+		uid BIGINT UNSIGNED NOT NULL,
+		id INTEGER NOT NULL,
+		param TEXT,
+		PRIMARY KEY (uid, id)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(
 		id,

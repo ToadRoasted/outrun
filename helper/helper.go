@@ -193,6 +193,7 @@ func (r *Helper) CheckSession(sendResponseOnFalseResult bool) bool {
 		return false
 	}
 	if !validsession {
+		r.DebugOut("Invalid session ID!")
 		if sendResponseOnFalseResult {
 			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ExpiredSession)))
 		}

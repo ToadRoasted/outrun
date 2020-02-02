@@ -9,8 +9,6 @@ import (
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db/dbaccess"
 
-	"github.com/Mtbcooler/outrun/enums"
-
 	"github.com/Mtbcooler/outrun/analytics"
 	"github.com/Mtbcooler/outrun/analytics/factors"
 	"github.com/Mtbcooler/outrun/config/gameconf"
@@ -160,6 +158,10 @@ func GetInformation(helper *helper.Helper) {
 	if !helper.CheckSession(true) {
 		return
 	}
+	uid, err := helper.GetCallingPlayerID()
+	if err != nil {
+		helper.InternalErr("Error getting player ID", err)
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	infos := []obj.Information{}
 	helper.DebugOut("%v", infoconf.CFile.EnableInfos)
@@ -170,15 +172,18 @@ func GetInformation(helper *helper.Helper) {
 			helper.DebugOut(newInfo.Param)
 		}
 	}
-	operatorInfos := []obj.OperatorInformation{
-		obj.LeagueOperatorInformation(0, 46, 39, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF, 50, 0),
-		obj.NewOperatorInformation(1, "100060000,420,9001,0"),
-		obj.LeagueOperatorInformation(2, 1, 1, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
+	/*operatorInfos := []obj.OperatorInformation{
+		obj.LeagueOperatorInformation(0, 123, 456, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
+		obj.EventOperatorInformation("100060000", 7, 17171, 0),
+		obj.LeagueOperatorInformation(2, 123, 456, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
+	}*/
+	operatorInfos, err := dbaccess.GetOperatorInfos(uid)
+	if err != nil {
+		helper.WarnErr("Couldn't load operator infos.", err)
 	}
-
 	numOpUnread := int64(len(operatorInfos))
 	response := responses.Information(baseInfo, infos, operatorInfos, numOpUnread)
-	err := helper.SendResponse(response)
+	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}

@@ -86,6 +86,7 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 		return
 	}
 	helper.DebugOut("Mode %v, type %v", request.Mode, request.Type)
+	helper.DebugOut("Starting from %v; listing up to %v entries", request.First, request.Count)
 	mode := request.Mode
 	lbtype := request.Type
 	rankingleague := playerState.RankingLeague
@@ -106,12 +107,12 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 		// TODO: Then what?
 	} else {
 		if lbtype == 6 || lbtype == 7 || time.Now().UTC().Unix() < leagueendtime {
-			entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, 20, uid)
+			entryList, myEntry, err = dbaccess.GetHighScores(mode, lbtype, request.First-1, request.Count, uid, false)
 			if err != nil {
 				helper.InternalErr("Error getting high score table", err)
 				return
 			}
-			entryCount, err = dbaccess.GetNumOfPlayers()
+			entryCount, err = dbaccess.GetNumOfLeaderboardPlayers(mode, lbtype)
 			if err != nil {
 				helper.InternalErr("Error getting number of players", err)
 				return

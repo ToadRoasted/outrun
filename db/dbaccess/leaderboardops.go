@@ -1,9 +1,12 @@
 package dbaccess
 
 import (
+	"encoding/json"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/Mtbcooler/outrun/netobj"
 
 	"github.com/jinzhu/now"
 
@@ -15,7 +18,7 @@ import (
 )
 
 // GetHighScores returns the list of high scores, your own entry if applicable, and an error if one is thrown
-func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.LeaderboardEntry, interface{}, error) {
+func GetHighScores(mode, lbtype, offset, limit int64, ownid string, showScoresOfZero bool) ([]obj.LeaderboardEntry, interface{}, error) {
 	CheckIfDBSet()
 	leagueColumn := "ranking_league"
 	if mode == 1 {
@@ -23,41 +26,13 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	}
 	columnToSortBy := ""
 	switch lbtype {
-	case 0: // Friends high score?
+	case 0, 2, 4:
 		if mode == 1 {
 			columnToSortBy = "quick_league_high_score"
 		} else {
 			columnToSortBy = "league_high_score"
 		}
-	case 1: // Friends total score?
-		// TODO: Define total_score column
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 2: // World high score
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 3: // World total score
-		// TODO: Define total_score column
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 4: // Runners' League high score
-		log.Println("[WARN] Please use GetLeagueHighScores() for getting Runners' League high scores!")
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 5: // Runners' League total score
-		log.Println("[WARN] Please use GetLeagueHighScores() for getting Runners' League high scores!")
+	case 1, 3, 5:
 		// TODO: Define total_score column
 		if mode == 1 {
 			columnToSortBy = "quick_league_high_score"
@@ -83,13 +58,19 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	}
 	var myEntry interface{}
 	leaderboardEntries := []obj.LeaderboardEntry{}
-	rows, err := db.Query("SELECT id, " + columnToSortBy + ", " + leagueColumn + ", rank, mainchara_id, subchara_id, mainchao_id, subchao_id FROM `" + consts.DBMySQLTablePlayerStates + "` ORDER BY " + columnToSortBy + " DESC LIMIT " + strconv.Itoa(int(limit)) + " OFFSET " + strconv.Itoa(int(offset)))
+	additionalQueryOps := ""
+	if !showScoresOfZero {
+		additionalQueryOps = " WHERE " + columnToSortBy + " > 0"
+	}
+	rows, err := db.Query("SELECT id, " + columnToSortBy + ", high_score, " + leagueColumn + ", rank, mainchara_id, subchara_id, mainchao_id, subchao_id FROM `" + consts.DBMySQLTablePlayerStates + "`" + additionalQueryOps + " ORDER BY " + columnToSortBy + " DESC LIMIT " + strconv.Itoa(int(limit)) + " OFFSET " + strconv.Itoa(int(offset)))
 	if err != nil {
 		return []obj.LeaderboardEntry{}, nil, err
 	}
 	var uid, username, mainchara, subchara, mainchao, subchao, charasjson, chaojson string
-	var highscore, league, rank, lastlogin int64
+	var highscore, maxscore, league, rank, lastlogin, language, maincharalv, subcharalv, mainchaolv, subchaolv int64
 	var currentEntry obj.LeaderboardEntry
+	var charas []netobj.Character
+	var chao []netobj.Chao
 	_, resetTime, err := GetStartAndEndTimesForLeague(league, 0)
 	if err != nil {
 		rows.Close()
@@ -97,15 +78,37 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	}
 	index := offset
 	for rows.Next() {
-		err = rows.Scan(&uid, &highscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
+		err = rows.Scan(&uid, &highscore, &maxscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
 		if err != nil {
 			rows.Close()
 			return []obj.LeaderboardEntry{}, nil, err
 		}
-		err = db.QueryRow("SELECT username, last_login, characters, chao FROM `"+consts.DBMySQLTableCorePlayerInfo+"` WHERE id = ?", uid).Scan(&username, &lastlogin, &charasjson, &chaojson)
+		err = db.QueryRow("SELECT username, last_login, language, characters, chao FROM `"+consts.DBMySQLTableCorePlayerInfo+"` WHERE id = ?", uid).Scan(&username, &lastlogin, &language, &charasjson, &chaojson)
 		if err != nil {
 			rows.Close()
 			return []obj.LeaderboardEntry{}, nil, err
+		}
+		json.Unmarshal([]byte(charasjson), &charas)
+		json.Unmarshal([]byte(chaojson), &chao)
+		maincharalv = 0
+		subcharalv = 0
+		for _, char := range charas {
+			if char.ID == mainchara {
+				maincharalv = char.Level
+			}
+			if char.ID == subchara {
+				subcharalv = char.Level
+			}
+		}
+		mainchaolv = 0
+		subchaolv = 0
+		for _, c := range chao {
+			if c.ID == mainchao {
+				mainchaolv = c.Level
+			}
+			if c.ID == subchao {
+				subchaolv = c.Level
+			}
 		}
 		currentEntry = obj.NewLeaderboardEntry(
 			uid,
@@ -120,14 +123,14 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 			rank,
 			lastlogin,
 			TryAtoi(mainchara),
-			0,
+			maincharalv,
 			TryAtoi(subchara),
-			0,
+			subcharalv,
 			TryAtoi(mainchao),
-			0,
+			mainchaolv,
 			TryAtoi(subchao),
-			0,
-			enums.LangEnglish,
+			subchaolv,
+			language,
 			league,
 			highscore,
 			0,
@@ -143,7 +146,7 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string) ([]obj.Leade
 	return leaderboardEntries, myEntry, err
 }
 
-func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, error) {
+func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string, showScoresOfZero bool) (interface{}, error) {
 	CheckIfDBSet()
 	leagueColumn := "ranking_league"
 	if mode == 1 {
@@ -151,41 +154,13 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 	}
 	columnToSortBy := ""
 	switch lbtype {
-	case 0: // Friends high score?
+	case 0, 2, 4:
 		if mode == 1 {
 			columnToSortBy = "quick_league_high_score"
 		} else {
 			columnToSortBy = "league_high_score"
 		}
-	case 1: // Friends total score?
-		// TODO: Define total_score column
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 2: // World high score
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 3: // World total score
-		// TODO: Define total_score column
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 4: // Runners' League high score
-		log.Println("[WARN] Please use GetLeagueHighScores() for getting Runners' League high scores!")
-		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
-		} else {
-			columnToSortBy = "league_high_score"
-		}
-	case 5: // Runners' League total score
-		log.Println("[WARN] Please use GetLeagueHighScores() for getting Runners' League high scores!")
+	case 1, 3, 5:
 		// TODO: Define total_score column
 		if mode == 1 {
 			columnToSortBy = "quick_league_high_score"
@@ -209,22 +184,28 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 		log.Printf("[WARN] Unknown leaderboard type %v", lbtype)
 		columnToSortBy = "high_score"
 	}
+	additionalQueryOps := ""
+	if !showScoresOfZero {
+		additionalQueryOps = " WHERE " + columnToSortBy + " > 0"
+	}
 	var myEntry interface{}
-	rows, err := db.Query("SELECT id, " + columnToSortBy + ", " + leagueColumn + ", rank, mainchara_id, subchara_id, mainchao_id, subchao_id FROM `" + consts.DBMySQLTablePlayerStates + "` ORDER BY " + columnToSortBy + " DESC")
+	rows, err := db.Query("SELECT id, " + columnToSortBy + ", high_score, " + leagueColumn + ", rank, mainchara_id, subchara_id, mainchao_id, subchao_id FROM `" + consts.DBMySQLTablePlayerStates + "` ORDER BY " + columnToSortBy + " DESC" + additionalQueryOps)
 	if err != nil {
 		return nil, err
 	}
 	var uid, username, mainchara, subchara, mainchao, subchao, charasjson, chaojson string
-	var highscore, league, rank, lastlogin int64
+	var highscore, maxscore, league, rank, lastlogin, language, maincharalv, subcharalv, mainchaolv, subchaolv int64
+	var charas []netobj.Character
+	var chao []netobj.Chao
 	index := 0
 	for rows.Next() {
-		err = rows.Scan(&uid, &highscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
+		err = rows.Scan(&uid, &highscore, &maxscore, &league, &rank, &mainchara, &subchara, &mainchao, &subchao)
 		if err != nil {
 			rows.Close()
 			return nil, err
 		}
 		if uid == ownid {
-			err = db.QueryRow("SELECT username, last_login, characters, chao FROM `"+consts.DBMySQLTableCorePlayerInfo+"` WHERE id = ?", uid).Scan(&username, &lastlogin, &charasjson, &chaojson)
+			err = db.QueryRow("SELECT username, last_login, language, characters, chao FROM `"+consts.DBMySQLTableCorePlayerInfo+"` WHERE id = ?", uid).Scan(&username, &lastlogin, &language, &charasjson, &chaojson)
 			if err != nil {
 				rows.Close()
 				return nil, err
@@ -233,6 +214,28 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 			if err != nil {
 				rows.Close()
 				return nil, err
+			}
+			json.Unmarshal([]byte(charasjson), &charas)
+			json.Unmarshal([]byte(chaojson), &chao)
+			maincharalv = 0
+			subcharalv = 0
+			for _, char := range charas {
+				if char.ID == mainchara {
+					maincharalv = char.Level
+				}
+				if char.ID == subchara {
+					subcharalv = char.Level
+				}
+			}
+			mainchaolv = 0
+			subchaolv = 0
+			for _, c := range chao {
+				if c.ID == mainchao {
+					mainchaolv = c.Level
+				}
+				if c.ID == subchao {
+					subchaolv = c.Level
+				}
 			}
 			myEntry = obj.NewLeaderboardEntry(
 				uid,
@@ -247,16 +250,16 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string) (interface{}, erro
 				rank,
 				lastlogin,
 				TryAtoi(mainchara),
-				0,
+				maincharalv,
 				TryAtoi(subchara),
-				0,
+				subcharalv,
 				TryAtoi(mainchao),
-				0,
+				mainchaolv,
 				TryAtoi(subchao),
-				0,
+				subchaolv,
 				enums.LangEnglish,
 				league,
-				highscore,
+				maxscore,
 				0,
 			)
 		}
@@ -270,6 +273,45 @@ func GetNumOfPlayers() (int64, error) {
 	CheckIfDBSet()
 	playercount := int64(0)
 	err := db.QueryRow("SELECT COUNT(*) FROM `" + consts.DBMySQLTablePlayerStates + "`").Scan(&playercount)
+	if err != nil {
+		return -1, err
+	}
+	return playercount, nil
+}
+
+func GetNumOfLeaderboardPlayers(mode, lbtype int64) (int64, error) {
+	CheckIfDBSet()
+	var hsc string
+	switch lbtype {
+	case 0, 2, 4: // League high score
+		if mode == 1 {
+			hsc = "quick_league_high_score"
+		} else {
+			hsc = "league_high_score"
+		}
+	case 1, 3, 5: // League total score
+		if mode == 1 {
+			hsc = "quick_league_high_score"
+		} else {
+			hsc = "league_high_score"
+		}
+	case 6:
+		if mode == 1 {
+			hsc = "quick_high_score"
+		} else {
+			hsc = "high_score"
+		}
+	case 7:
+		if mode == 1 {
+			hsc = "quick_high_score"
+		} else {
+			hsc = "high_score"
+		}
+	default:
+		hsc = "high_score"
+	}
+	playercount := int64(0)
+	err := db.QueryRow("SELECT COUNT(*) FROM `" + consts.DBMySQLTablePlayerStates + "` WHERE " + hsc + " > 0").Scan(&playercount)
 	if err != nil {
 		return -1, err
 	}

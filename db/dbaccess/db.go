@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Mtbcooler/outrun/obj"
+
 	"github.com/Mtbcooler/outrun/consts"
 
 	"github.com/Mtbcooler/outrun/netobj"
@@ -118,6 +120,17 @@ func SetLoginBonusState(table, id string, value netobj.LoginBonusState) error {
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ := result.RowsAffected()
 		log.Printf("[DEBUG] SetLoginBonusState operation complete; %v rows affected\n", rowsAffected)
+	}
+	return err
+}
+
+func SetOperatorInfo(uid, id, param string) error {
+	CheckIfDBSet()
+	result, err := db.Exec("REPLACE INTO `" + consts.DBMySQLTableOperatorInfos + "`(uid, id, param)\n" +
+		"VALUES (" + uid + ", " + id + ", `" + param + "`)")
+	if err == nil && config.CFile.DebugPrints {
+		rowsAffected, _ := result.RowsAffected()
+		log.Printf("[DEBUG] SetOperatorInfo operation complete; %v rows affected\n", rowsAffected)
 	}
 	return err
 }
@@ -310,6 +323,27 @@ func GetLoginBonusState(table, id string) (netobj.LoginBonusState, error) {
 	if err != nil {
 		return netobj.DefaultLoginBonusState(0), err
 	}
+	return values, nil
+}
+
+func GetOperatorInfos(uid string) ([]obj.OperatorInformation, error) {
+	CheckIfDBSet()
+	values := []obj.OperatorInformation{}
+	rows, err := db.Query("SELECT * FROM `"+consts.DBMySQLTableOperatorInfos+"` WHERE uid = ?", uid)
+	if err != nil {
+		return []obj.OperatorInformation{}, err
+	}
+	var id int64
+	var param string
+	for rows.Next() {
+		err = rows.Scan(&uid, &id, &param)
+		if err != nil {
+			rows.Close()
+			return []obj.OperatorInformation{}, err
+		}
+		values = append(values, obj.NewOperatorInformation(id, param))
+	}
+	rows.Close()
 	return values, nil
 }
 
