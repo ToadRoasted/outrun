@@ -171,31 +171,29 @@ func (r *Helper) InvalidRequest() {
 	//	r.RespW.Write([]byte(BadRequest))
 	r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
 }
-func (r *Helper) CheckSession(sendResponseAndGenerateNewSessionIDIfNeeded bool) bool {
+func (r *Helper) CheckSession(sendResponseOnFalseResult bool) bool {
 	recv := r.GetGameRequest()
 	var request requests.Base
 	err := json.Unmarshal(recv, &request)
 	if err != nil {
 		// likely malformed request
-		if sendResponseAndGenerateNewSessionIDIfNeeded {
+		if sendResponseOnFalseResult {
 			r.RespW.WriteHeader(http.StatusBadRequest)
 			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ClientError)))
 		}
 		return false
 	}
 	sid := []byte(request.SessionID)
-	r.DebugOut("Session ID to check: %s", sid)
 	validsession, err := db.BoltIsValidSessionID(sid)
 	if err != nil {
-		if sendResponseAndGenerateNewSessionIDIfNeeded {
+		if sendResponseOnFalseResult {
 			r.RespW.WriteHeader(http.StatusInternalServerError)
 			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.InternalServerError)))
 		}
 		return false
 	}
 	if !validsession {
-		if sendResponseAndGenerateNewSessionIDIfNeeded {
-
+		if sendResponseOnFalseResult {
 			r.SendResponse(responses.NewBaseResponse(r.BaseInfo(emess.OK, status.ExpiredSession)))
 		}
 		return false

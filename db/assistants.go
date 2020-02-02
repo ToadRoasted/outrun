@@ -4,7 +4,6 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -241,10 +240,6 @@ func ParseSIDEntry(sidResult []byte) (string, int64) {
 
 func IsValidSessionTime(sessionTime int64) bool {
 	timeNow := time.Now().Unix()
-	if config.CFile.DebugPrints {
-		log.Printf("[DEBUG] Session expire time: %v\n", sessionTime+consts.DBSessionExpiryTime)
-		log.Printf("[DEBUG] Current time:        %v\n", timeNow)
-	}
 	if timeNow > sessionTime+consts.DBSessionExpiryTime {
 		return false
 	}
@@ -260,9 +255,6 @@ func BoltIsValidSessionID(sid []byte) (bool, error) {
 	sidResult, err := boltdbaccess.Get(consts.DBBucketSessionIDs, string(sid))
 	if err != nil {
 		return false, err
-	}
-	if config.CFile.DebugPrints {
-		log.Printf("[DEBUG] Session ID data: \"%s\"\n", sidResult)
 	}
 	_, sessionTime := ParseSIDEntry(sidResult)
 
