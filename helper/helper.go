@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -32,11 +33,11 @@ const (
 	LogOutBase = "[%s] (%s) %s\n"
 	LogErrBase = "[%s] (%s) %s: %s\n"
 
-	InternalServerError = "Internal server error"
-	//	BadRequest          = "Bad request"
+	InternalServerError = "Internal Server Error"
+	BadRequest          = "Bad Request"
 
-	//DefaultIV = "HotAndSunnyMiami"
-	DefaultIV = "FoundDeadInMiami"
+	DefaultIV   = "FoundDeadInMiami"
+	RandomizeIV = false               // highly experimental option; will slow Outrun down slightly
 )
 
 type Helper struct {
@@ -108,9 +109,22 @@ func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
 	r.RespW.Write(toClient)
 }
 func (r *Helper) Respond(out []byte) {
-	r.RespondRaw(out, "1", DefaultIV)
+	iv := DefaultIV
+	if RandomizeIV {
+		randChar := func(charset string, length int64) string {
+			runes := []rune(charset)
+			final := make([]rune, length)
+			for i := range final {
+				final[i] = runes[rand.Intn(len(runes))]
+			}
+			return string(final)
+		}
+		iv = randChar("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 16)
+	}
+	r.RespondRaw(out, "1", iv)
 }
 func (r *Helper) RespondInsecure(out []byte) {
+	// TODO: This won't work with daily battle or raid boss endpoints. Rework.
 	r.RespondRaw(out, "0", "")
 }
 func (r *Helper) Out(s string, a ...interface{}) {
