@@ -49,11 +49,26 @@ func OutputUnknownRequest(w http.ResponseWriter, r *http.Request) {
 	err := ioutil.WriteFile(path, recv, 0644)
 	if err != nil {
 		log.Println("[OUT] UNABLE TO WRITE UNKNOWN REQUEST: " + err.Error())
-		w.Write([]byte(""))
+		HandleUnknownRequest(w, r)
 		return
 	}
 	log.Println("[OUT] !!!!!!!!!!!! Unknown request, output to " + path)
+	HandleUnknownRequest(w, r)
+}
+
+func HandleUnknownRequest(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(""))
+}
+
+// return Not Found for the favicon; no favicon is intended
+func FaviconResponse(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	w.Write([]byte(""))
+}
+
+// Return "OK" for checking if the Outrun instance is alive (intended for uptime monitors)
+func GenericRootResponse(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
 
 func removePrependingSlashes(next http.Handler) http.Handler {
@@ -229,8 +244,13 @@ func main() {
 		router.HandleFunc("/outrunInfo/stats", inforeporters.Stats)
 	}
 
+	router.HandleFunc("/", GenericRootResponse)
+	router.HandleFunc("/favicon.ico", FaviconResponse)
+
 	if config.CFile.LogUnknownRequests {
 		router.PathPrefix("/").HandlerFunc(OutputUnknownRequest)
+	} else {
+		router.PathPrefix("/").HandlerFunc(HandleUnknownRequest)
 	}
 
 	go bgtasks.TouchAnalyticsDB()

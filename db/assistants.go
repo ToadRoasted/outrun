@@ -3,6 +3,7 @@ package db
 import (
 	"crypto/sha1"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/rand"
 	"strconv"
@@ -99,17 +100,25 @@ func NewAccountWithID(uid string) netobj.Player {
 	)
 }
 
-func NewAccount() netobj.Player {
+func NewAccount() (netobj.Player, error) {
 	// create ID
+	attemptsLeft := 500
 	newID := ""
-	for i := range make([]byte, 10) {
-		if i == 0 { // if first character
-			newID += strconv.Itoa(rand.Intn(9) + 1)
-		} else {
-			newID += strconv.Itoa(rand.Intn(10))
+	for attemptsLeft > 0 {
+		for i := range make([]byte, 10) {
+			if i == 0 { // if first character
+				newID += strconv.Itoa(rand.Intn(9) + 1)
+			} else {
+				newID += strconv.Itoa(rand.Intn(10))
+			}
 		}
+		if !DoesPlayerExistInDatabase(newID) {
+			return NewAccountWithID(newID), nil
+		}
+		newID = ""
+		attemptsLeft--
 	}
-	return NewAccountWithID(newID)
+	return constnetobjs.BlankPlayer, errors.New("couldn't find an unused ID after 500 attempts")
 }
 
 func SavePlayer(player netobj.Player) error {
@@ -164,6 +173,34 @@ func GetPlayer(uid string) (netobj.Player, error) {
 		return constnetobjs.BlankPlayer, err
 	}
 	return player, nil
+}
+
+func DoesPlayerExistInDatabase(uid string) bool {
+	_, err := dbaccess.GetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, uid)
+	if err != nil {
+		return false
+	} else {
+		_, err = dbaccess.GetRouletteInfo(consts.DBMySQLTableRouletteInfos, uid)
+		if err != nil {
+			return false
+		} else {
+			_, err = dbaccess.GetLoginBonusState(consts.DBMySQLTableLoginBonusStates, uid)
+			if err != nil {
+				return false
+			} else {
+				_, err = dbaccess.GetPlayerState(consts.DBMySQLTablePlayerStates, uid)
+				if err != nil {
+					return false
+				} else {
+					_, err = dbaccess.GetOptionUserResult(consts.DBMySQLTableOptionUserResults, uid)
+					if err != nil {
+						return false
+					}
+					return true
+				}
+			}
+		}
+	}
 }
 
 func BoltGetPlayer(uid string) (netobj.Player, error) {
