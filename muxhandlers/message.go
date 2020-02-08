@@ -218,3 +218,7 @@ func GetMessage(helper *helper.Helper) {
 	}
 	db.SavePlayer(player)
 }
+
+func SendEnergy(helper *helper.Helper) {
+	// TODO: Implement.
+}

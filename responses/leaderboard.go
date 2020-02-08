@@ -35,7 +35,7 @@ func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) Wee
 	startTime := now.BeginningOfWeek().UTC().Unix()
 	resetTime := now.EndOfWeek().UTC().Unix()
 	//ltype := int64(1)
-	ltype := int64(0)
+	ltype := int64(0) // TODO: not used?
 	//param := int64(0)
 	param := int64(5)
 	return WeeklyLeaderboardOptions(base, mode, ltype, param, startTime, resetTime)

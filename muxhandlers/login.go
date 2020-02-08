@@ -37,13 +37,19 @@ func Login(helper *helper.Helper) {
 		helper.Err("Error unmarshalling", err)
 		return
 	}
+
 	uid := request.LineAuth.UserID
 	password := request.LineAuth.Password
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	if uid == "0" && password == "" {
-		helper.Out("Entering LoginAlpha")
-		newPlayer := db.NewAccount()
+	if uid == "0" {
+		helper.Out("Entering Registration (Alpha) phase")
+		// game wants to get a brand-new ID
+		newPlayer, err := db.NewAccount()
+		if err != nil {
+			helper.InternalErr("Error creating account", err)
+			return
+		}
 		err = db.SavePlayer(newPlayer)
 		if err != nil {
 			helper.InternalErr("Error saving player", err)
@@ -62,25 +68,26 @@ func Login(helper *helper.Helper) {
 			helper.InternalErr("Error responding", err)
 		}
 		return
-	} else if uid == "0" && password != "" {
-		helper.Out("Entering LoginBravo")
-		// invalid request
-		helper.InvalidRequest()
-		return
 	} else if uid != "0" && password == "" {
-		helper.Out("Entering LoginCharlie")
+		helper.Out("Entering Pre-Login (Bravo) phase")
 		// game wants to log in
 		baseInfo.StatusCode = status.InvalidPassword
 		baseInfo.SetErrorMessage(emess.BadPassword)
 		player, err := db.GetPlayer(uid)
 		if err != nil {
-			helper.InternalErr("Error getting player", err)
-			// TODO: Actually check to see if the player exists. If it does, return Error ID -500 (InternalServerError) instead of MissingPlayer
+			if db.DoesPlayerExistInDatabase(uid) {
+				helper.InternalErr("Error getting player", err)
+				return
+			} else {
+				// likely account that wasn't found, so let's tell them that:
+				response := responses.NewBaseResponse(baseInfo)
+				baseInfo.StatusCode = status.MissingPlayer
+				err = helper.SendResponse(response)
+				if err != nil {
+					helper.InternalErr("Error sending response", err)
+				}
+			}
 
-			// likely account that wasn't found, so let's tell them that:
-			response := responses.LoginCheckKey(baseInfo, "")
-			baseInfo.StatusCode = status.MissingPlayer
-			helper.SendResponse(response)
 			return
 		}
 		response := responses.LoginCheckKey(baseInfo, player.Key)
@@ -91,7 +98,7 @@ func Login(helper *helper.Helper) {
 		}
 		return
 	} else if uid != "0" && password != "" {
-		helper.Out("Entering LoginDelta")
+		helper.Out("Entering Login (Charlie) phase")
 		// game is attempting to log in using key
 		player, err := db.GetPlayer(uid)
 		if err != nil {

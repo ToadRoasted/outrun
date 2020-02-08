@@ -132,3 +132,16 @@ func RedStarExchange(helper *helper.Helper) {
 		helper.InternalErr("Error sending response", err)
 	}
 }
+
+func SetBirthday(helper *helper.Helper) {
+	if !helper.CheckSession(true) {
+		return
+	}
+	// agnostic
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultSetBirthday(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}
