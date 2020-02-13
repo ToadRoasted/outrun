@@ -792,15 +792,15 @@ func PostGameResults(helper *helper.Helper) {
 					goToNextEpisode = true
 				}
 			}
+			player.PlayerState.Rank++
+			if player.PlayerState.Rank > 998 { // rank going above 999
+				player.PlayerState.Rank = 998
+			}
 			if goToNextEpisode {
 				player.MileageMapState.Episode++
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				player.PlayerState.Rank++
-				if player.PlayerState.Rank > 998 { // rank going above 999
-					player.PlayerState.Rank = 998
-				}
 				if player.PlayerState.Energy < player.PlayerVarious.EnergyRecoveryMax {
 					player.PlayerState.Energy = player.PlayerVarious.EnergyRecoveryMax //restore energy
 				}

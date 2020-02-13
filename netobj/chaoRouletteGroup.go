@@ -10,6 +10,12 @@ type ChaoRouletteGroup struct {
 	ChaoRouletteInfo RouletteInfo     `json:"ORN_chaoRouletteInfo" db:"chao_roulette_info"`          // may not be needed
 }
 
+type SqlChaoRouletteGroup struct {
+	ChaoWheelOptions []byte `json:"ORN_lastChaoWheelOptions" db:"last_chao_wheel_options"` // actual wheel options for this wheel
+	WheelChao        []byte `json:"ORN_wheelChao" db:"wheel_chao"`                         // what Chao/characters are in this wheel
+	ChaoRouletteInfo []byte `json:"ORN_chaoRouletteInfo" db:"chao_roulette_info"`          // may not be needed
+}
+
 func DefaultChaoRouletteGroup(playerState PlayerState, allowedCharacters, allowedChao []string) ChaoRouletteGroup {
 	chaoWheelOptions := DefaultChaoWheelOptions(playerState)
 	//wheelChao, err := roulette.GetRandomChaoRouletteItems(chaoWheelOptions.Rarity, exclusions) // populate based on given rarities
