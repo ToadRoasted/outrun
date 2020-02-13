@@ -1,5 +1,7 @@
 # outrun
 
+[![Build status](https://ci.appveyor.com/api/projects/status/5rflskqftetfcntk/branch/master?svg=true)](https://ci.appveyor.com/project/FairPlay137/outrun-revival/branch/mysql_testing)
+
 **THIS BRANCH IS HIGHLY EXPERIMENTAL! USE THIS AT YOUR OWN RISK!**
 
 ### Summary
