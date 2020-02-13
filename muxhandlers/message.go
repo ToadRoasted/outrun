@@ -140,6 +140,7 @@ func GetMessage(helper *helper.Helper) {
 			}
 		}
 	}
+	// TODO: Combine stackable items in present list, as that's how the original server went about creating the present list
 
 	helper.DebugOut("%v", presentList)
 	for _, currentPresent := range presentList {

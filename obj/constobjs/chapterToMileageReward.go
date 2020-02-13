@@ -650,8 +650,8 @@ var AreaRewards = map[string][]obj.MileageReward{
 		// no rewards for point 3
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDMagnet, 35, 4),
 
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 40000, 5),
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 45, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 55000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 50, 5),
 	},
 	"50,2": []obj.MileageReward{
 		// no rewards for point 1
@@ -659,8 +659,8 @@ var AreaRewards = map[string][]obj.MileageReward{
 		// no rewards for point 3
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDTrampoline, 35, 4),
 
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 45000, 5),
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 50, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 60000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 65, 5),
 	},
 	"50,3": []obj.MileageReward{
 		// no rewards for point 1
@@ -668,8 +668,8 @@ var AreaRewards = map[string][]obj.MileageReward{
 		// no rewards for point 3
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 42000, 4),
 
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 50000, 5),
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 55, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 65000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 70, 5),
 	},
 	"50,4": []obj.MileageReward{
 		// no rewards for point 1
@@ -677,8 +677,8 @@ var AreaRewards = map[string][]obj.MileageReward{
 		// no rewards for point 3
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 45, 4),
 
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 55000, 5),
-		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 60, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRing, 70000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeChapter, enums.ItemIDRedRing, 75, 5),
 	},
 	"50,5": []obj.MileageReward{
 		// no rewards for point 1
@@ -686,8 +686,8 @@ var AreaRewards = map[string][]obj.MileageReward{
 		// no rewards for point 3
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 50, 4),
 
-		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 60000, 5),
-		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 65, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 110000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 100, 5),
 	},
 }
 
