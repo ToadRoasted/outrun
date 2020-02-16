@@ -544,6 +544,8 @@ func QuickPostGameResults(helper *helper.Helper) {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
 
+	helper.DebugOut("CheatResult: %s", request.CheatResult)
+
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultQuickPostGameResults(baseInfo, player, playCharacters)
 	err = helper.SendResponse(response)
@@ -874,6 +876,8 @@ func PostGameResults(helper *helper.Helper) {
 	if hasSubCharacter {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
+
+	helper.DebugOut("CheatResult: %s", request.CheatResult)
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)

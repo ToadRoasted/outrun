@@ -38,7 +38,7 @@ func GetWonRewards(oldEpisode, oldChapter, oldPoint, newEpisode, newChapter, new
 			if oldPoint == newPoint { // no movement at all
 				return wonRewards
 			} else if oldPoint > newPoint { // something fishy is happening...
-				log.Printf("[WARN] oldPoint (%v) > newPoint (%v), but still same area! Something is going wrong!\n", oldPoint, newPoint)
+				log.Printf("[WARN] oldPoint (%v) > newPoint (%v), but still same area! Something weird is going on!\n", oldPoint, newPoint)
 			} else if oldPoint < newPoint { // correct behavior, is moving along
 				for i := oldPoint + 1; i <= newPoint; i++ { // range (oldPoint, newPoint]
 					if i == 5 { // if boss point
@@ -78,7 +78,7 @@ func GetWonRewards(oldEpisode, oldChapter, oldPoint, newEpisode, newChapter, new
 		if config.CFile.DebugPrints {
 			log.Println("oldEpisode > newEpisode")
 		}
-		log.Printf("[WARN] oldEpisode (%v) > newEpisode (%v)! Something is going wrong!\n", oldEpisode, newEpisode)
+		log.Printf("[WARN] oldEpisode (%v) > newEpisode (%v)! Something weird is going on!\n", oldEpisode, newEpisode)
 	} else if oldEpisode < newEpisode { // crossed episodes, get all rewards from previous chapter [oldPoint, 5]
 		if config.CFile.DebugPrints {
 			log.Println("oldEpisode < newEpisode")

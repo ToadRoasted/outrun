@@ -35,11 +35,11 @@ const (
 	SQLCorePlayerInfoSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableCorePlayerInfo + ` (
 		id BIGINT UNSIGNED NOT NULL,
-		username TEXT NOT NULL,
-		password TEXT NOT NULL,
-		migrate_password TEXT NOT NULL,
+		username VARCHAR(12) NOT NULL,
+		password VARCHAR(10) NOT NULL,
+		migrate_password VARCHAR(10) NOT NULL,
 		user_password TEXT NOT NULL,
-		player_key TEXT NOT NULL,
+		player_key VARCHAR(10) NOT NULL,
 		last_login BIGINT UNSIGNED NOT NULL,
 		language INTEGER NOT NULL,
 		characters JSON,
