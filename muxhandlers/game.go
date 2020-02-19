@@ -560,28 +560,28 @@ func QuickPostGameResults(helper *helper.Helper) {
 	}
 
 	//helper.DebugOut("CheatResult: %s", request.CheatResult)
-	if request.CheatResult[0] != '0' {
+	if request.CheatResult[0] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 1 set!!!")
 	}
-	if request.CheatResult[1] != '0' {
+	if request.CheatResult[1] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 2 set!!!")
 	}
-	if request.CheatResult[2] != '0' {
+	if request.CheatResult[2] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 3 set!!!")
 	}
-	if request.CheatResult[3] != '0' {
-		helper.DebugOut("(CheatResult) Too many continues!!! (more than 3 continues used)") // NO DOCS!!! This is an assumption!
+	if request.CheatResult[3] != '0' { // 3 or more continues used
+		helper.DebugOut("(CheatResult) Too many continues used!!!")
 	}
-	if request.CheatResult[4] != '0' {
+	if request.CheatResult[4] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 5 set!!!")
 	}
-	if request.CheatResult[5] != '0' {
+	if request.CheatResult[5] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 6 set!!!")
 	}
-	if request.CheatResult[6] != '0' {
+	if request.CheatResult[6] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 7 set!!!")
 	}
-	if request.CheatResult[7] != '0' {
+	if request.CheatResult[7] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 8 set!!!")
 	}
 
@@ -844,12 +844,12 @@ func PostGameResults(helper *helper.Helper) {
 
 		goToNextEpisode := true
 		if goToNextChapter {
-			// Assumed this just means next episode...
+			player.MileageMapState.Point = 0
+			player.MileageMapState.StageTotalScore = 0
 			maxChapters, episodeHasMultipleChapters := consts.EpisodeWithChapters[player.MileageMapState.Episode]
 			if episodeHasMultipleChapters {
 				goToNextEpisode = false
 				player.MileageMapState.Chapter++
-				player.MileageMapState.StageTotalScore = 0
 				if player.MileageMapState.Chapter > maxChapters {
 					// there's no more chapters for this episode!
 					goToNextEpisode = true
@@ -865,8 +865,6 @@ func PostGameResults(helper *helper.Helper) {
 			if goToNextEpisode {
 				player.MileageMapState.Episode++
 				player.MileageMapState.Chapter = 1
-				player.MileageMapState.Point = 0
-				player.MileageMapState.StageTotalScore = 0
 				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
 				if config.CFile.Debug {
 					player.MileageMapState.Episode = 11
@@ -875,8 +873,6 @@ func PostGameResults(helper *helper.Helper) {
 			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
 				player.MileageMapState.Episode = 50
 				player.MileageMapState.Chapter = 1
-				player.MileageMapState.Point = 0
-				player.MileageMapState.StageTotalScore = 0
 				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
 			}
 		} else {
@@ -949,7 +945,7 @@ func PostGameResults(helper *helper.Helper) {
 		helper.DebugOut("(CheatResult) flag 3 set!!!")
 	}
 	if request.CheatResult[3] != '0' {
-		helper.DebugOut("(CheatResult) Too many continues!!! (more than 3 continues used)") // NO DOCS!!! This is an assumption!
+		helper.DebugOut("(CheatResult) Too many continues used!!!")
 	}
 	if request.CheatResult[4] != '0' {
 		helper.DebugOut("(CheatResult) flag 5 set!!!")
