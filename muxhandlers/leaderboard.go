@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Mtbcooler/outrun/consts"
+	"github.com/Mtbcooler/outrun/db"
 
 	"github.com/Mtbcooler/outrun/db/dbaccess"
 
@@ -20,6 +21,7 @@ import (
 // Leaderboards and league endpoints
 
 func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -57,6 +59,7 @@ func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
 	response := responses.DefaultWeeklyLeaderboardOptions(baseInfo, mode)
 	response.StartTime = leaguestarttime
 	response.ResetTime = leagueendtime
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -64,6 +67,7 @@ func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
 }
 
 func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -146,6 +150,7 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 		entryCount,
 		entryList,
 	)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -153,6 +158,7 @@ func GetWeeklyLeaderboardEntries(helper *helper.Helper) {
 }
 
 func GetLeagueData(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -187,6 +193,7 @@ func GetLeagueData(helper *helper.Helper) {
 	leagueData.NumLeagueMember = 500 // TODO: Add something to dbaccess which can determine these values!
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.LeagueData(baseInfo, leagueData, mode)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -194,6 +201,7 @@ func GetLeagueData(helper *helper.Helper) {
 }
 
 func GetLeagueOperatorData(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -206,6 +214,7 @@ func GetLeagueOperatorData(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultLeagueOperatorData(baseInfo, request.Mode)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

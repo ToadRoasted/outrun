@@ -24,6 +24,7 @@ import (
 )
 
 func GetChaoWheelOptions(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -34,6 +35,7 @@ func GetChaoWheelOptions(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultChaoWheelOptions(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -41,12 +43,14 @@ func GetChaoWheelOptions(helper *helper.Helper) {
 }
 
 func GetPrizeChaoWheelSpin(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
 	// agnostic
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPrizeChaoWheel(baseInfo)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -54,6 +58,7 @@ func GetPrizeChaoWheelSpin(helper *helper.Helper) {
 }
 
 func EquipChao(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -143,6 +148,7 @@ completed:
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.EquipChao(baseInfo, player.PlayerState)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -150,6 +156,7 @@ completed:
 }
 
 func CommitChaoWheelSpin(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -352,7 +359,7 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, availStatus)
 	response := responses.ChaoWheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.ChaoRouletteGroup.ChaoWheelOptions, spinResults)
-
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)

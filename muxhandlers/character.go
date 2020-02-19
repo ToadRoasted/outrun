@@ -18,6 +18,7 @@ import (
 )
 
 func ChangeCharacter(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -73,6 +74,7 @@ func ChangeCharacter(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.ChangeCharacter(baseInfo, player.PlayerState)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -80,6 +82,7 @@ func ChangeCharacter(helper *helper.Helper) {
 }
 
 func UpgradeCharacter(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -144,6 +147,7 @@ func UpgradeCharacter(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, int64(sendStatus))
 	response := responses.DefaultUpgradeCharacter(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -151,6 +155,10 @@ func UpgradeCharacter(helper *helper.Helper) {
 }
 
 func UnlockedCharacter(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
+	if !helper.CheckSession(true) {
+		return
+	}
 	recv := helper.GetGameRequest()
 	var request requests.UnlockedCharacterRequest
 	err := json.Unmarshal(recv, &request)
@@ -230,6 +238,7 @@ func UnlockedCharacter(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, int64(responseStatus))
 	response := responses.DefaultUpgradeCharacter(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

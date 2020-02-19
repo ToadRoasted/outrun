@@ -23,6 +23,7 @@ import (
 )
 
 func GetWheelOptions(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -46,6 +47,7 @@ func GetWheelOptions(helper *helper.Helper) {
 	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
 
 	response := responses.WheelOptions(baseInfo, player.LastWheelOptions)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -53,6 +55,7 @@ func GetWheelOptions(helper *helper.Helper) {
 }
 
 func CommitWheelSpin(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -191,7 +194,7 @@ func CommitWheelSpin(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.WheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.LastWheelOptions)
-
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)

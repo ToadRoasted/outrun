@@ -2,6 +2,7 @@ package muxhandlers
 
 import (
 	"github.com/Mtbcooler/outrun/config/eventconf"
+	"github.com/Mtbcooler/outrun/db"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/helper"
 	"github.com/Mtbcooler/outrun/logic/conversion"
@@ -11,6 +12,7 @@ import (
 )
 
 func GetEventList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -39,6 +41,7 @@ func GetEventList(helper *helper.Helper) {
 	helper.DebugOut("Global event list: %v", eventconf.CFile.CurrentEvents)
 	helper.DebugOut("Event list: %v", eventList)
 	response := responses.EventList(baseInfo, eventList)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

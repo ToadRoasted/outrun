@@ -31,6 +31,7 @@ import (
 )
 
 func GetDailyChallengeData(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -41,6 +42,7 @@ func GetDailyChallengeData(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DailyChallengeData(baseInfo, player.PlayerState.NumDailyChallenge, player.PlayerState.NextNumDailyChallenge)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -48,12 +50,14 @@ func GetDailyChallengeData(helper *helper.Helper) {
 }
 
 func GetCostList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
 	// no player, agonstic
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultCostList(baseInfo)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -61,6 +65,7 @@ func GetCostList(helper *helper.Helper) {
 }
 
 func GetMileageData(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -71,6 +76,7 @@ func GetMileageData(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultMileageData(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -78,6 +84,7 @@ func GetMileageData(helper *helper.Helper) {
 }
 
 func GetCampaignList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -91,6 +98,7 @@ func GetCampaignList(helper *helper.Helper) {
 	helper.DebugOut("Campaign list: %v", campaignList)
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.CampaignList(baseInfo, campaignList)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -98,6 +106,7 @@ func GetCampaignList(helper *helper.Helper) {
 }
 
 func QuickActStart(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -172,6 +181,7 @@ func QuickActStart(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.DefaultQuickActStart(baseInfo, player, campaignList)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -189,6 +199,7 @@ func QuickActStart(helper *helper.Helper) {
 }
 
 func ActStart(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -264,6 +275,7 @@ func ActStart(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.DefaultActStart(baseInfo, player, campaignList)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -281,6 +293,7 @@ func ActStart(helper *helper.Helper) {
 }
 
 func ActRetry(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -306,6 +319,7 @@ func ActRetry(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.NewBaseResponse(baseInfo)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -318,6 +332,7 @@ func ActRetry(helper *helper.Helper) {
 }
 
 func QuickPostGameResults(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -544,10 +559,35 @@ func QuickPostGameResults(helper *helper.Helper) {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
 
-	helper.DebugOut("CheatResult: %s", request.CheatResult)
+	//helper.DebugOut("CheatResult: %s", request.CheatResult)
+	if request.CheatResult[0] != '0' {
+		helper.DebugOut("(CheatResult) flag 1 set!!!")
+	}
+	if request.CheatResult[1] != '0' {
+		helper.DebugOut("(CheatResult) flag 2 set!!!")
+	}
+	if request.CheatResult[2] != '0' {
+		helper.DebugOut("(CheatResult) flag 3 set!!!")
+	}
+	if request.CheatResult[3] != '0' {
+		helper.DebugOut("(CheatResult) Too many continues!!! (more than 3 continues used)") // NO DOCS!!! This is an assumption!
+	}
+	if request.CheatResult[4] != '0' {
+		helper.DebugOut("(CheatResult) flag 5 set!!!")
+	}
+	if request.CheatResult[5] != '0' {
+		helper.DebugOut("(CheatResult) flag 6 set!!!")
+	}
+	if request.CheatResult[6] != '0' {
+		helper.DebugOut("(CheatResult) flag 7 set!!!")
+	}
+	if request.CheatResult[7] != '0' {
+		helper.DebugOut("(CheatResult) flag 8 set!!!")
+	}
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultQuickPostGameResults(baseInfo, player, playCharacters)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -576,6 +616,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 }
 
 func PostGameResults(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -714,7 +755,7 @@ func PostGameResults(helper *helper.Helper) {
 		// increase character(s)'s experience
 		expIncrease := request.Rings + request.FailureRings // all rings collected
 		abilityIndex := 1
-		for abilityIndex == 1 { // unused ability is at index 1
+		for abilityIndex == 1 || mainC.AbilityLevel[abilityIndex] >= 10 { // unused ability is at index 1
 			abilityIndex = rand.Intn(len(mainC.AbilityLevel))
 		}
 		// check that increases exist
@@ -734,21 +775,41 @@ func PostGameResults(helper *helper.Helper) {
 			playCharacters[0].Exp += expIncrease
 			for playCharacters[0].Exp >= playCharacters[0].Cost {
 				// more exp than cost = level up
-				playCharacters[0].Level++                                               // increase level
-				playCharacters[0].AbilityLevel[abilityIndex]++                          // increase ability level
-				playCharacters[0].Exp -= playCharacters[0].Cost                         // remove cost from exp
+				playCharacters[0].Level++                       // increase level
+				playCharacters[0].AbilityLevel[abilityIndex]++  // increase ability level
+				playCharacters[0].Exp -= playCharacters[0].Cost // remove cost from exp
+				playCharacters[0].AbilityLevelUp = append(playCharacters[0].AbilityLevelUp, int64(abilityIndex))
+				playCharacters[0].AbilityLevelUpExp = append(playCharacters[0].AbilityLevelUp, playCharacters[0].Cost)
+				mainC.AbilityLevelUp = playCharacters[0].AbilityLevelUp
+				mainC.AbilityLevelUpExp = playCharacters[0].AbilityLevelUpExp
 				playCharacters[0].Cost += consts.UpgradeIncreases[playCharacters[0].ID] // increase cost
+				abilityIndex = 1
+				for abilityIndex == 1 || playCharacters[0].AbilityLevel[abilityIndex] >= 10 { // unused ability is at index 1
+					abilityIndex = rand.Intn(len(mainC.AbilityLevel))
+				}
 			}
 		}
 		if hasSubCharacter {
+			abilityIndex = 1
+			for abilityIndex == 1 || subC.AbilityLevel[abilityIndex] >= 10 { // unused ability is at index 1
+				abilityIndex = rand.Intn(len(subC.AbilityLevel))
+			}
 			if playCharacters[1].Level < 100 {
 				playCharacters[1].Exp += expIncrease
 				for playCharacters[1].Exp >= playCharacters[1].Cost {
 					// more exp than cost = level up
-					playCharacters[1].Level++                                               // increase level
-					playCharacters[1].AbilityLevel[abilityIndex]++                          // increase ability level
-					playCharacters[1].Exp -= playCharacters[1].Cost                         // remove cost from exp
+					playCharacters[1].Level++                       // increase level
+					playCharacters[1].AbilityLevel[abilityIndex]++  // increase ability level
+					playCharacters[1].Exp -= playCharacters[1].Cost // remove cost from exp
+					playCharacters[1].AbilityLevelUp = append(playCharacters[1].AbilityLevelUp, int64(abilityIndex))
+					playCharacters[1].AbilityLevelUpExp = append(playCharacters[1].AbilityLevelUp, playCharacters[1].Cost)
+					subC.AbilityLevelUp = playCharacters[1].AbilityLevelUp
+					subC.AbilityLevelUpExp = playCharacters[1].AbilityLevelUpExp
 					playCharacters[1].Cost += consts.UpgradeIncreases[playCharacters[1].ID] // increase cost
+					abilityIndex = 1
+					for abilityIndex == 1 || playCharacters[1].AbilityLevel[abilityIndex] >= 10 { // unused ability is at index 1
+						abilityIndex = rand.Intn(len(subC.AbilityLevel))
+					}
 				}
 			}
 		}
@@ -798,14 +859,14 @@ func PostGameResults(helper *helper.Helper) {
 			if player.PlayerState.Rank > 998 { // rank going above 999
 				player.PlayerState.Rank = 998
 			}
+			if player.PlayerState.Energy < player.PlayerVarious.EnergyRecoveryMax {
+				player.PlayerState.Energy = player.PlayerVarious.EnergyRecoveryMax //restore energy
+			}
 			if goToNextEpisode {
 				player.MileageMapState.Episode++
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				if player.PlayerState.Energy < player.PlayerVarious.EnergyRecoveryMax {
-					player.PlayerState.Energy = player.PlayerVarious.EnergyRecoveryMax //restore energy
-				}
 				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
 				if config.CFile.Debug {
 					player.MileageMapState.Episode = 11
@@ -877,10 +938,35 @@ func PostGameResults(helper *helper.Helper) {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
 
-	helper.DebugOut("CheatResult: %s", request.CheatResult)
+	//helper.DebugOut("CheatResult: %s", request.CheatResult)
+	if request.CheatResult[0] != '0' {
+		helper.DebugOut("(CheatResult) flag 1 set!!!")
+	}
+	if request.CheatResult[1] != '0' {
+		helper.DebugOut("(CheatResult) flag 2 set!!!")
+	}
+	if request.CheatResult[2] != '0' {
+		helper.DebugOut("(CheatResult) flag 3 set!!!")
+	}
+	if request.CheatResult[3] != '0' {
+		helper.DebugOut("(CheatResult) Too many continues!!! (more than 3 continues used)") // NO DOCS!!! This is an assumption!
+	}
+	if request.CheatResult[4] != '0' {
+		helper.DebugOut("(CheatResult) flag 5 set!!!")
+	}
+	if request.CheatResult[5] != '0' {
+		helper.DebugOut("(CheatResult) flag 6 set!!!")
+	}
+	if request.CheatResult[6] != '0' {
+		helper.DebugOut("(CheatResult) flag 7 set!!!")
+	}
+	if request.CheatResult[7] != '0' {
+		helper.DebugOut("(CheatResult) flag 8 set!!!")
+	}
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -909,6 +995,7 @@ func PostGameResults(helper *helper.Helper) {
 }
 
 func GetFreeItemList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -919,6 +1006,7 @@ func GetFreeItemList(helper *helper.Helper) {
 	} else {
 		response = responses.FreeItemList(baseInfo, []obj.Item{}) // No free items
 	}
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -926,6 +1014,7 @@ func GetFreeItemList(helper *helper.Helper) {
 }
 
 func GetMileageReward(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -945,6 +1034,7 @@ func GetMileageReward(helper *helper.Helper) {
 	*/
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultMileageReward(baseInfo, request.Chapter, request.Episode)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

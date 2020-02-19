@@ -108,7 +108,7 @@ func Login(helper *helper.Helper) {
 		if request.Password == logic.GenerateLoginPasskey(player) {
 			baseInfo.StatusCode = status.OK
 			baseInfo.SetErrorMessage(emess.OK)
-			sid, err := db.BoltAssignSessionID(uid)
+			sid, err := db.BoltAssignSessionID(uid, strconv.Itoa(int(request.Seq)))
 			if err != nil {
 				helper.InternalErr("Error assigning session ID", err)
 				return
@@ -123,6 +123,8 @@ func Login(helper *helper.Helper) {
 				return
 			}
 			response := responses.LoginSuccess(baseInfo, sid, player.Username, player.PlayerVarious.EnergyRecoveryTime, player.PlayerVarious.EnergyRecoveryMax)
+			helper.DebugOut("seq = %v", request.Seq)
+			response.Seq = request.Seq
 			err = helper.SendResponse(response)
 			if err != nil {
 				helper.InternalErr("Error sending response", err)
@@ -144,6 +146,7 @@ func Login(helper *helper.Helper) {
 }
 
 func GetVariousParameter(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -154,6 +157,7 @@ func GetVariousParameter(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.VariousParameter(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -162,6 +166,7 @@ func GetVariousParameter(helper *helper.Helper) {
 }
 
 func GetInformation(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -190,6 +195,7 @@ func GetInformation(helper *helper.Helper) {
 	}
 	numOpUnread := int64(len(operatorInfos))
 	response := responses.Information(baseInfo, infos, operatorInfos, numOpUnread)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -197,6 +203,7 @@ func GetInformation(helper *helper.Helper) {
 }
 
 func GetTicker(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -207,6 +214,7 @@ func GetTicker(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultTicker(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -214,6 +222,7 @@ func GetTicker(helper *helper.Helper) {
 }
 
 func LoginBonus(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -242,6 +251,7 @@ func LoginBonus(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultLoginBonus(baseInfo, player, doLoginBonus)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -249,6 +259,7 @@ func LoginBonus(helper *helper.Helper) {
 }
 
 func LoginBonusSelect(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -307,6 +318,7 @@ func LoginBonusSelect(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.LoginBonusSelect(baseInfo, rewardList, firstRewardList)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -314,12 +326,14 @@ func LoginBonusSelect(helper *helper.Helper) {
 }
 
 func GetCountry(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
 	// TODO: Should get correct country code!
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultGetCountry(baseInfo)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -335,6 +349,7 @@ func GetMigrationPassword(helper *helper.Helper) {
 		}
 		return string(final)
 	}
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -357,6 +372,7 @@ func GetMigrationPassword(helper *helper.Helper) {
 	db.SavePlayer(player)
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.MigrationPassword(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -372,7 +388,6 @@ func Migration(helper *helper.Helper) {
 		}
 		return string(final)
 	}
-
 	recv := helper.GetGameRequest()
 	var request requests.LoginRequest
 	err := json.Unmarshal(recv, &request)
@@ -406,7 +421,7 @@ func Migration(helper *helper.Helper) {
 			helper.InternalErr("Error saving player info", err)
 			return
 		}
-		sid, err := db.BoltAssignSessionID(pid)
+		sid, err := db.BoltAssignSessionID(pid, "0")
 		if err != nil {
 			helper.InternalErr("Error assigning session ID", err)
 			return

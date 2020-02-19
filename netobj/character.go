@@ -22,10 +22,10 @@ type Character struct { // Can also be used as PlayCharacter
 	StarMax           int64          `json:"starMax"`
 	LockCondition     int64          `json:"lockCondition"` // value from enums.LockCondition*
 	CampaignList      []obj.Campaign `json:"campaignList"`
-	AbilityLevel      []int64        `json:"abilityLevel"`    // levels for each ability
-	AbilityNumRings   []int64        `json:"abilityNumRings"` // where is this being checked? I can't find the string using dnSpy...
-	AbilityLevelUp    []int64        `json:"abilityLevelup"`  // this is a list of items using enums.ItemID*
-	AbilityLevelUpExp []int64        `json:"abilityLevelupExp,omitempty"`
+	AbilityLevel      []int64        `json:"abilityLevel"`      // levels for each ability
+	AbilityNumRings   []int64        `json:"abilityNumRings"`   // where is this being checked? I can't find the string using dnSpy...
+	AbilityLevelUp    []int64        `json:"abilityLevelup"`    // ability ID?
+	AbilityLevelUpExp []int64        `json:"abilityLevelupExp"` // exp to level up corresponding abilityLevelup ability?
 }
 
 var tick = 0
@@ -40,8 +40,8 @@ func DefaultCharacter(char obj.Character) Character {
 	campaignList := []obj.Campaign{}
 	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // 11 abilities?
 	abilityNumRings := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	abilityLevelUp := []int64{enums.ItemIDInvincible}
-	abilityLevelUpExp := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	abilityLevelUp := []int64{}
+	abilityLevelUpExp := []int64{}
 	return Character{
 		char,
 		status,

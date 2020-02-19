@@ -37,7 +37,7 @@ const (
 	BadRequest          = "Bad Request"
 
 	DefaultIV   = "FoundDeadInMiami"
-	RandomizeIV = false               // highly experimental option; will slow Outrun down slightly
+	RandomizeIV = false // highly experimental option; will slow Outrun down slightly
 )
 
 type Helper struct {
@@ -246,4 +246,19 @@ func (r *Helper) GetCallingPlayerID() (string, error) {
 		return "0", err
 	}
 	return uid, nil
+}
+func (r *Helper) GetSessionID() (string, bool) {
+	recv := r.GetGameRequest()
+	var request requests.Base
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		// likely malformed request
+		return "", false
+	}
+	sid := []byte(request.SessionID)
+	validsession, err := db.BoltIsValidSessionID(sid)
+	if err != nil {
+		return string(sid), false
+	}
+	return string(sid), validsession
 }

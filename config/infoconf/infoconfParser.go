@@ -48,7 +48,7 @@ var InfoTypes = map[string]string{ // TODO: check through these
 	"feed":         "2",
 	"roulette":     "10",
 	"shop":         "11",
-	"event":        "12",
+	"event":        "12", // only seems to work properly in 1.1.4 and earlier?
 	"rouletteInfo": "14", // the banner at the bottom of the menu screen?
 	"quickInfo":    "15", // a banner across the timed mode button?
 	"countryText":  "16", // based on region code

@@ -2,6 +2,7 @@ package muxhandlers
 
 import (
 	"github.com/Mtbcooler/outrun/consts"
+	"github.com/Mtbcooler/outrun/db"
 	"github.com/Mtbcooler/outrun/db/dbaccess"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/helper"
@@ -10,6 +11,7 @@ import (
 )
 
 func GetOptionUserResult(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -25,5 +27,6 @@ func GetOptionUserResult(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.OptionUserResult(baseInfo, optionUserResult)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	helper.SendResponse(response)
 }

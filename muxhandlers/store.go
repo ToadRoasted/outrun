@@ -17,6 +17,7 @@ import (
 )
 
 func GetRedStarExchangeList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -46,6 +47,7 @@ func GetRedStarExchangeList(helper *helper.Helper) {
 	}
 
 	response = responses.RedStarExchangeList(baseInfo, redStarItems, 0, "1900-1-1")
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -53,6 +55,7 @@ func GetRedStarExchangeList(helper *helper.Helper) {
 }
 
 func RedStarExchange(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -127,6 +130,7 @@ func RedStarExchange(helper *helper.Helper) {
 	}
 
 	response := responses.DefaultRedStarExchange(baseInfo, player)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -134,12 +138,14 @@ func RedStarExchange(helper *helper.Helper) {
 }
 
 func SetBirthday(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
 	// agnostic
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultSetBirthday(baseInfo)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

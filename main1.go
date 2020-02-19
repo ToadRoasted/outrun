@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -12,6 +13,11 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/Mtbcooler/outrun/emess"
+	"github.com/Mtbcooler/outrun/responses"
+	"github.com/Mtbcooler/outrun/responses/responseobjs"
+	"github.com/Mtbcooler/outrun/status"
 
 	"github.com/Mtbcooler/outrun/enums"
 
@@ -63,12 +69,23 @@ func HandleUnknownRequest(w http.ResponseWriter, r *http.Request) {
 // return Not Found for the favicon; no favicon is intended
 func FaviconResponse(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte(""))
+	w.Write([]byte("Not Found"))
 }
 
 // Return "OK" for checking if the Outrun instance is alive (intended for uptime monitors)
 func GenericRootResponse(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
+}
+
+func MaintenanceResponse(w http.ResponseWriter, r *http.Request) {
+	baseInfo := responseobjs.NewBaseInfo(emess.OK, status.ServerMaintenance)
+	out := responses.NewBaseResponse(baseInfo)
+	response := map[string]interface{}{"secure": "0", "param": out}
+	toClient, err := json.Marshal(response)
+	if err != nil {
+		log.Println("[ERR] Error marshalling in MaintenanceResponse")
+	}
+	w.Write(toClient)
 }
 
 func removePrependingSlashes(next http.Handler) http.Handler {

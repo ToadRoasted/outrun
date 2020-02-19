@@ -17,6 +17,7 @@ import (
 )
 
 func GetMessageList(helper *helper.Helper) {
+	sid, _ := helper.GetSessionID()
 	if !helper.CheckSession(true) {
 		return
 	}
@@ -35,6 +36,7 @@ func GetMessageList(helper *helper.Helper) {
 	db.SavePlayer(player)
 	// response := responses.DefaultMessageList(baseInfo)
 	response := responses.MessageList(baseInfo, player.Messages, player.OperatorMessages)
+	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

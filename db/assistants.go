@@ -226,7 +226,7 @@ func BoltGetPlayerBySessionID(sid string) (netobj.Player, error) {
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}
-	uid, _ := ParseSIDEntry(sidResult)
+	uid, _, _ := ParseSIDEntry(sidResult)
 	player, err := GetPlayer(uid)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
@@ -244,8 +244,21 @@ func BoltGetPlayerIDBySessionID(sid string) (string, error) {
 	if err != nil {
 		return "0", err
 	}
-	uid, _ := ParseSIDEntry(sidResult)
+	uid, _, _ := ParseSIDEntry(sidResult)
 	return uid, nil
+}
+
+func BoltGetSessionIDSeq(sid string) (int64, error) {
+	sidResult, err := boltdbaccess.Get(consts.DBBucketSessionIDs, sid)
+	if err != nil {
+		return 0, err
+	}
+	_, _, seq := ParseSIDEntry(sidResult)
+	seqI, err := strconv.Atoi(seq)
+	if err != nil {
+		return 0, err
+	}
+	return int64(seqI), nil
 }
 
 func AssignSessionID(uid string) (string, error) {
@@ -257,22 +270,23 @@ func AssignSessionID(uid string) (string, error) {
 	return sid, nil
 }
 
-func BoltAssignSessionID(uid string) (string, error) {
+func BoltAssignSessionID(uid string, seq string) (string, error) {
 	datB := []byte(uid + strconv.Itoa(int(time.Now().Unix())))
 	hash := sha1.Sum(datB)
 	hashStr := fmt.Sprintf("%x", hash)
 	sid := fmt.Sprintf(SessionIDSchema, hashStr)
-	value := fmt.Sprintf("%s/%s", uid, strconv.Itoa(int(time.Now().Unix()))) // register the time that the session ID was assigned
+	value := fmt.Sprintf("%s/%s/%s", uid, strconv.Itoa(int(time.Now().Unix())), seq) // register the time that the session ID was assigned
 	valueB := []byte(value)
 	err := boltdbaccess.Set(consts.DBBucketSessionIDs, sid, valueB)
 	return sid, err
 }
 
-func ParseSIDEntry(sidResult []byte) (string, int64) {
+func ParseSIDEntry(sidResult []byte) (string, int64, string) {
 	split := strings.Split(string(sidResult), "/")
 	uid := split[0]
 	timeAssigned, _ := strconv.Atoi(split[1])
-	return uid, int64(timeAssigned)
+	seq := split[2]
+	return uid, int64(timeAssigned), seq
 }
 
 func IsValidSessionTime(sessionTime int64) bool {
@@ -293,7 +307,7 @@ func BoltIsValidSessionID(sid []byte) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	_, sessionTime := ParseSIDEntry(sidResult)
+	_, sessionTime, _ := ParseSIDEntry(sidResult)
 
 	return IsValidSessionTime(sessionTime), err
 }
@@ -312,7 +326,7 @@ func BoltPurgeAllExpiredSessionIDs() {
 	each := func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(consts.DBBucketSessionIDs))
 		err2 := bucket.ForEach(func(k, v []byte) error { // for each value in the session bucket
-			_, sessionTime := ParseSIDEntry(v) // get time the session was created
+			_, sessionTime, _ := ParseSIDEntry(v) // get time the session was created
 			if !IsValidSessionTime(sessionTime) {
 				keysToPurge = append(keysToPurge, k)
 			}
