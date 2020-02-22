@@ -1,16 +1,10 @@
-# outrun
+# Outrun for Revival
 
-**THIS BRANCH IS HIGHLY EXPERIMENTAL! USE THIS AT YOUR OWN RISK!**
+**Not everything works in this branch yet. Please use the master branch for the stable version.**
 
 ### Summary
 
-Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) (Now uses Outrun) project.
-
-### Goals
-
-  - Implement all non debug endpoints as fulfilled by the original server
-  - Maintain speed throughout runtime
-  - Consume little resources for conservative deployment
+Outrun for Revival is a fork of Outrun, a custom server for Sonic Runners reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project back during the Open Beta. It is intended for use on the Sonic Runners Revival server, but can be used for your own private servers as well.
 
 ### Current functionality
 
@@ -23,18 +17,18 @@ Notable:
   - Character leveling and progression
   - Item/Chao roulette functionality
   - Events
-  - Basic ranking
+  - Campaigns
+  - Leaderboards
 
 Functional:
   - Android and iOS support
   - High score keeping
   - In game notices
   - Deep configuration options
-  - Powerful RPC control functions
+  - Powerful RPC control functions (WIP)
   - Ticker notices
-  - Small database size and memory footprint
   - Low CPU usage
-  - Analytics support
+  - Analytics support (WIP)
 
 ### Building
 
@@ -70,10 +64,6 @@ Binary releases can be found [in the releases tab.](https://github.com/fluofoxxo
 ### Misc.
 
 Any pull requests deemed code improvements are strongly encouraged. Refactors may be merged into a different branch.
-
-#### Palmbound (Public Development Server)
-
-As of 1 September, 2019, an instance of this server named Palmbound is currently publicly accessible. App file downloads can be acquired by joining the Palmbound Download Discord server: https://discord.gg/eeQAe8R
 
 ### Credits
 

@@ -105,7 +105,7 @@ func checkArgs() bool {
 	amt := len(args)
 	if amt >= 1 {
 		if args[0] == "--version" {
-			fmt.Printf("Outrun %s\n", meta.Version)
+			fmt.Printf("Outrun for Revival %s\n", meta.Version)
 			return true
 		}
 		if args[0] == "--migrate" {

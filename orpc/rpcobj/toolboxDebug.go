@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Mtbcooler/outrun/enums"
+
 	"github.com/Mtbcooler/outrun/config/gameconf"
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db"
@@ -507,6 +509,43 @@ func (t *Toolbox) Debug_FixCharacterPrices(uids string, reply *ToolboxReply) err
 			player.CharacterState[i].Character.PriceRedRings = defaultPriceRedRings // TODO: check if needed
 			player.CharacterState[i].PriceRedRings = defaultPriceRedRings
 		}
+		err = db.SavePlayer(player)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("error saving player %s: ", uid) + err.Error()
+			return err
+		}
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
+func (t *Toolbox) Debug_ResetCharacterLevels(uids string, reply *ToolboxReply) error {
+	allUIDs := strings.Split(uids, ",")
+
+	for _, uid := range allUIDs {
+		player, err := db.GetPlayer(uid)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("unable to get player %s: ", uid) + err.Error()
+			return err
+		}
+		amountPerLevel := int64(8) // Red Rings offered per level
+		compensation := int64(0)
+		for index, char := range player.CharacterState {
+			if char.Status != enums.CharacterStatusLocked {
+				compensation += char.Level * amountPerLevel
+				player.CharacterState[index].AbilityLevelUp = []int64{}
+				player.CharacterState[index].AbilityLevelUpExp = []int64{}
+				player.CharacterState[index].AbilityLevel = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+				player.CharacterState[index].AbilityNumRings = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+				player.CharacterState[index].Level = 0
+				player.CharacterState[index].Cost = consts.UpgradeIncreases[char.ID]
+			}
+		}
+		player.PlayerState.NumRedRings += compensation
+
 		err = db.SavePlayer(player)
 		if err != nil {
 			reply.Status = StatusOtherError
