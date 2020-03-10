@@ -163,7 +163,7 @@ type ActStartResponse struct {
 	DistanceFriendList []netobj.DistanceFriendEntry `json:"distanceFriendList"`
 }
 
-func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campaignList []obj.Campaign, distFriends []netobj.MileageFriend) ActStartResponse {
+func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campaignList []obj.Campaign, distFriends []netobj.DistanceFriendEntry) ActStartResponse {
 	actStartBase := ActStartBase(base, playerState, campaignList)
 	return ActStartResponse{
 		actStartBase,
