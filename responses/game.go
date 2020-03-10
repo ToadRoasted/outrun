@@ -160,7 +160,7 @@ func DefaultQuickActStart(base responseobjs.BaseInfo, player netobj.Player, camp
 
 type ActStartResponse struct {
 	ActStartBaseResponse
-	DistanceFriendList []netobj.MileageFriend `json:"distanceFriendList"` // TODO: Discover if correct type
+	DistanceFriendList []netobj.DistanceFriendEntry `json:"distanceFriendList"`
 }
 
 func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campaignList []obj.Campaign, distFriends []netobj.MileageFriend) ActStartResponse {
@@ -173,7 +173,7 @@ func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campai
 
 func DefaultActStart(base responseobjs.BaseInfo, player netobj.Player, campaignList []obj.Campaign) ActStartResponse {
 	playerState := player.PlayerState
-	distFriends := []netobj.MileageFriend{}
+	distFriends := []netobj.DistanceFriendEntry{}
 	return ActStart(
 		base,
 		playerState,
@@ -256,11 +256,10 @@ type PostGameResultsResponse struct {
 	QuickPostGameResultsResponse
 	MileageMapState      netobj.MileageMapState `json:"mileageMapState"`
 	MileageIncentiveList []obj.MileageIncentive `json:"mileageIncentiveList"`
-	EventIncentiveList   []obj.Item             `json:"eventIncentiveList"`
 	WheelOptions         netobj.WheelOptions    `json:"wheelOptions"`
 }
 
-func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, eil []obj.Item, wo netobj.WheelOptions) PostGameResultsResponse {
+func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, wo netobj.WheelOptions) PostGameResultsResponse {
 	baseResponse := NewBaseResponse(base)
 	playerState := player.PlayerState
 	chaoState := player.ChaoState
@@ -287,7 +286,6 @@ func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj
 		qpgrr,
 		mms,
 		mil,
-		eil,
 		wo,
 	}
 }
@@ -296,7 +294,6 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
 	mms := player.MileageMapState
 	//mil := []obj.MileageIncentive{}
-	eil := []obj.Item{}
 	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
 	// TODO: Remove logic from response!!
 	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
@@ -305,8 +302,70 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 		qpgrr,
 		mms,
 		incentives,
-		eil,
 		wo,
+	}
+}
+
+type PostGameResultsEventResponse struct {
+	PostGameResultsResponse
+	EventState         netobj.EventState `json:"eventState"`
+	EventIncentiveList []obj.Item        `json:"eventIncentiveList"`
+}
+
+func PostGameResultsEvent(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, wo netobj.WheelOptions, eil []obj.Item, es netobj.EventState) PostGameResultsEventResponse {
+	baseResponse := NewBaseResponse(base)
+	playerState := player.PlayerState
+	chaoState := player.ChaoState
+	dailyChallengeIncentive := dci
+	characterState := player.CharacterState
+	messageList := []obj.Message{}
+	operatorMessageList := []obj.OperatorMessage{}
+	totalMessage := int64(len(messageList))
+	totalOperatorMessage := int64(len(operatorMessageList))
+	playCharacterState := pcs
+	qpgrr := QuickPostGameResultsResponse{
+		baseResponse,
+		playerState,
+		chaoState,
+		dailyChallengeIncentive,
+		characterState,
+		messageList,
+		operatorMessageList,
+		totalMessage,
+		totalOperatorMessage,
+		playCharacterState,
+	}
+	pgrr := PostGameResultsResponse{
+		qpgrr,
+		mms,
+		mil,
+		wo,
+	}
+	return PostGameResultsEventResponse{
+		pgrr,
+		es,
+		eil,
+	}
+}
+
+func DefaultPostGameResultsEvent(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character, incentives []obj.MileageIncentive, eventIncentives []obj.Item, eventState netobj.EventState) PostGameResultsEventResponse {
+	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
+	mms := player.MileageMapState
+	//mil := []obj.MileageIncentive{}
+	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+	// TODO: Remove logic from response!!
+	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
+	wo := player.LastWheelOptions
+	pgrr := PostGameResultsResponse{
+		qpgrr,
+		mms,
+		incentives,
+		wo,
+	}
+	return PostGameResultsEventResponse{
+		pgrr,
+		eventState,
+		eventIncentives,
 	}
 }
 

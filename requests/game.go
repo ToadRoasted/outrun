@@ -1,7 +1,5 @@
 package requests
 
-import "github.com/Mtbcooler/outrun/netobj"
-
 type QuickPostGameResultsRequest struct {
 	Base
 	Score                  int64  `json:"score,string"`
@@ -19,11 +17,13 @@ type QuickPostGameResultsRequest struct {
 
 type PostGameResultsRequest struct {
 	QuickPostGameResultsRequest
-	BossDestroyed int64 `json:"bossDestroyed"`
-	ChapterClear  int64 `json:"chapterClear"`
-	GetChaoEgg    int64 `json:"getChaoEgg"`
-	NumBossAttack int64 `json:"numBossAttack,string"`
-	ReachPoint    int64 `json:"reachPoint,string"`
+	BossDestroyed int64  `json:"bossDestroyed"`
+	ChapterClear  int64  `json:"chapterClear"`
+	GetChaoEgg    int64  `json:"getChaoEgg"`
+	NumBossAttack int64  `json:"numBossAttack,string"`
+	ReachPoint    int64  `json:"reachPoint,string"`
+	EventID       string `json:"eventId,omitempty"`
+	EventValue    int64  `json:"eventValue,string,omitempty"`
 }
 
 type QuickActStartRequest struct {
@@ -34,7 +34,8 @@ type QuickActStartRequest struct {
 
 type ActStartRequest struct {
 	QuickActStartRequest
-	DistanceFriendList []netobj.MileageFriend `json:"distanceFriendList"` // TODO: Discover correct type... This might be list of strings
+	DistanceFriendList []string `json:"distanceFriendList"` // list of IDs for facebook friends (converted to a DistanceFriendEntry list for response)
+	EventID            string   `json:"eventId,omitempty"`
 }
 
 type MileageRewardRequest struct {

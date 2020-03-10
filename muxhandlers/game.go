@@ -959,7 +959,7 @@ func PostGameResults(helper *helper.Helper) {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
 
-	//helper.DebugOut("CheatResult: %s", request.CheatResult)
+	helper.DebugOut("CheatResult: %s", request.CheatResult)
 	if request.CheatResult[0] != '0' {
 		helper.DebugOut("(CheatResult) flag 1 set!!!")
 	}
@@ -988,7 +988,15 @@ func PostGameResults(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
-	err = helper.SendResponse(response)
+	eresponse := responses.DefaultPostGameResultsEvent(baseInfo, player, playCharacters, incentives, []obj.Item{}, netobj.NewEventState(request.EventValue, -1))
+	eresponse.Seq, _ = db.BoltGetSessionIDSeq(sid)
+	if len(request.EventID) > 0 {
+		helper.DebugOut("Event ID: %s", request.EventID)
+		helper.DebugOut("Event Value: %v", request.EventValue)
+		err = helper.SendResponse(eresponse)
+	} else {
+		err = helper.SendResponse(response)
+	}
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 		return

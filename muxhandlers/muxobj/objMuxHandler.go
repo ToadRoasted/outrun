@@ -13,11 +13,19 @@ import (
 	"github.com/Mtbcooler/outrun/helper"
 )
 
+var shuttingDown = false
+
 func Handle(f func(*helper.Helper), logExecutionTime bool) func(w http.ResponseWriter, r *http.Request) {
 	funcnameSplit := strings.Split(runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name(), "/")
 	funcname := funcnameSplit[len(funcnameSplit)-1]
 	funcnameSplit = strings.Split(funcname, ".") // just get function name
 	funcname = funcnameSplit[len(funcnameSplit)-1]
+	if shuttingDown {
+		return func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			w.Write([]byte(""))
+		}
+	}
 	if logExecutionTime {
 		return func(w http.ResponseWriter, r *http.Request) {
 			startTime := time.Now()

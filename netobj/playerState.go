@@ -61,6 +61,10 @@ type PlayerState struct {
 	LeagueResetTime         int64      `json:"leagueResetTime" db:"league_reset_time"`
 	RankingLeagueGroup      int64      `json:"rankingLeagueGroup,string" db:"ranking_league_group"`
 	QuickRankingLeagueGroup int64      `json:"quickRankingLeagueGroup,string" db:"quick_ranking_league_group"`
+	TotalScore              int64      `json:"totalScore,string" db:"total_score"`
+	TimedTotalScore         int64      `json:"quickTotalScore,string" db:"quick_total_score"`
+	HighTotalScore          int64      `json:"bestTotalScore,string" db:"best_total_score"`
+	TimedHighTotalScore     int64      `json:"bestQuickTotalScore,string" db:"best_quick_total_score"`
 }
 
 type SqlCompatiblePlayerState struct {
@@ -106,6 +110,10 @@ type SqlCompatiblePlayerState struct {
 	LeagueResetTime         int64  `json:"leagueResetTime" db:"league_reset_time"`
 	RankingLeagueGroup      int64  `json:"rankingLeagueGroup,string" db:"ranking_league_group"`
 	QuickRankingLeagueGroup int64  `json:"quickRankingLeagueGroup,string" db:"quick_ranking_league_group"`
+	TotalScore              int64  `json:"totalScore,string" db:"total_score"`
+	TimedTotalScore         int64  `json:"quickTotalScore,string" db:"quick_total_score"`
+	HighTotalScore          int64  `json:"bestTotalScore,string" db:"best_total_score"`
+	TimedHighTotalScore     int64  `json:"bestQuickTotalScore,string" db:"best_quick_total_score"`
 }
 
 func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerState {
@@ -154,6 +162,10 @@ func PlayerStateToSQLCompatiblePlayerState(ps PlayerState) SqlCompatiblePlayerSt
 		ps.LeagueResetTime,
 		ps.RankingLeagueGroup,
 		ps.QuickRankingLeagueGroup,
+		ps.TotalScore,
+		ps.TimedTotalScore,
+		ps.HighTotalScore,
+		ps.TimedHighTotalScore,
 	}
 }
 
@@ -204,6 +216,10 @@ func SQLCompatiblePlayerStateToPlayerState(ps SqlCompatiblePlayerState) PlayerSt
 		ps.LeagueResetTime,
 		ps.RankingLeagueGroup,
 		ps.QuickRankingLeagueGroup,
+		ps.TotalScore,
+		ps.TimedTotalScore,
+		ps.HighTotalScore,
+		ps.TimedHighTotalScore,
 	}
 }
 
@@ -259,6 +275,10 @@ func DefaultPlayerState() PlayerState {
 	leagueResetTime := now.EndOfWeek().UTC().Unix()
 	rankingLeagueGroup := int64(0)
 	quickRankingLeagueGroup := int64(0)
+	totalScore := int64(0)
+	timedTotalScore := int64(0)
+	highTotalScore := int64(0)
+	timedHighTotalScore := int64(0)
 	return PlayerState{
 		items,
 		equippedItemIDs,
@@ -301,5 +321,9 @@ func DefaultPlayerState() PlayerState {
 		leagueResetTime,
 		rankingLeagueGroup,
 		quickRankingLeagueGroup,
+		totalScore,
+		timedTotalScore,
+		highTotalScore,
+		timedHighTotalScore,
 	}
 }

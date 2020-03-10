@@ -33,11 +33,10 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string, showScoresOf
 			columnToSortBy = "league_high_score"
 		}
 	case 1, 3, 5:
-		// TODO: Define total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
+			columnToSortBy = "quick_total_score"
 		} else {
-			columnToSortBy = "league_high_score"
+			columnToSortBy = "total_score"
 		}
 	case 6: // Historical high score
 		if mode == 1 {
@@ -46,11 +45,10 @@ func GetHighScores(mode, lbtype, offset, limit int64, ownid string, showScoresOf
 			columnToSortBy = "high_score"
 		}
 	case 7: // Historical total score
-		// TODO: Define high_total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_high_score"
+			columnToSortBy = "best_quick_total_score"
 		} else {
-			columnToSortBy = "high_score"
+			columnToSortBy = "best_total_score"
 		}
 	default:
 		log.Printf("[WARN] Unknown leaderboard type %v", lbtype)
@@ -166,11 +164,10 @@ func GetLeagueHighScores(mode, lbtype, league, leagueGroup, offset, limit int64,
 			columnToSortBy = "league_high_score"
 		}
 	case 1, 3, 5:
-		// TODO: Define total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
+			columnToSortBy = "quick_total_score"
 		} else {
-			columnToSortBy = "league_high_score"
+			columnToSortBy = "total_score"
 		}
 	case 6: // Historical high score
 		if mode == 1 {
@@ -181,9 +178,9 @@ func GetLeagueHighScores(mode, lbtype, league, leagueGroup, offset, limit int64,
 	case 7: // Historical total score
 		// TODO: Define high_total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_high_score"
+			columnToSortBy = "best_quick_total_score"
 		} else {
-			columnToSortBy = "high_score"
+			columnToSortBy = "best_total_score"
 		}
 	default:
 		log.Printf("[WARN] Unknown leaderboard type %v", lbtype)
@@ -291,11 +288,10 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string, showScoresOfZero b
 			columnToSortBy = "league_high_score"
 		}
 	case 1, 3, 5:
-		// TODO: Define total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_league_high_score"
+			columnToSortBy = "quick_total_score"
 		} else {
-			columnToSortBy = "league_high_score"
+			columnToSortBy = "total_score"
 		}
 	case 6: // Historical high score
 		if mode == 1 {
@@ -304,11 +300,10 @@ func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string, showScoresOfZero b
 			columnToSortBy = "high_score"
 		}
 	case 7: // Historical total score
-		// TODO: Define high_total_score column
 		if mode == 1 {
-			columnToSortBy = "quick_high_score"
+			columnToSortBy = "best_quick_total_score"
 		} else {
-			columnToSortBy = "high_score"
+			columnToSortBy = "best_total_score"
 		}
 	default:
 		log.Printf("[WARN] Unknown leaderboard type %v", lbtype)
@@ -584,7 +579,7 @@ func ResetAllRankingLeagueData() error {
 func ClearLeagueHighScores() error {
 	CheckIfDBSet()
 	rowsAffected := int64(0)
-	result, err := db.Exec("UPDATE `" + consts.DBMySQLTablePlayerStates + "` SET league_high_score = 0, quick_league_high_score = 0")
+	result, err := db.Exec("UPDATE `" + consts.DBMySQLTablePlayerStates + "` SET league_high_score = 0, quick_league_high_score = 0, total_score = 0, quick_total_score = 0")
 	if err == nil && config.CFile.DebugPrints {
 		rowsAffected, _ = result.RowsAffected()
 		log.Printf("[DEBUG] ClearLeagueHighScores operation completed; %v rows affected\n", rowsAffected)

@@ -10,21 +10,21 @@ const (
 	DBSessionExpiryTime = 3600
 
 	// TODO: Add more tables as needed.
-	DBMySQLTableAnalytics          = "analytics"
-	DBMySQLTableCorePlayerInfo     = "player_info"
-	DBMySQLTablePlayerStates       = "player_states"
-	DBMySQLTableMileageMapStates   = "player_mileage"
-	DBMySQLTableOptionUserResults  = "player_user_results"
-	DBMySQLTableLastWheelOptions   = "player_roulette_options"
-	DBMySQLTableRouletteInfos      = "player_item_roulette_data"
-	DBMySQLTableChaoRouletteGroups = "player_chao_roulette_data"
-	DBMySQLTableLoginBonusStates   = "player_login_bonus_states"
-	DBMySQLTablePersonalEvents     = "player_personal_events"
-	DBMySQLTableMessages           = "player_messages"
-	DBMySQLTableOperatorMessages   = "player_operator_messages"
-	DBMySQLTableOperatorInfos      = "player_operator_infos"
-	DBMySQLTableRankingLeagueData  = "ranking_league_data"
-	DBMySQLTableSessionIDs         = "session_ids"
+	DBMySQLTableAnalytics         = "analytics"
+	DBMySQLTableCorePlayerInfo    = "player_info"
+	DBMySQLTableEventStates       = "player_event_states"
+	DBMySQLTablePlayerStates      = "player_states"
+	DBMySQLTableMileageMapStates  = "player_mileage"
+	DBMySQLTableOptionUserResults = "player_user_results"
+	DBMySQLTableLastWheelOptions  = "player_roulette_options"
+	DBMySQLTableRouletteInfos     = "player_item_roulette_data"
+	DBMySQLTableLoginBonusStates  = "player_login_bonus_states"
+	DBMySQLTablePersonalEvents    = "player_personal_events"
+	DBMySQLTableMessages          = "player_messages"
+	DBMySQLTableOperatorMessages  = "player_operator_messages"
+	DBMySQLTableOperatorInfos     = "player_operator_infos"
+	DBMySQLTableRankingLeagueData = "ranking_league_data"
+	DBMySQLTableSessionIDs        = "session_ids"
 
 	SQLAnalyticsSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableAnalytics + ` (
@@ -49,47 +49,51 @@ const (
 	SQLPlayerStatesSchema = `
 	CREATE TABLE IF NOT EXISTS ` + DBMySQLTablePlayerStates + ` (
 		id BIGINT UNSIGNED NOT NULL,
-		items JSON,
-		equipped_items JSON,
-		mainchara_id TEXT,
-		subchara_id TEXT,
-		mainchao_id TEXT,
-		subchao_id TEXT,
-		num_rings INTEGER,
-		num_buy_rings INTEGER,
-		num_red_rings INTEGER,
-		num_buy_red_rings INTEGER,
-		energy INTEGER,
-		energy_buy INTEGER,
-		energy_renews_at BIGINT,
-		num_messages INTEGER,
-		ranking_league INTEGER,
-		quick_ranking_league INTEGER,
-		num_roulette_ticket INTEGER,
-		num_chao_roulette_ticket INTEGER,
-		chao_eggs INTEGER,
-		high_score INTEGER,
-		quick_high_score INTEGER,
-		total_distance INTEGER,
-		best_distance INTEGER,
-		daily_mission_id INTEGER,
+		items JSON NOT NULL,
+		equipped_items JSON NOT NULL,
+		mainchara_id TEXT NOT NULL,
+		subchara_id TEXT NOT NULL,
+		mainchao_id TEXT NOT NULL,
+		subchao_id TEXT NOT NULL,
+		num_rings INTEGER NOT NULL,
+		num_buy_rings INTEGER NOT NULL,
+		num_red_rings INTEGER NOT NULL,
+		num_buy_red_rings INTEGER NOT NULL,
+		energy INTEGER NOT NULL,
+		energy_buy INTEGER NOT NULL,
+		energy_renews_at BIGINT UNSIGNED NOT NULL,
+		num_messages INTEGER NOT NULL,
+		ranking_league INTEGER NOT NULL,
+		quick_ranking_league INTEGER NOT NULL,
+		num_roulette_ticket INTEGER NOT NULL,
+		num_chao_roulette_ticket INTEGER NOT NULL,
+		chao_eggs INTEGER NOT NULL,
+		high_score BIGINT NOT NULL,
+		quick_high_score BIGINT NOT NULL,
+		total_distance BIGINT NOT NULL,
+		best_distance BIGINT NOT NULL,
+		daily_mission_id INTEGER UNSIGNED NOT NULL,
 		daily_mission_end_time BIGINT UNSIGNED NOT NULL,
 		daily_challenge_value INTEGER,
-		daily_challenge_complete TINYINT,
-		num_daily_chal_cont INTEGER,
-		num_plays INTEGER,
-		num_animals INTEGER,
-		rank INTEGER,
-		dm_cat INTEGER,
-		dm_set INTEGER,
-		dm_pos INTEGER,
-		dm_nextcont INTEGER,
-		league_high_score INTEGER,
-		quick_league_high_score INTEGER,
+		daily_challenge_complete TINYINT UNSIGNED NOT NULL,
+		num_daily_chal_cont INTEGER NOT NULL,
+		num_plays INTEGER NOT NULL,
+		num_animals INTEGER NOT NULL,
+		rank INTEGER UNSIGNED NOT NULL,
+		dm_cat INTEGER NOT NULL,
+		dm_set INTEGER NOT NULL,
+		dm_pos INTEGER NOT NULL,
+		dm_nextcont INTEGER NOT NULL,
+		league_high_score BIGINT NOT NULL,
+		quick_league_high_score BIGINT NOT NULL,
 		league_start_time BIGINT UNSIGNED NOT NULL,
 		league_reset_time BIGINT UNSIGNED NOT NULL,
-		ranking_league_group INTEGER,
-		quick_ranking_league_group INTEGER,
+		ranking_league_group INTEGER NOT NULL,
+		quick_ranking_league_group INTEGER NOT NULL,
+		total_score BIGINT NOT NULL,
+		quick_total_score BIGINT NOT NULL,
+		best_total_score BIGINT NOT NULL,
+		best_quick_total_score BIGINT NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
 	SQLMileageMapStatesSchema = `
@@ -102,7 +106,7 @@ const (
 		episode INTEGER,
 		chapter INTEGER,
 		point INTEGER,
-		stage_total_score INTEGER,
+		stage_total_score BIGINT,
 		chapter_start_time BIGINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
@@ -173,6 +177,12 @@ const (
 		param TEXT,
 		PRIMARY KEY (uid, id)
 	) ENGINE = InnoDB;`
+	SQLEventStatesSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableEventStates + ` (
+		uid BIGINT UNSIGNED NOT NULL,
+		param INTEGER NOT NULL,
+		PRIMARY KEY (uid)
+	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(
 		id,
 		items,
@@ -215,7 +225,11 @@ const (
 		league_start_time,
 		league_reset_time,
 		ranking_league_group,
-		quick_ranking_league_group
+		quick_ranking_league_group,
+		total_score,
+		quick_total_score,
+		best_total_score,
+		best_quick_total_score
 	)
 	VALUES (
 		:id,
@@ -259,6 +273,10 @@ const (
 		:league_start_time,
 		:league_reset_time,
 		:ranking_league_group,
-		:quick_ranking_league_group
+		:quick_ranking_league_group,
+		:total_score,
+		:quick_total_score,
+		:best_total_score,
+		:best_quick_total_score
 	)`
 )

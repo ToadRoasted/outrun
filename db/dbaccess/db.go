@@ -243,6 +243,10 @@ func GetPlayerState(table, id string) (netobj.PlayerState, error) {
 		&values.LeagueResetTime,
 		&values.RankingLeagueGroup,
 		&values.QuickRankingLeagueGroup,
+		&values.TotalScore,
+		&values.TimedTotalScore,
+		&values.HighTotalScore,
+		&values.TimedHighTotalScore,
 	)
 	if err != nil {
 		return netobj.DefaultPlayerState(), err
@@ -345,6 +349,16 @@ func GetOperatorInfos(uid string) ([]obj.OperatorInformation, error) {
 	}
 	rows.Close()
 	return values, nil
+}
+
+func GetEventParam(uid string) (int64, error) {
+	CheckIfDBSet()
+	var param int64
+	err := db.QueryRow("SELECT param FROM `"+consts.DBMySQLTableEventStates+"` WHERE uid = ?", uid).Scan(&uid, &param)
+	if err != nil {
+		return 0, err
+	}
+	return param, nil
 }
 
 func Delete(table, id string) error {
