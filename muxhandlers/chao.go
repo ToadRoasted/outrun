@@ -260,7 +260,7 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 					//highRange := int(consts.ChaoRouletteChaoLevelIncreaseHigh)
 					//lowRange := int(consts.ChaoRouletteChaoLevelIncreaseLow)
 					//prizeChaoLevel := int64(rand.Intn(highRange-lowRange+1) + lowRange) // This level is added to the current Chao level
-					prizeChaoLevel := 1 // prevent visual glitches from multiple level increases
+					prizeChaoLevel := int64(1) // prevent visual glitches from multiple level increases
 					if player.ChaoState[chaoIndex].Level < 10 {
 						player.ChaoState[chaoIndex].Level += prizeChaoLevel
 						player.ChaoState[chaoIndex].Acquired++
