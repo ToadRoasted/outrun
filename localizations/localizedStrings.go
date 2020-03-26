@@ -10,7 +10,7 @@ var LocalizedStrings = map[string]map[string]string{
 		"DailyBattleWinStreakRewardLabel":    "A reward for winning %v daily battles in a row.",
 		"DailyChallengeRewardLabel":          "A Daily Challenge Reward.",
 		"DefaultAnnouncementMessage":         "Welcome to Sonic Runners Revival, powered by OUTRUN!",
-		"DefaultLoginRouletteMessage":        "Welcome to the Item Roulette! Right now, everything is randomized.",
+		"DefaultLoginRouletteMessage":        "Earn some items to help you get a high score, and maybe even a top place in the rankings!",
 		"DefaultMaintenanceMessage":          "The server is currently undergoing scheduled maintenance. Check our social media, especially our Discord server, for more information.",
 		"DefaultRewardLabel":                 "A gift from the Revival Team.",
 		"FirstLoginBonusRewardLabel":         "A Debut Dash Login Bonus.", // TODO: Should this be corrected to "Start Dash Login Bonus" for consistency?
@@ -18,8 +18,6 @@ var LocalizedStrings = map[string]map[string]string{
 		"LeaguePromotionRewardLabel":         "Runners' League Promotion Reward. Story Mode.",
 		"LeagueTotalRankingRewardLabel":      "A reward for getting the following position in the Runners' League Total Score Ranking: %v.",
 		"LoginBonusRewardLabel":              "A Login Bonus.",
-		"OverallHighRankingRewardLabel":      "A reward for getting the following position in the overall High Score Ranking: %v.",
-		"OverallTotalRankingRewardLabel":     "A reward for getting the following position in the overall Total Score Ranking: %v.",
 		"QuickLeagueHighRankingRewardLabel":  "A reward for getting the following position in the Runners' League Timed Mode High Score Ranking: %v.",
 		"QuickLeaguePromotionRewardLabel":    "Runners' League Promotion Reward. Timed Mode.",
 		"QuickLeagueTotalRankingRewardLabel": "A reward for getting the following position in the Runners' League Timed Mode Total Score Ranking: %v.",
