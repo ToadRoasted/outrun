@@ -23,8 +23,8 @@ type Character struct { // Can also be used as PlayCharacter
 	LockCondition     int64          `json:"lockCondition"` // value from enums.LockCondition*
 	CampaignList      []obj.Campaign `json:"campaignList"`
 	AbilityLevel      []int64        `json:"abilityLevel"`      // levels for each ability
-	AbilityNumRings   []int64        `json:"abilityNumRings"`   // where is this being checked? I can't find the string using dnSpy...
-	AbilityLevelUp    []int64        `json:"abilityLevelup"`    // ability ID?
+	AbilityNumRings   []int64        `json:"abilityNumRings"`   // possibly unused?
+	AbilityLevelUp    []int64        `json:"abilityLevelup"`    // which ability ID(s) leveled up during a run
 	AbilityLevelUpExp []int64        `json:"abilityLevelupExp"` // exp to level up corresponding abilityLevelup ability?
 }
 
@@ -38,7 +38,7 @@ func DefaultCharacter(char obj.Character) Character {
 	starMax := int64(10) // Max number of limit breaks?
 	lockCondition := int64(enums.LockConditionOpen)
 	campaignList := []obj.Campaign{}
-	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // 11 abilities?
+	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // index 0 is a dummy entry not used by the game apparently???
 	abilityNumRings := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	abilityLevelUp := []int64{}
 	abilityLevelUpExp := []int64{}
@@ -79,6 +79,7 @@ func DefaultRouletteLockedCharacter(char obj.Character) Character {
 	return ch
 }
 
+// UnlockedCharacterState is a default CharacterState
 func UnlockedCharacterState() []Character { // every character
 	// TODO: It looks like the game only wants 300000-300020, otherwise an index error is created. Investigate this in game!
 	return []Character{
@@ -103,14 +104,6 @@ func UnlockedCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterTikal),
 		DefaultCharacter(constobjs.CharacterMephiles),
 		DefaultCharacter(constobjs.CharacterPSISilver),
-		/*		DefaultCharacter(constobjs.CharacterAmitieAmy),
-				DefaultCharacter(constobjs.CharacterGothicAmy),
-				DefaultCharacter(constobjs.CharacterHalloweenShadow),
-				DefaultCharacter(constobjs.CharacterHalloweenRouge),
-				DefaultCharacter(constobjs.CharacterHalloweenOmega),
-				DefaultCharacter(constobjs.CharacterXMasSonic),
-				DefaultCharacter(constobjs.CharacterXMasTails),
-				DefaultCharacter(constobjs.CharacterXMasKnuckles),*/
 	}
 }
 
@@ -140,13 +133,35 @@ func DefaultCharacterState() []Character {
 		DefaultLockedCharacter(constobjs.CharacterTikal),
 		DefaultLockedCharacter(constobjs.CharacterMephiles),
 		DefaultLockedCharacter(constobjs.CharacterPSISilver),
-		/*		DefaultRouletteLockedCharacter(constobjs.CharacterAmitieAmy),
-				DefaultRouletteLockedCharacter(constobjs.CharacterGothicAmy),
-				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenShadow),
-				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenRouge),
-				DefaultRouletteLockedCharacter(constobjs.CharacterHalloweenOmega),
-				DefaultRouletteLockedCharacter(constobjs.CharacterXMasSonic),
-				DefaultRouletteLockedCharacter(constobjs.CharacterXMasTails),
-				DefaultRouletteLockedCharacter(constobjs.CharacterXMasKnuckles),*/
+		// other characters will be added to the CharacterState as they are obtained on the roulette
 	}
+}
+
+// CheckForLevelAbnormalities fixes any abnormalities in the ability levels and the character level
+// Returns: Corrected Character, and if abnormalities were detected
+func CheckForLevelAbnormalities(char Character) (Character, bool) {
+	abnormalitiesDetected := false
+	if char.Star > char.StarMax {
+		char.Star = char.StarMax
+		abnormalitiesDetected = true
+	}
+	realLevel := int64(0)
+	for index, aL := range char.AbilityLevel {
+		if (index == 0 && aL != 0) || aL < 0 { // does ability index 0 have a non-zero level, or is ability level negative?
+			char.AbilityLevel[index] = 0
+			aL = 0
+			abnormalitiesDetected = true
+		}
+		if aL > 10 { // is ability level above 10?
+			char.AbilityLevel[index] = 10
+			aL = 10
+			abnormalitiesDetected = true
+		}
+		realLevel += aL
+	}
+	if realLevel != char.Level {
+		char.Level = realLevel
+		abnormalitiesDetected = true
+	}
+	return char, abnormalitiesDetected
 }

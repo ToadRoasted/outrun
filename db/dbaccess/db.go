@@ -1,6 +1,7 @@
 package dbaccess
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"strings"
@@ -346,6 +347,29 @@ func GetOperatorInfos(uid string) ([]obj.OperatorInformation, error) {
 			return []obj.OperatorInformation{}, err
 		}
 		values = append(values, obj.NewOperatorInformation(id, param))
+	}
+	rows.Close()
+	return values, nil
+}
+
+func GetOperatorMessages(uid string) ([]obj.OperatorMessage, error) {
+	CheckIfDBSet()
+	values := []obj.OperatorMessage{}
+	rows, err := db.Query("SELECT * FROM `"+consts.DBMySQLTableOperatorMessages+"` WHERE userid = ?", uid)
+	if err != nil {
+		return []obj.OperatorMessage{}, err
+	}
+	var id, userid, contents, itemjson string
+	var expiretime int64
+	var item obj.MessageItem
+	for rows.Next() {
+		err = rows.Scan(&id, &userid, &contents, &itemjson, &expiretime)
+		if err != nil {
+			rows.Close()
+			return []obj.OperatorMessage{}, err
+		}
+		json.Unmarshal([]byte(itemjson), &item)
+		values = append(values, obj.OperatorMessage{id, contents, item, expiretime})
 	}
 	rows.Close()
 	return values, nil

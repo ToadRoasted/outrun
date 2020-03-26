@@ -1,9 +1,12 @@
 package responses
 
 import (
+	"strconv"
 
-    "github.com/Mtbcooler/outrun/obj"
-    "github.com/Mtbcooler/outrun/responses/responseobjs"
+	"github.com/Mtbcooler/outrun/enums"
+	"github.com/Mtbcooler/outrun/netobj"
+	"github.com/Mtbcooler/outrun/obj"
+	"github.com/Mtbcooler/outrun/responses/responseobjs"
 )
 
 type EventListResponse struct {
@@ -38,4 +41,83 @@ func DefaultEventList(base responseobjs.BaseInfo) EventListResponse {
 			*/
 		},
 	)
+}
+
+type EventRewardListResponse struct {
+	BaseResponse
+	EventRewardList []obj.EventReward `json:"eventRewardList"`
+}
+
+func EventRewardList(base responseobjs.BaseInfo, eventRewardList []obj.EventReward) EventRewardListResponse {
+	baseResponse := NewBaseResponse(base)
+	out := EventRewardListResponse{
+		baseResponse,
+		eventRewardList,
+	}
+	return out
+}
+
+func DefaultEventRewardList(base responseobjs.BaseInfo) EventRewardListResponse {
+	//TODO: Get this from the config, and/or on a per-event basis
+	return EventRewardList(
+		base,
+		[]obj.EventReward{
+			obj.NewEventReward(
+				1,
+				1,
+				strconv.Itoa(int(enums.ItemIDAsteroid)),
+				10,
+			),
+			obj.NewEventReward(
+				2,
+				50,
+				strconv.Itoa(int(enums.ItemIDTrampoline)),
+				10,
+			),
+			obj.NewEventReward(
+				3,
+				100,
+				strconv.Itoa(int(enums.ItemIDDrill)),
+				10,
+			),
+			obj.NewEventReward(
+				4,
+				250,
+				strconv.Itoa(int(enums.ItemIDLaser)),
+				15,
+			),
+			obj.NewEventReward(
+				5,
+				500,
+				strconv.Itoa(int(enums.ItemIDInvincible)),
+				15,
+			),
+			obj.NewEventReward(
+				6,
+				850,
+				strconv.Itoa(int(enums.ItemIDRing)),
+				50000,
+			),
+			obj.NewEventReward(
+				7,
+				1200,
+				strconv.Itoa(int(enums.ItemIDRedRing)),
+				50,
+			),
+		},
+	)
+}
+
+type EventStateResponse struct {
+	BaseResponse
+	netobj.EventState `json:"eventState"`
+}
+
+func EventState(base responseobjs.BaseInfo, eventState netobj.EventState) EventStateResponse {
+	baseResponse := NewBaseResponse(base)
+	out := EventStateResponse{
+		baseResponse,
+		eventState,
+	}
+	return out
 }

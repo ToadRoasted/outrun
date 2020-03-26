@@ -3,8 +3,8 @@ package obj
 type MessageItem struct {
 	ID              int64 `json:"itemId,string"`
 	Amount          int64 `json:"numItem"`
-	AdditionalInfo1 int64 `json:"additionalInfo1"`
-	AdditionalInfo2 int64 `json:"additionalInfo2"`
+	AdditionalInfo1 int64 `json:"additionalInfo1,omitempty"`
+	AdditionalInfo2 int64 `json:"additionalInfo2,omitempty"`
 }
 
 func NewMessageItem(id, amount, ai1, ai2 int64) MessageItem {

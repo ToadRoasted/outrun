@@ -42,17 +42,25 @@ var DisplayTypes = map[string]string{
 	"onlyInfoPage": "3",
 }
 
-var InfoTypes = map[string]string{ // TODO: check through these
-	"text":         "0",
-	"image":        "1",
-	"feed":         "2",
-	"roulette":     "10",
-	"shop":         "11",
-	"event":        "12", // only seems to work properly in 1.1.4 and earlier?
-	"rouletteInfo": "14", // the banner at the bottom of the menu screen?
-	"quickInfo":    "15", // a banner across the timed mode button?
-	"countryText":  "16", // based on region code
-	"countryImage": "17", // based on region code
+var InfoTypes = map[string]string{
+	"text":          "0",  // text is specified in "message" field
+	"image":         "1",  // show image with specified imageID
+	"feed":          "2",  // FB Post button
+	"shopCancel":    "3",  // ?
+	"feedUrl":       "4",  // same as 9, but with a FB Post button
+	"feedRoulette":  "5",  // same as 10, but with a FB Post button
+	"feedShop":      "6",  // same as 11, but with a FB Post button (?)
+	"feedEvent":     "7",  // same as 12, but with a FB Post button
+	"feedEventList": "8",  // same as 13, but with a FB Post button
+	"url":           "9",  // external link is provided in the "extra" field
+	"roulette":      "10", // button for roulette
+	"shop":          "11", // button for shop
+	"event":         "12", // for events with a top page
+	"eventList":     "13", // for events with a rewards list
+	"rouletteInfo":  "14", // the banner at the bottom of the menu screen?
+	"quickInfo":     "15", // a banner across the timed mode button?
+	"countryText":   "16", // based on region code in "extra" field
+	"countryImage":  "17", // based on region code in "extra" field
 }
 
 type InfoData struct {

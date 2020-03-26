@@ -11,19 +11,19 @@ type OperatorMessage struct {
 	ID         string      `json:"messageId"`
 	Content    string      `json:"contents"`
 	Item       MessageItem `json:"item"`
-	ExpireTime int64       `json:"expireTime"`
+	ExpireTime int64       `json:"expireTime,omitempty"`
 }
 
 func DefaultOperatorMessage() OperatorMessage {
-	id := "8575819"
-	content := "A daily challenge reward."
+	id := "1"
+	content := "A test gift."
 	item := NewMessageItem(
-		enums.ItemIDInvincible,
-		135,
+		enums.ItemIDRing,
+		100,
 		0,
 		0,
 	)
-	expireTime := time.Now().Unix() + 12600 // three and a half hours from now
+	expireTime := time.Now().Unix() + 86400
 	return OperatorMessage{
 		id,
 		content,

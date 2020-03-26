@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"github.com/Mtbcooler/outrun/db/dbaccess"
+
 	"github.com/Mtbcooler/outrun/db"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/enums"
@@ -21,21 +23,16 @@ func GetMessageList(helper *helper.Helper) {
 	if !helper.CheckSession(true) {
 		return
 	}
-	player, err := helper.GetCallingPlayer()
+	uid, err := helper.GetCallingPlayerID()
 	if err != nil {
-		helper.InternalErr("error getting calling player", err)
-		return
+		helper.InternalErr("Error getting player ID", err)
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	if player.Messages == nil {
-		player.Messages = []obj.Message{}
-	}
-	if player.OperatorMessages == nil {
-		player.OperatorMessages = []obj.OperatorMessage{}
-	}
-	db.SavePlayer(player)
+	messages := []obj.Message{}
+	opmessages, _ := dbaccess.GetOperatorMessages(uid)
+
 	// response := responses.DefaultMessageList(baseInfo)
-	response := responses.MessageList(baseInfo, player.Messages, player.OperatorMessages)
+	response := responses.MessageList(baseInfo, messages, opmessages)
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
@@ -60,12 +57,8 @@ func GetMessage(helper *helper.Helper) {
 		return
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	if player.Messages == nil {
-		player.Messages = []obj.Message{}
-	}
-	if player.OperatorMessages == nil {
-		player.OperatorMessages = []obj.OperatorMessage{}
-	}
+	messages := []obj.Message{}
+	opmessages, _ := dbaccess.GetOperatorMessages(player.ID)
 
 	presentList := []obj.Present{}
 	acceptingMessages := false
@@ -75,13 +68,8 @@ func GetMessage(helper *helper.Helper) {
 	case []interface{}:
 		acceptingMessages = true
 		helper.DebugOut("%v", messageIds)
-		player.CleanUpExpiredMessages()
 		for _, msgid := range messageIds {
 			helper.DebugOut("Accepting message ID %v", msgid)
-			present := player.AcceptMessage(int64(msgid.(float64))) // TODO: why does Go think this is a float64 and not an int64?
-			if present != nil {
-				presentList = append(presentList, present.(obj.Present))
-			}
 		}
 	case string:
 		if request.MessageIDs.(string) == "0" {
@@ -101,13 +89,8 @@ func GetMessage(helper *helper.Helper) {
 	case []interface{}:
 		acceptingOperatorMessages = true
 		helper.DebugOut("%v", operatorMessageIds)
-		player.CleanUpExpiredOperatorMessages()
 		for _, omsgid := range operatorMessageIds {
 			helper.DebugOut("Accepting operator message ID %v", omsgid)
-			present := player.AcceptOperatorMessage(int64(omsgid.(float64))) // TODO: why does Go think this is a float64 and not an int64?
-			if present != nil {
-				presentList = append(presentList, present.(obj.Present))
-			}
 		}
 	case string:
 		if request.OperatorMessageIDs.(string) == "0" {
@@ -125,21 +108,11 @@ func GetMessage(helper *helper.Helper) {
 
 	if !acceptingMessages && !acceptingOperatorMessages {
 		helper.DebugOut("Assuming this is an 'Accept All Gifts' command...")
-		player.CleanUpExpiredMessages()
-		for _, msgid := range player.GetAllMessageIDs() {
-			helper.DebugOut("Accepting message ID %v", msgid)
-			present := player.AcceptMessage(msgid)
-			if present != nil {
-				presentList = append(presentList, present.(obj.Present))
-			}
+		for _, msg := range messages {
+			helper.DebugOut("Accepting message ID %s", msg.ID)
 		}
-		player.CleanUpExpiredOperatorMessages()
-		for _, omsgid := range player.GetAllOperatorMessageIDs() {
-			helper.DebugOut("Accepting operator message ID %v", omsgid)
-			present := player.AcceptOperatorMessage(omsgid)
-			if present != nil {
-				presentList = append(presentList, present.(obj.Present))
-			}
+		for _, omsg := range opmessages {
+			helper.DebugOut("Accepting operator message ID %s", omsg.ID)
 		}
 	}
 	// TODO: Combine stackable items in present list, as that's how the original server went about creating the present list
@@ -181,14 +154,17 @@ func GetMessage(helper *helper.Helper) {
 			if player.ChaoState[chaoIndex].Status == enums.ChaoStatusNotOwned {
 				// earn the Chao
 				player.ChaoState[chaoIndex].Status = enums.ChaoStatusOwned
-				player.ChaoState[chaoIndex].Acquired = 1
-				player.ChaoState[chaoIndex].Level = 0
+				player.ChaoState[chaoIndex].Acquired = currentPresent.NumItem
+				player.ChaoState[chaoIndex].Level = currentPresent.NumItem - 1
+			} else {
+				player.ChaoState[chaoIndex].Acquired += currentPresent.NumItem
+				player.ChaoState[chaoIndex].Level += currentPresent.NumItem
+				if player.ChaoState[chaoIndex].Level > 10 { // if max chao level
+					player.ChaoState[chaoIndex].Level = 10                        // reset to maximum
+					player.ChaoState[chaoIndex].Status = enums.ChaoStatusMaxLevel // set status to MaxLevel
+				}
 			}
-			player.ChaoState[chaoIndex].Level += currentPresent.NumItem
-			if player.ChaoState[chaoIndex].Level > 10 { // if max chao level
-				player.ChaoState[chaoIndex].Level = 10                        // reset to maximum
-				player.ChaoState[chaoIndex].Status = enums.ChaoStatusMaxLevel // set status to MaxLevel
-			}
+
 		} else if itemid[:2] == "30" { // ID is a character
 			charIndex := player.IndexOfChara(itemid)
 			if charIndex == -1 { // character index not found, should never happen
@@ -223,5 +199,11 @@ func GetMessage(helper *helper.Helper) {
 }
 
 func SendEnergy(helper *helper.Helper) {
-	// TODO: Implement.
+	// TODO: make this functional
+	baseInfo := helper.BaseInfo(emess.OK, status.AlreadySentEnergy)
+	response := responses.NewBaseResponse(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
 }

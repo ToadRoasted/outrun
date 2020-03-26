@@ -116,6 +116,10 @@ func CommitWheelSpin(helper *helper.Helper) {
 			itemIndex := player.IndexOfItem(wonItem)
 			helper.DebugOut("Amount of item player has: %v", player.PlayerState.Items[itemIndex].Amount)
 			player.PlayerState.Items[itemIndex].Amount += amountOfItemWon
+			if player.PlayerState.Items[itemIndex].Amount > 99 {
+				helper.DebugOut("Player is maxed out on that item!")
+				player.PlayerState.Items[itemIndex].Amount = 99
+			}
 			helper.DebugOut("New amount of item player has: %v", player.PlayerState.Items[itemIndex].Amount)
 		} else {
 			if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) && oldRanking == enums.WheelRankSuper {

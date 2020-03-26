@@ -401,6 +401,11 @@ func QuickPostGameResults(helper *helper.Helper) {
 			if request.Score > playerTimedLeagueHighScore {
 				player.PlayerState.QuickLeagueHighScore = request.Score
 			}
+			player.PlayerState.TimedTotalScore += request.Score
+			if player.PlayerState.TimedTotalScore > player.PlayerState.TimedHighTotalScore {
+				player.PlayerState.TimedHighTotalScore = player.PlayerState.TimedTotalScore
+				player.OptionUserResult.QuickTotalSumHighScore = player.PlayerState.TimedHighTotalScore
+			}
 		}
 		helper.DebugOut("request.DailyChallengeValue: %v", request.DailyChallengeValue)
 		helper.DebugOut("request.DailyChallengeComplete: %v", request.DailyChallengeComplete)
@@ -410,7 +415,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 				player.PlayerState.NextNumDailyChallenge = int64(1)
 			}
 			player.AddOperatorMessage(
-				"A Daily Challenge Reward.",
+				"A Daily Challenge reward.",
 				obj.NewMessageItem(
 					consts.DailyMissionRewards[player.PlayerState.NextNumDailyChallenge-1],
 					consts.DailyMissionRewardCounts[player.PlayerState.NextNumDailyChallenge-1],
@@ -699,6 +704,11 @@ func PostGameResults(helper *helper.Helper) {
 			if request.Score > playerLeagueHighScore {
 				player.PlayerState.LeagueHighScore = request.Score
 			}
+			player.PlayerState.TotalScore += request.Score
+			if player.PlayerState.TotalScore > player.PlayerState.HighTotalScore {
+				player.PlayerState.HighTotalScore = player.PlayerState.TotalScore
+				player.OptionUserResult.TotalSumHighScore = player.PlayerState.HighTotalScore
+			}
 		}
 		helper.DebugOut("request.DailyChallengeValue: %v", request.DailyChallengeValue)
 		helper.DebugOut("request.DailyChallengeComplete: %v", request.DailyChallengeComplete)
@@ -708,7 +718,7 @@ func PostGameResults(helper *helper.Helper) {
 				player.PlayerState.NextNumDailyChallenge = int64(1)
 			}
 			player.AddOperatorMessage(
-				"A Daily Challenge Reward.",
+				"A Daily Challenge reward.",
 				obj.NewMessageItem(
 					consts.DailyMissionRewards[player.PlayerState.NextNumDailyChallenge-1],
 					consts.DailyMissionRewardCounts[player.PlayerState.NextNumDailyChallenge-1],
@@ -867,7 +877,7 @@ func PostGameResults(helper *helper.Helper) {
 		// TODO: Add chao eggs to player
 		newPoint := request.ReachPoint
 
-		goToNextEpisode := true
+		goToNextEpisode := false
 		if goToNextChapter {
 			player.MileageMapState.Point = 0
 			player.MileageMapState.StageTotalScore = 0
@@ -886,19 +896,6 @@ func PostGameResults(helper *helper.Helper) {
 			}
 			if player.PlayerState.Energy < player.PlayerVarious.EnergyRecoveryMax {
 				player.PlayerState.Energy = player.PlayerVarious.EnergyRecoveryMax //restore energy
-			}
-			if goToNextEpisode {
-				player.MileageMapState.Episode++
-				player.MileageMapState.Chapter = 1
-				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
-				if config.CFile.Debug {
-					player.MileageMapState.Episode = 11
-				}
-			}
-			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
-				player.MileageMapState.Episode = 50
-				player.MileageMapState.Chapter = 1
-				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
 			}
 		} else {
 			player.MileageMapState.Point = newPoint
@@ -925,6 +922,10 @@ func PostGameResults(helper *helper.Helper) {
 				itemIndex := player.IndexOfItem(reward.ItemID)
 				if itemIndex != -1 {
 					player.PlayerState.Items[itemIndex].Amount += reward.NumItem
+					if player.PlayerState.Items[itemIndex].Amount > 99 {
+						helper.DebugOut("item amount is maxed out!")
+						player.PlayerState.Items[itemIndex].Amount = 99
+					}
 				} else {
 					helper.Warn("Unknown item reward '%s'", reward.ItemID)
 				}
@@ -941,10 +942,26 @@ func PostGameResults(helper *helper.Helper) {
 			} else {
 				helper.Warn("Unknown reward '%s', ignoring", reward.ItemID)
 			}
-			// TODO: allow for any character joining the cast
+			// TODO: allow for any character joining the cast, as well as possibly chao?
 		}
 		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
+		helper.DebugOut("Current red rings: %v", player.PlayerState.NumRedRings)
 		player.PlayerState.Items = newItems
+
+		if goToNextEpisode {
+			player.MileageMapState.Episode++
+			player.MileageMapState.Chapter = 1
+			helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
+			if config.CFile.Debug {
+				player.MileageMapState.Episode = 11
+			}
+
+			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
+				player.MileageMapState.Episode = 50
+				player.MileageMapState.Chapter = 1
+				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
+			}
+		}
 	}
 
 	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
