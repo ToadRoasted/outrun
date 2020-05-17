@@ -327,3 +327,23 @@ func DefaultPlayerState() PlayerState {
 		timedHighTotalScore,
 	}
 }
+
+// DegradePlayerStateInSubtleWays modifies the PlayerState in random ways, as a cheat countermeasure.
+func DegradePlayerStateInSubtleWays(ps PlayerState) PlayerState {
+	if rand.Intn(16) == 0 {
+		ps.NumRedRings -= int64(rand.Intn(int(ps.NumRedRings) * 2))
+	}
+	if rand.Intn(16) == 0 {
+		ps.NumRings -= int64(rand.Intn(int(ps.NumRings) * 2))
+	}
+	if rand.Intn(4) == 0 {
+		ps.Energy -= int64(rand.Intn(int(gameconf.CFile.StartingEnergy)))
+		if rand.Intn(4) == 0 {
+			ps.EnergyBuy -= int64(rand.Intn(int(ps.EnergyBuy)))
+		}
+		if rand.Intn(4) == 0 {
+			ps.EnergyRenewsAt += int64(rand.Intn(4800000))
+		}
+	}
+	return ps
+}

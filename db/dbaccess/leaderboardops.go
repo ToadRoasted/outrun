@@ -274,6 +274,7 @@ func GetLeagueHighScores(mode, lbtype, league, leagueGroup, offset, limit int64,
 }
 
 func GetOwnLeaderboardEntry(mode, lbtype int64, ownid string, showScoresOfZero bool) (interface{}, error) {
+	// TODO: OPTIMIZE THIS! This routine may potentially be very slow on servers with a large number of players!
 	CheckIfDBSet()
 	leagueColumn := "ranking_league"
 	if mode == 1 {

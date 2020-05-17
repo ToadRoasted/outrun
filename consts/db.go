@@ -11,6 +11,7 @@ const (
 
 	// TODO: Add more tables as needed.
 	DBMySQLTableAnalytics         = "analytics"
+	DBMySQLTableGameResults       = "game_results"
 	DBMySQLTableCorePlayerInfo    = "player_info"
 	DBMySQLTableEventStates       = "player_event_states"
 	DBMySQLTablePlayerStates      = "player_states"
@@ -23,6 +24,7 @@ const (
 	DBMySQLTableMessages          = "player_messages"
 	DBMySQLTableOperatorMessages  = "player_operator_messages"
 	DBMySQLTableOperatorInfos     = "player_operator_infos"
+	DBMySQLTableQuickGameResults  = "quick_game_results"
 	DBMySQLTableRankingLeagueData = "ranking_league_data"
 	DBMySQLTableSessionIDs        = "session_ids"
 
@@ -182,6 +184,47 @@ const (
 		uid BIGINT UNSIGNED NOT NULL,
 		param INTEGER NOT NULL,
 		PRIMARY KEY (uid)
+	) ENGINE = InnoDB;`
+	SQLGameResultsSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableGameResults + ` (
+		gameid BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		uid BIGINT UNSIGNED NOT NULL,
+		score BIGINT NOT NULL,
+		rings INTEGER NOT NULL,
+		failure_rings INTEGER NOT NULL,
+		red_rings INTEGER NOT NULL,
+		distance BIGINT NOT NULL,
+		daily_challenge_value INTEGER NOT NULL,
+		daily_challenge_complete TINYINT NOT NULL,
+		animals INTEGER NOT NULL,
+		max_combo INTEGER NOT NULL,
+		closed TINYINT NOT NULL,
+		boss_destroyed TINYINT NOT NULL,
+		chapter_clear TINYINT NOT NULL,
+		get_chao_egg TINYINT NOT NULL,
+		boss_hits INTEGER NOT NULL,
+		reach_point INTEGER NOT NULL,
+		event_id BIGINT,
+		event_value INTEGER,
+		cheat_result VARCHAR(8) NOT NULL,
+		PRIMARY KEY (gameid)
+	) ENGINE = InnoDB;`
+	SQLQuickGameResultsSchema = `
+	CREATE TABLE IF NOT EXISTS ` + DBMySQLTableQuickGameResults + ` (
+		gameid BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		uid BIGINT UNSIGNED NOT NULL,
+		score BIGINT NOT NULL,
+		rings INTEGER NOT NULL,
+		failure_rings INTEGER NOT NULL,
+		red_rings INTEGER NOT NULL,
+		distance BIGINT NOT NULL,
+		daily_challenge_value INTEGER NOT NULL,
+		daily_challenge_complete TINYINT NOT NULL,
+		animals INTEGER NOT NULL,
+		max_combo INTEGER NOT NULL,
+		closed TINYINT NOT NULL,
+		cheat_result VARCHAR(8) NOT NULL,
+		PRIMARY KEY (gameid)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesInsertTypeSchema = `(
 		id,
