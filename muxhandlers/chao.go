@@ -200,18 +200,19 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 
 	// spin logic
 	primaryLogic := func(usingTickets bool) {
+		actions := request.Count
 		if usingTickets { // paying with ticket(s) or free chao wheel spin
 			if player.PlayerState.ChaoEggs < 10 {
 				player.PlayerState.NumChaoRouletteTicket -= consts.ChaoRouletteTicketCost * request.Count // spend ticket(s)
 			} else {
 				player.PlayerState.ChaoEggs -= 10
+				actions = 1 // ten chao eggs are for just one spin no matter what, so set number of spins to 1 instead of request.Count
 			}
 		} else { // paying with red ring(s)
 			player.PlayerState.NumRedRings -= consts.ChaoRouletteRedRingCost * request.Count // spend red ring(s)
 		}
 		player.OptionUserResult.NumChaoRoulette++
 		player.ChaoRouletteGroup.ChaoRouletteInfo.RouletteCountInPeriod++ // increment times spun in timer; TODO: Should we count request.Count?
-		actions := request.Count
 		for actions > 0 {
 			actions--
 			gottenItemIndex, err := roulette.ChooseChaoRouletteItemIndex(items, weights) // pick a potential item index (used for later)
