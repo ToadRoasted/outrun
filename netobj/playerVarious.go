@@ -20,7 +20,7 @@ func DefaultPlayerVarious() PlayerVarious {
 	energyRecoveryMax := gameconf.CFile.EnergyRecoveryMax
 	energyRecoveryTime := gameconf.CFile.EnergyRecoveryTime
 	onePlayCmCount := int64(0)
-	onePlayContinueCount := int64(2) // Apparently the native library doesn't like it if 3 or more continues are used
+	onePlayContinueCount := int64(2) // The cheat detection library trips if 3 or more continues are used.
 	isPurchased := int64(0)
 	return PlayerVarious{
 		cmSkipCount,

@@ -329,7 +329,7 @@ func DefaultPlayerState() PlayerState {
 }
 
 // DegradePlayerStateInSubtleWays modifies the PlayerState in random ways, as a cheat countermeasure.
-func DegradePlayerStateInSubtleWays(ps PlayerState) PlayerState {
+/*func DegradePlayerStateInSubtleWays(ps PlayerState) PlayerState {
 	if rand.Intn(16) == 0 {
 		ps.NumRedRings -= int64(rand.Intn(int(ps.NumRedRings) * 2))
 	}
@@ -346,4 +346,4 @@ func DegradePlayerStateInSubtleWays(ps PlayerState) PlayerState {
 		}
 	}
 	return ps
-}
+}*/

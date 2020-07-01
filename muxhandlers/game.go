@@ -383,7 +383,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
-		player.PlayerState.NumRouletteTicket += request.RedRings // TODO: URGENT! Remove as soon as possible!
+		player.PlayerState.NumRouletteTicket += request.RedRings // TODO: This was meant as a debugging function. Perhaps this should be removed at some point?
 		player.PlayerState.Animals += request.Animals
 		player.OptionUserResult.NumTakeAllRings += request.Rings
 		player.OptionUserResult.NumTakeAllRedRings += request.RedRings
@@ -653,7 +653,7 @@ func PostGameResults(helper *helper.Helper) {
 	playCharacters := []netobj.Character{ // assume only main character active right now
 		mainC,
 	}
-	lvupCharacters := []netobj.Character{
+	lvupCharacters := []netobj.Character{ // TODO: the pointers for these seem to be all screwy. Fix ASAP!
 		mainC,
 	}
 	if hasSubCharacter {
@@ -837,6 +837,7 @@ func PostGameResults(helper *helper.Helper) {
 			}
 		}
 
+		// TODO: Remove these EXP debug output statements below once the level up animation works properly again
 		helper.DebugOut("Old mainC Exp: %v / %v", mainC.Exp, mainC.Cost)
 		helper.DebugOut("Old mainC Level: %v", mainC.Level)
 		if hasSubCharacter {
@@ -891,7 +892,7 @@ func PostGameResults(helper *helper.Helper) {
 				}
 			}
 			player.PlayerState.Rank++
-			if player.PlayerState.Rank > 998 { // rank going above 999
+			if player.PlayerState.Rank > 998 { // don't let rank go up past 999
 				player.PlayerState.Rank = 998
 			}
 			if player.PlayerState.Energy < player.PlayerVarious.EnergyRecoveryMax {
@@ -899,11 +900,6 @@ func PostGameResults(helper *helper.Helper) {
 			}
 		} else {
 			player.MileageMapState.Point = newPoint
-		}
-		if config.CFile.Debug {
-			if player.MileageMapState.Episode < 11 {
-				//player.MileageMapState.Episode = 11
-			}
 		}
 		newRewardEpisode = player.MileageMapState.Episode
 		newRewardChapter = player.MileageMapState.Chapter
@@ -976,6 +972,7 @@ func PostGameResults(helper *helper.Helper) {
 		subCIndex = player.IndexOfChara(subC.ID) // TODO: check if -1
 	}
 
+	// TODO: bind all of these to the ban function /s
 	helper.DebugOut("CheatResult: %s", request.CheatResult)
 	if request.CheatResult[0] != '0' {
 		helper.DebugOut("(CheatResult) flag 1 set!!!")
@@ -1047,6 +1044,7 @@ func GetFreeItemList(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	var response responses.FreeItemListResponse
+	// TODO: maybe give the player up to 3 free uses for each item each day?
 	if gameconf.CFile.AllItemsFree {
 		response = responses.DefaultFreeItemList(baseInfo)
 	} else {
