@@ -234,7 +234,7 @@ type LoginBonusResponse struct {
 	FirstLoginBonusRewardList []obj.LoginBonusReward `json:"firstLoginBonusRewardList"`
 	StartTime                 int64                  `json:"startTime"`
 	EndTime                   int64                  `json:"endTime"`
-	RewardID                  int64                  `json:"rewardId"`
+	RewardID                  int64                  `json:"rewardId"` // TODO: investigate purpose
 	RewardDays                int64                  `json:"rewardDays"`
 	FirstRewardDays           int64                  `json:"firstRewardDays"`
 }
@@ -255,7 +255,7 @@ func LoginBonus(base responseobjs.BaseInfo, lbs obj.LoginBonusStatus, lbrl, flbr
 }
 
 func DefaultLoginBonus(base responseobjs.BaseInfo, player netobj.Player, doLoginBonus bool) LoginBonusResponse {
-	lbs := obj.NewLoginBonusStatus(player.LoginBonusState.CurrentFirstLoginBonusDay-1, player.LoginBonusState.CurrentLoginBonusDay, player.LoginBonusState.LastLoginBonusTime)
+	lbs := obj.NewLoginBonusStatus(player.LoginBonusState.CurrentFirstLoginBonusDay-1, player.LoginBonusState.CurrentLoginBonusDay-1, player.LoginBonusState.LastLoginBonusTime)
 	lbrl := constobjs.DefaultLoginBonusRewardList
 	flbrl := constobjs.DefaultFirstLoginBonusRewardList
 	st := player.LoginBonusState.LoginBonusStartTime

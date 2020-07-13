@@ -211,8 +211,8 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 		} else { // paying with red ring(s)
 			player.PlayerState.NumRedRings -= consts.ChaoRouletteRedRingCost * request.Count // spend red ring(s)
 		}
-		player.OptionUserResult.NumChaoRoulette++
-		player.ChaoRouletteGroup.ChaoRouletteInfo.RouletteCountInPeriod++ // increment times spun in timer; TODO: Should we count request.Count?
+		player.OptionUserResult.NumChaoRoulette += actions
+		player.ChaoRouletteGroup.ChaoRouletteInfo.RouletteCountInPeriod += actions // increment times spun in timer
 		for actions > 0 {
 			actions--
 			gottenItemIndex, err := roulette.ChooseChaoRouletteItemIndex(items, weights) // pick a potential item index (used for later)
