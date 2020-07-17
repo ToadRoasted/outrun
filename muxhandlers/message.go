@@ -70,6 +70,7 @@ func GetMessage(helper *helper.Helper) {
 		helper.DebugOut("%v", messageIds)
 		for _, msgid := range messageIds {
 			helper.DebugOut("Accepting message ID %v", msgid)
+			// TODO: Put actual code here!
 		}
 	case string:
 		if request.MessageIDs.(string) == "0" {
@@ -91,6 +92,7 @@ func GetMessage(helper *helper.Helper) {
 		helper.DebugOut("%v", operatorMessageIds)
 		for _, omsgid := range operatorMessageIds {
 			helper.DebugOut("Accepting operator message ID %v", omsgid)
+			// TODO: Put actual code here!
 		}
 	case string:
 		if request.OperatorMessageIDs.(string) == "0" {
@@ -110,9 +112,11 @@ func GetMessage(helper *helper.Helper) {
 		helper.DebugOut("Assuming this is an 'Accept All Gifts' command...")
 		for _, msg := range messages {
 			helper.DebugOut("Accepting message ID %s", msg.ID)
+			// TODO: Put actual code here!
 		}
 		for _, omsg := range opmessages {
 			helper.DebugOut("Accepting operator message ID %s", omsg.ID)
+			// TODO: Put actual code here!
 		}
 	}
 	// TODO: Combine stackable items in present list, as that's how the original server went about creating the present list

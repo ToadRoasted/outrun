@@ -61,6 +61,7 @@ var Defaults = map[string]interface{}{
 	"DEnergyRecoveryMax":         int64(10),
 	"DEnergyRecoveryTime":        int64(600),
 	"DEnableStartDashLoginBonus": true,
+	"DEnableRunnersLeague":       false,
 }
 
 var CFile ConfigFile
@@ -80,6 +81,7 @@ type ConfigFile struct {
 	EnergyRecoveryMax         int64  `json:"energyRecoveryMax,omitempty"`
 	EnergyRecoveryTime        int64  `json:"energyRecoveryTime,omitempty"`
 	EnableStartDashLoginBonus bool   `json:"enableStartDashLoginBonus,omitempty`
+	EnableRunnersLeague       bool   `json:"enableRunnersLeague,omitempty`
 }
 
 func Parse(filename string) error {
@@ -98,6 +100,7 @@ func Parse(filename string) error {
 		Defaults["DEnergyRecoveryMax"].(int64),
 		Defaults["DEnergyRecoveryTime"].(int64),
 		Defaults["DEnableStartDashLoginBonus"].(bool),
+		Defaults["DEnableRunnersLeague"].(bool),
 	}
 	file, err := loadFile(filename)
 	if err != nil {

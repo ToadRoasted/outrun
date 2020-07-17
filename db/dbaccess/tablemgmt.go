@@ -12,6 +12,7 @@ import (
 )
 
 func GetPlayerFromDB(id string) (netobj.Player, error) {
+	// TODO: This is slow! Phase out the usage of this function ASAP!
 	playerinfo, err := GetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, id)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
@@ -77,62 +78,62 @@ func GetPlayerFromDB(id string) (netobj.Player, error) {
 }
 
 func InitializeTablesIfNecessary() error {
-	log.Println("[INFO] Initializing tables... (1/12)")
+	log.Println("[INFO] Initializing analytics table... (1/12)")
 	_, err := db.Exec(consts.SQLAnalyticsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (2/12)")
+	log.Println("[INFO] Initializing player info table... (2/12)")
 	_, err = db.Exec(consts.SQLCorePlayerInfoSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (3/12)")
+	log.Println("[INFO] Initializing player states table... (3/12)")
 	_, err = db.Exec(consts.SQLPlayerStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (4/12)")
+	log.Println("[INFO] Initializing mileage map states table... (4/12)")
 	_, err = db.Exec(consts.SQLMileageMapStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (5/12)")
+	log.Println("[INFO] Initializing user stats table... (5/12)")
 	_, err = db.Exec(consts.SQLOptionUserResultsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (6/12)")
+	log.Println("[INFO] Initializing roulette info states table... (6/12)")
 	_, err = db.Exec(consts.SQLRouletteInfosSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (7/12)")
+	log.Println("[INFO] Initializing login bonus states table... (7/12)")
 	_, err = db.Exec(consts.SQLLoginBonusStatesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (8/12)")
+	log.Println("[INFO] Initializing operator messages table... (8/12)")
 	_, err = db.Exec(consts.SQLOperatorMessagesSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (9/12)")
+	log.Println("[INFO] Initializing ranking league data table... (9/12)")
 	_, err = db.Exec(consts.SQLRankingLeagueDataSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (10/12)")
+	log.Println("[INFO] Initializing session IDs table... (10/12)")
 	_, err = db.Exec(consts.SQLSessionIDsSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (11/12)")
+	log.Println("[INFO] Initializing operator infos table... (11/12)")
 	_, err = db.Exec(consts.SQLOperatorInfosSchema)
 	if err != nil {
 		return err
 	}
-	log.Println("[INFO] Initializing tables... (12/12)")
+	log.Println("[INFO] Initializing event states table... (12/12)")
 	_, err = db.Exec(consts.SQLEventStatesSchema)
 	return err
 }
