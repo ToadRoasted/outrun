@@ -33,20 +33,27 @@ func GetRedStarExchangeList(helper *helper.Helper) {
 	var response responses.RedStarExchangeListResponse
 	var redStarItems []obj.RedStarItem
 	helper.Out("Recv ItemType " + strconv.Itoa(int(request.ItemType)))
-	if request.ItemType == 0 {
+	if request.ItemType == 0 { // Red Star Rings
 		redStarItems = []obj.RedStarItem{}
-	} else if request.ItemType == 1 {
+	} else if request.ItemType == 1 { // Rings
 		redStarItems = constobjs.RedStarItemsType1
-	} else if request.ItemType == 2 {
+	} else if request.ItemType == 2 { // Revive Tokens
 		redStarItems = constobjs.RedStarItemsType2
-	} else if request.ItemType == 4 {
+	} else if request.ItemType == 4 { // Boss Challenge Tokens
 		redStarItems = constobjs.RedStarItemsType4
 	} else {
-		helper.Respond([]byte("Invalid request"))
+		helper.Warn("Invalid item type!")
+		baseInfo.StatusCode = status.ClientError
+		response = responses.RedStarExchangeList(baseInfo, []obj.RedStarItem{}, 0, "2000-1-1")
+		response.Seq, _ = db.BoltGetSessionIDSeq(sid)
+		err = helper.SendResponse(response)
+		if err != nil {
+			helper.InternalErr("Error sending response", err)
+		}
 		return
 	}
 
-	response = responses.RedStarExchangeList(baseInfo, redStarItems, 0, "1900-1-1")
+	response = responses.RedStarExchangeList(baseInfo, redStarItems, 0, "2000-1-1")
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
 	if err != nil {
@@ -122,11 +129,11 @@ func RedStarExchange(helper *helper.Helper) {
 			}
 		default:
 			// this should never execute!
-			baseInfo.StatusCode = status.MasterDataMismatch
+			baseInfo.StatusCode = status.ClientError
 			helper.Out("Default case executed... Something went wrong!")
 		}
 	} else {
-		baseInfo.StatusCode = status.MasterDataMismatch
+		baseInfo.StatusCode = status.ClientError
 	}
 
 	response := responses.DefaultRedStarExchange(baseInfo, player)
@@ -142,7 +149,7 @@ func SetBirthday(helper *helper.Helper) {
 	if !helper.CheckSession(true) {
 		return
 	}
-	// agnostic
+	// agnostic; only used for compatibility with older versions
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultSetBirthday(baseInfo)
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)

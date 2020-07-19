@@ -55,7 +55,7 @@ var Defaults = map[string]interface{}{
 	"DDefaultSubChao":            "empty",
 	"DStartingRings":             int64(5000),
 	"DStartingRedRings":          int64(25),
-	"DStartingEnergy":            int64(5),
+	"DStartingEnergy":            int64(10),
 	"DAllItemsFree":              false,
 	"DEnableEnergyConsumption":   true,
 	"DEnergyRecoveryMax":         int64(10),
