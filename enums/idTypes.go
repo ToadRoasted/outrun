@@ -7,11 +7,11 @@ const (
 	IDTypeNone = -1
 )
 const (
-	IDTypeBoostItem = iota + 110000
+	IDTypeBoostItem = iota*10000 + 110000
 	IDTypeEquipItem
 )
 const (
-	IDTypeItemRouletteWin = iota + 200000
+	IDTypeItemRouletteWin = iota*10000 + 200000
 	IDTypeRouletteToken
 	IDTypeEggItem
 	IDTypePremiumRouletteTicket
@@ -22,7 +22,7 @@ const (
 	IDTypeChao  = 400000
 )
 const (
-	IDTypeRedRing = iota + 900000
+	IDTypeRedRing = iota*10000 + 900000
 	IDTypeRing
 	IDTypeEnergy
 	IDTypeEnergyMax
