@@ -67,11 +67,7 @@ func (r *Helper) SendResponse(i interface{}) error {
 	return nil
 }
 func (r *Helper) SendInsecureResponse(i interface{}) error {
-	out, err := json.Marshal(i)
-	if err != nil {
-		return err
-	}
-	r.RespondInsecure(out)
+	r.RespondInsecure(i)
 	return nil
 }
 func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
@@ -123,9 +119,32 @@ func (r *Helper) Respond(out []byte) {
 	}
 	r.RespondRaw(out, "1", iv)
 }
-func (r *Helper) RespondInsecure(out []byte) {
-	// TODO: This won't work with daily battle or raid boss endpoints. Rework.
-	r.RespondRaw(out, "0", "")
+func (r *Helper) RespondInsecure(out interface{}) {
+	if config.CFile.LogAllResponses {
+		nano := time.Now().UnixNano()
+		nanoStr := strconv.Itoa(int(nano))
+		filename := r.Request.RequestURI + "--" + nanoStr
+		filename = strings.ReplaceAll(filename, ".", "-")
+		filename = strings.ReplaceAll(filename, "/", "-") + ".txt"
+		filepath := "logging/all_responses/" + filename
+		r.Out("DEBUG: Saving request to " + filepath)
+		outS, err := json.Marshal(out)
+		if err != nil {
+			r.Out("DEBUG ERROR: Unable to marshal param")
+		} else {
+			err := ioutil.WriteFile(filepath, outS, 0644)
+			if err != nil {
+				r.Out("DEBUG ERROR: Unable to write file '" + filepath + "'")
+			}
+		}
+	}
+	response := map[string]interface{}{"secure": "0", "param": out}
+	toClient, err := json.Marshal(response)
+	if err != nil {
+		r.InternalErr("Error marshalling in RespondInsecure", err)
+		return
+	}
+	r.RespW.Write(toClient)
 }
 func (r *Helper) Out(s string, a ...interface{}) {
 	msg := fmt.Sprintf(s, a...)

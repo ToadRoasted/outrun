@@ -33,6 +33,7 @@ var Defaults = map[string]interface{}{
 	"DMySQLUsername":               "outrun",
 	"DMySQLPassword":               "FoundDeadYetAgainInMiami",
 	"DMySQLDatabaseName":           "outrun",
+	"DCustomSecret":                "",
 }
 
 var CFile ConfigFile
@@ -63,6 +64,7 @@ type ConfigFile struct {
 	MySQLUsername               string `json:"mysqlUsername,omitempty"`
 	MySQLPassword               string `json:"mysqlPassword,omitempty"`
 	MySQLDatabaseName           string `json:"mysqlDatabaseName,omitempty"`
+	CustomSecret                string `json:"customSecret,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -92,6 +94,7 @@ func Parse(filename string) error {
 		Defaults["DMySQLUsername"].(string),
 		Defaults["DMySQLPassword"].(string),
 		Defaults["DMySQLDatabaseName"].(string),
+		Defaults["DCustomSecret"].(string),
 	}
 	file, err := loadFile(filename)
 	if err != nil {

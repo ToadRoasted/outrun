@@ -7,7 +7,7 @@ import (
 )
 
 var EncryptionIv = []byte("")
-var EncryptionKey = []byte("Ec7bLaTdSuXuf5pW")
+var EncryptionKey = []byte("Ec7bLaTdSuXuf5pW") // TODO: be able to redefine this in config to ensure the security of requests (NOTE: changes to this should also be reflected in client)
 
 func CleanBytes(b []byte) []byte {
 	re := regexp.MustCompile("[^\u0020-\u007f]+")

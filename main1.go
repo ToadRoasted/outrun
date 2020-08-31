@@ -292,6 +292,15 @@ func main() {
 	router.HandleFunc(prefix+"/Login/loginBonus/", h(muxhandlers.LoginBonus, LogExecutionTime))
 	router.HandleFunc(prefix+"/Login/loginBonusSelect/", h(muxhandlers.LoginBonusSelect, LogExecutionTime))
 
+	// Battle
+	router.HandleFunc(prefix+"/Battle/getDailyBattleData/", h(muxhandlers.GetDailyBattleData, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/updateDailyBattleStatus/", h(muxhandlers.UpdateDailyBattleStatus, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/resetDailyBattleMatching/", h(muxhandlers.ResetDailyBattleMatching, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/getDailyBattleDataHistory/", h(muxhandlers.GetDailyBattleHistory, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/getDailyBattleStatus/", h(muxhandlers.GetDailyBattleStatus, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/postDailyBattleResult/", h(muxhandlers.PostDailyBattleResult, LogExecutionTime))
+	router.HandleFunc(prefix+"/Battle/getPrizeDailyBattle/", h(muxhandlers.GetPrizeDailyBattle, LogExecutionTime))
+
 	// Misc. operations
 	router.HandleFunc(prefix+"/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
 
