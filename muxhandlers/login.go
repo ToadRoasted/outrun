@@ -8,6 +8,7 @@ import (
 
 	"github.com/Mtbcooler/outrun/consts"
 	"github.com/Mtbcooler/outrun/db/dbaccess"
+	"github.com/Mtbcooler/outrun/enums"
 
 	"github.com/Mtbcooler/outrun/analytics"
 	"github.com/Mtbcooler/outrun/analytics/factors"
@@ -16,6 +17,7 @@ import (
 	"github.com/Mtbcooler/outrun/db"
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/helper"
+	"github.com/Mtbcooler/outrun/localizations"
 	"github.com/Mtbcooler/outrun/logic"
 	"github.com/Mtbcooler/outrun/logic/conversion"
 	"github.com/Mtbcooler/outrun/netobj"
@@ -133,6 +135,103 @@ func Login(helper *helper.Helper) {
 				return
 			}
 			analytics.Store(player.ID, factors.AnalyticTypeLogins)
+		} else {
+			// Looks like the credentials don't match what's in the database!
+			baseInfo.StatusCode = status.InvalidPassword
+			baseInfo.SetErrorMessage(emess.BadPassword)
+			helper.DebugOut("Incorrect passkey sent: \"%s\"", request.Password)
+			err = helper.SendResponse(responses.NewBaseResponse(baseInfo))
+			if err != nil {
+				helper.InternalErr("Error sending response", err)
+				return
+			}
+		}
+	}
+}
+
+func LoginMaintenance(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.LoginRequest
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
+
+	uid := request.LineAuth.UserID
+	password := request.LineAuth.Password
+
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	if uid == "0" {
+		helper.Out("Entering Registration (Alpha) phase")
+		baseInfo.StatusCode = status.ServerNextVersion
+		baseInfo.SetErrorMessage(emess.BadPassword)
+		response := responses.NewNextVersionResponse(baseInfo,
+			int64(0),
+			int64(0),
+			"",
+			localizations.GetStringByLanguage(enums.LangJapanese, "DefaultMaintenanceMessage", true),
+			localizations.GetStringByLanguage(enums.LangEnglish, "DefaultMaintenanceMessage", true),
+			"https://sonic.runner.es/",
+		)
+		err = helper.SendResponse(response)
+		if err != nil {
+			helper.InternalErr("Error responding", err)
+		}
+		return
+	} else if uid != "0" && password == "" {
+		helper.Out("Entering Pre-Login (Bravo) phase")
+		// game wants to log in
+		baseInfo.StatusCode = status.InvalidPassword
+		baseInfo.SetErrorMessage(emess.BadPassword)
+		player, err := db.GetPlayer(uid)
+		if err != nil {
+			if db.DoesPlayerExistInDatabase(uid) {
+				helper.InternalErr("Error getting player", err)
+				return
+			} else {
+				// likely account that wasn't found, so let's tell them that:
+				response := responses.NewBaseResponse(baseInfo)
+				baseInfo.StatusCode = status.MissingPlayer
+				err = helper.SendResponse(response)
+				if err != nil {
+					helper.InternalErr("Error sending response", err)
+				}
+			}
+
+			return
+		}
+		response := responses.LoginCheckKey(baseInfo, player.Key)
+		err = helper.SendResponse(response)
+		if err != nil {
+			helper.InternalErr("Error sending response", err)
+			return
+		}
+		return
+	} else if uid != "0" && password != "" {
+		helper.Out("Entering Login (Charlie) phase")
+		// game is attempting to log in using key
+		player, err := db.GetPlayer(uid)
+		if err != nil {
+			helper.InternalErr("Error getting player", err)
+			return
+		}
+		if request.Password == logic.GenerateLoginPasskey(player) {
+			baseInfo.StatusCode = status.ServerNextVersion
+			baseInfo.SetErrorMessage(emess.OK)
+			response := responses.NewNextVersionResponse(baseInfo,
+				player.PlayerState.NumRedRings,
+				player.PlayerState.NumBuyRedRings,
+				player.Username,
+				localizations.GetStringByLanguage(enums.LangJapanese, "DefaultMaintenanceMessage", true),
+				localizations.GetStringByLanguage(enums.LangEnglish, "DefaultMaintenanceMessage", true),
+				"https://sonic.runner.es/",
+			)
+			err = helper.SendResponse(response)
+			if err != nil {
+				helper.InternalErr("Error sending response", err)
+				return
+			}
 		} else {
 			// Looks like the credentials don't match what's in the database!
 			baseInfo.StatusCode = status.InvalidPassword
