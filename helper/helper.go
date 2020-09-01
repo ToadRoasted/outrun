@@ -36,8 +36,14 @@ const (
 	InternalServerError = "Internal Server Error"
 	BadRequest          = "Bad Request"
 
-	DefaultIV   = "FoundDeadInMiami"
-	RandomizeIV = false // highly experimental option; will slow Outrun down slightly
+	DefaultIV                           = "FoundDeadInMiami"
+	RandomizeIV                         = true // highly experimental option; may slow Outrun down slightly
+	RandomizeIVAfterUpToHowManyRequests = 16
+)
+
+var (
+	RequestsLeft = 0
+	CurrentIV    = DefaultIV
 )
 
 type Helper struct {
@@ -107,15 +113,21 @@ func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
 func (r *Helper) Respond(out []byte) {
 	iv := DefaultIV
 	if RandomizeIV {
-		randChar := func(charset string, length int64) string {
-			runes := []rune(charset)
-			final := make([]rune, length)
-			for i := range final {
-				final[i] = runes[rand.Intn(len(runes))]
+		if RequestsLeft <= 0 {
+			RequestsLeft = rand.Intn(RandomizeIVAfterUpToHowManyRequests)
+			randChar := func(charset string, length int64) string {
+				runes := []rune(charset)
+				final := make([]rune, length)
+				for i := range final {
+					final[i] = runes[rand.Intn(len(runes))]
+				}
+				return string(final)
 			}
-			return string(final)
+			CurrentIV = randChar("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 16)
+		} else {
+			RequestsLeft--
 		}
-		iv = randChar("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 16)
+		iv = CurrentIV
 	}
 	r.RespondRaw(out, "1", iv)
 }
