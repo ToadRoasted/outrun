@@ -115,6 +115,7 @@ func (r *Helper) Respond(out []byte) {
 	if RandomizeIV {
 		if RequestsLeft <= 0 {
 			RequestsLeft = rand.Intn(RandomizeIVAfterUpToHowManyRequests)
+			r.Out("DEBUG: Rerolling random IV...")
 			randChar := func(charset string, length int64) string {
 				runes := []rune(charset)
 				final := make([]rune, length)
