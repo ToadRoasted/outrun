@@ -27,11 +27,13 @@ func MessageList(base responseobjs.BaseInfo, msgl []obj.Message, opmsgl []obj.Op
 }
 
 func DefaultMessageList(base responseobjs.BaseInfo) MessageListResponse {
+	// FOR TESTING PURPOSES ONLY
 	return MessageList(
 		base,
 		[]obj.Message{},
 		[]obj.OperatorMessage{
 			obj.DefaultOperatorMessage(),
+			obj.DefaultUntimedOperatorMessage(),
 		},
 	)
 }

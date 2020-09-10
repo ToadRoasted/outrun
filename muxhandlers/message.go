@@ -23,18 +23,18 @@ func GetMessageList(helper *helper.Helper) {
 	if !helper.CheckSession(true) {
 		return
 	}
-	uid, err := helper.GetCallingPlayerID()
+	/*uid, err := helper.GetCallingPlayerID()
 	if err != nil {
 		helper.InternalErr("Error getting player ID", err)
-	}
+	}*/
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	messages := []obj.Message{}
-	opmessages, _ := dbaccess.GetOperatorMessages(uid)
+	//messages := []obj.Message{}
+	//opmessages, _ := dbaccess.GetOperatorMessages(uid)
 
-	// response := responses.DefaultMessageList(baseInfo)
-	response := responses.MessageList(baseInfo, messages, opmessages)
+	response := responses.DefaultMessageList(baseInfo)
+	// response := responses.MessageList(baseInfo, messages, opmessages)
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
-	err = helper.SendResponse(response)
+	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}
@@ -203,7 +203,7 @@ func GetMessage(helper *helper.Helper) {
 }
 
 func SendEnergy(helper *helper.Helper) {
-	// TODO: make this functional
+	// agnostic; sending energy is not possible without having facebook integration working
 	baseInfo := helper.BaseInfo(emess.OK, status.AlreadySentEnergy)
 	response := responses.NewBaseResponse(baseInfo)
 	err := helper.SendResponse(response)

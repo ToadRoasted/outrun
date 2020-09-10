@@ -565,7 +565,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 
 	//helper.DebugOut("CheatResult: %s", request.CheatResult)
 	if request.CheatResult[0] != '0' { // unknown trigger
-		helper.DebugOut("(CheatResult) flag 1 set!!!")
+		helper.DebugOut("(CheatResult) flag 1 set!!! (Possibly score to time mismatch?)")
 	}
 	if request.CheatResult[1] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 2 set!!!")
@@ -573,8 +573,8 @@ func QuickPostGameResults(helper *helper.Helper) {
 	if request.CheatResult[2] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 3 set!!!")
 	}
-	if request.CheatResult[3] != '0' { // 3 or more continues used
-		helper.DebugOut("(CheatResult) Too many continues used!!!")
+	if request.CheatResult[3] != '0' { // unknown trigger
+		helper.DebugOut("(CheatResult) flag 4 set!!!")
 	}
 	if request.CheatResult[4] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 5 set!!!")
