@@ -14,6 +14,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Mtbcooler/outrun/logic"
+
 	"github.com/Mtbcooler/outrun/emess"
 	"github.com/Mtbcooler/outrun/responses"
 	"github.com/Mtbcooler/outrun/responses/responseobjs"
@@ -184,7 +186,9 @@ func main() {
 			}
 		} else {
 			if time.Now().UTC().Unix() > leagueendtime {
-				log.Printf("[WARN] League reset time has passed! %v - %v (Now: %v)\n", leaguestarttime, leagueendtime, time.Now().UTC().Unix())
+				log.Printf("[WARN] League reset time has passed! %v - %v (Now: %v) Now resetting...\n", leaguestarttime, leagueendtime, time.Now().UTC().Unix())
+				excode, exmsg := logic.CalculateAndResetRunnersLeague()
+				log.Printf("[INFO] Result: Error code %v: %s", excode, exmsg)
 			}
 		}
 	}

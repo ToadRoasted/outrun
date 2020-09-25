@@ -112,29 +112,39 @@ func Login(helper *helper.Helper) {
 		if request.Password == logic.GenerateLoginPasskey(player) {
 			baseInfo.StatusCode = status.OK
 			baseInfo.SetErrorMessage(emess.OK)
-			sid, err := db.BoltAssignSessionID(uid, strconv.Itoa(int(request.Seq)))
-			if err != nil {
-				helper.InternalErr("Error assigning session ID", err)
-				return
+			if time.Now().UTC().Unix() < player.SuspendedUntil {
+				baseInfo.StatusCode = status.NotAvailablePlayer
+				err = helper.SendResponse(responses.NewBaseResponse(baseInfo))
+				if err != nil {
+					helper.InternalErr("Error sending response", err)
+					return
+				}
+			} else {
+
+				sid, err := db.BoltAssignSessionID(uid, strconv.Itoa(int(request.Seq)))
+				if err != nil {
+					helper.InternalErr("Error assigning session ID", err)
+					return
+				}
+				player.Language = request.Language
+				player.LastLogin = time.Now().UTC().Unix()
+				player.PlayerVarious.EnergyRecoveryMax = gameconf.CFile.EnergyRecoveryMax
+				player.PlayerVarious.EnergyRecoveryTime = gameconf.CFile.EnergyRecoveryTime
+				err = db.SavePlayer(player)
+				if err != nil {
+					helper.InternalErr("Error saving player", err)
+					return
+				}
+				response := responses.LoginSuccess(baseInfo, sid, player.Username, player.PlayerVarious.EnergyRecoveryTime, player.PlayerVarious.EnergyRecoveryMax)
+				helper.DebugOut("seq = %v", request.Seq)
+				response.Seq = request.Seq
+				err = helper.SendResponse(response)
+				if err != nil {
+					helper.InternalErr("Error sending response", err)
+					return
+				}
+				analytics.Store(player.ID, factors.AnalyticTypeLogins)
 			}
-			player.Language = request.Language
-			player.LastLogin = time.Now().UTC().Unix()
-			player.PlayerVarious.EnergyRecoveryMax = gameconf.CFile.EnergyRecoveryMax
-			player.PlayerVarious.EnergyRecoveryTime = gameconf.CFile.EnergyRecoveryTime
-			err = db.SavePlayer(player)
-			if err != nil {
-				helper.InternalErr("Error saving player", err)
-				return
-			}
-			response := responses.LoginSuccess(baseInfo, sid, player.Username, player.PlayerVarious.EnergyRecoveryTime, player.PlayerVarious.EnergyRecoveryMax)
-			helper.DebugOut("seq = %v", request.Seq)
-			response.Seq = request.Seq
-			err = helper.SendResponse(response)
-			if err != nil {
-				helper.InternalErr("Error sending response", err)
-				return
-			}
-			analytics.Store(player.ID, factors.AnalyticTypeLogins)
 		} else {
 			// Looks like the credentials don't match what's in the database!
 			baseInfo.StatusCode = status.InvalidPassword
@@ -287,7 +297,7 @@ func GetInformation(helper *helper.Helper) {
 	}
 	/*operatorInfos := []obj.OperatorInformation{
 		obj.LeagueOperatorInformation(0, 123, 456, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
-		obj.EventOperatorInformation("100060000", 7, 17171, 0),
+		obj.EventOperatorInformation("200010000", 7, 17171, 0),
 		obj.LeagueOperatorInformation(2, 123, 456, 0, now.BeginningOfWeek().UTC().Unix(), enums.RankingLeagueF_M, enums.RankingLeagueF_M, 50, 0),
 	}*/
 	operatorInfos, err := dbaccess.GetOperatorInfos(uid)

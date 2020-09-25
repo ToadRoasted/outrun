@@ -15,6 +15,7 @@ type PlayerInfo struct {
 	Language          int64       `json:"language" db:"language"`
 	CharacterState    []Character `json:"characters" db:"characters"`
 	ChaoState         []Chao      `json:"chao" db:"chao"`
+	SuspendedUntil    int64       `json:"suspendedUntil" db:"suspended_until"`
 }
 
 type StoredPlayerInfo struct {
@@ -27,6 +28,7 @@ type StoredPlayerInfo struct {
 	Language          int64  `json:"language" db:"language"`
 	CharacterState    []byte `json:"characters" db:"characters"`
 	ChaoState         []byte `json:"chao" db:"chao"`
+	SuspendedUntil    int64  `json:"suspendedUntil" db:"suspended_until"`
 }
 
 func PlayerInfoToStoredPlayerInfo(pli PlayerInfo) StoredPlayerInfo {
@@ -48,6 +50,7 @@ func PlayerInfoToStoredPlayerInfo(pli PlayerInfo) StoredPlayerInfo {
 		pli.Language,
 		characterstate,
 		chaostate,
+		pli.SuspendedUntil,
 	}
 }
 
@@ -72,5 +75,6 @@ func StoredPlayerInfoToPlayerInfo(pli StoredPlayerInfo) PlayerInfo {
 		pli.Language,
 		characterstate,
 		chaostate,
+		pli.SuspendedUntil,
 	}
 }

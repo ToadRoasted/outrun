@@ -46,6 +46,7 @@ const (
 		language INTEGER NOT NULL,
 		characters JSON,
 		chao JSON,
+		suspended_until BIGINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesSchema = `

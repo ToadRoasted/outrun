@@ -63,6 +63,7 @@ var BlankPlayer = func() netobj.Player {
 	operatorMessages := []obj.OperatorMessage{}
 	loginBonusState := netobj.DefaultLoginBonusState(0)
 	language := int64(enums.LangEnglish)
+	suspendedUntil := int64(0)
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -85,5 +86,6 @@ var BlankPlayer = func() netobj.Player {
 		messages,
 		operatorMessages,
 		loginBonusState,
+		suspendedUntil,
 	)
 }() // TODO: Solve duplication requirement with db/assistants.go
