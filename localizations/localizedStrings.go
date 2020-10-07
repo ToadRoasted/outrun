@@ -21,11 +21,31 @@ var LocalizedStrings = map[string]map[string]string{
 		"QuickLeagueHighRankingRewardLabel":  "A reward for getting the following position in the Runners' League Timed Mode High Score Ranking: %v.",
 		"QuickLeaguePromotionRewardLabel":    "Runners' League Promotion Reward. Timed Mode.",
 		"QuickLeagueTotalRankingRewardLabel": "A reward for getting the following position in the Runners' League Timed Mode Total Score Ranking: %v.",
-		"WatermarkTicker_1":                  "This server is powered by [ff0000]Outrun for Revival!",
-		"WatermarkTicker_2":                  "ID: [0000ff]%s",
-		"WatermarkTicker_3":                  "High score (Timed Mode): [0000ff]%v",
-		"WatermarkTicker_4":                  "High score (Story Mode): [0000ff]%v",
-		"WatermarkTicker_5":                  "Total distance ran (Story Mode): [0000ff]%v",
+		"SuspensionNotice_Temporary": "The account on this device has been temporarily suspended from Sonic Runners Revival until the following date: %s\n" +
+			"Reason: %s\n\n" +
+			"If you feel this is in error, please get in touch!\n" +
+			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Discord: https://discord.gg/T5ytR6T",
+		"SuspensionNotice_Permanent": "The account on this device has been permanently banned from Sonic Runners Revival.\n" +
+			"Reason: %s\n\n" +
+			"If you feel this is in error, please get in touch!\n" +
+			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Discord: https://discord.gg/T5ytR6T",
+		"SuspensionReason_0": "(no reason specified)",
+		"SuspensionReason_1": "Cheating",
+		"SuspensionReason_2": "Packet manipulation",
+		"SuspensionReason_3": "Account selling",
+		"SuspensionReason_4": "Reserved for future use (Reason ID 4)",
+		"SuspensionReason_5": "Reserved for future use (Reason ID 5)",
+		"SuspensionReason_6": "Reserved for future use (Reason ID 6)",
+		"SuspensionReason_7": "Reserved for future use (Reason ID 7)",
+		"SuspensionReason_8": "Reserved for future use (Reason ID 8)",
+		"SuspensionReason_9": "Reserved for future use (Reason ID 9)",
+		"WatermarkTicker_1":  "This server is powered by [ff0000]Outrun for Revival!",
+		"WatermarkTicker_2":  "ID: [0000ff]%s",
+		"WatermarkTicker_3":  "High score (Timed Mode): [0000ff]%v",
+		"WatermarkTicker_4":  "High score (Story Mode): [0000ff]%v",
+		"WatermarkTicker_5":  "Total distance ran (Story Mode): [0000ff]%v",
 	},
 }
 

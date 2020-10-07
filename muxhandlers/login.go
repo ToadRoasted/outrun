@@ -113,14 +113,22 @@ func Login(helper *helper.Helper) {
 			baseInfo.StatusCode = status.OK
 			baseInfo.SetErrorMessage(emess.OK)
 			if time.Now().UTC().Unix() < player.SuspendedUntil {
-				baseInfo.StatusCode = status.NotAvailablePlayer
-				err = helper.SendResponse(responses.NewBaseResponse(baseInfo))
+				// player is suspended! return a NextVersion response (bring up notifications menu with specified text)
+				helper.Out("Player is suspended!")
+				baseInfo.StatusCode = status.ServerNextVersion
+				err = helper.SendResponse(responses.NewNextVersionResponse(baseInfo,
+					player.PlayerState.NumRedRings,
+					player.PlayerState.NumBuyRedRings,
+					player.Username,
+					localizations.GetStringByLanguage(enums.LangJapanese, "SuspensionNotice_Temporary", true),
+					localizations.GetStringByLanguage(player.Language, "SuspensionNotice_Temporary", true),
+					"https://sonic.runner.es/",
+				))
 				if err != nil {
 					helper.InternalErr("Error sending response", err)
 					return
 				}
 			} else {
-
 				sid, err := db.BoltAssignSessionID(uid, strconv.Itoa(int(request.Seq)))
 				if err != nil {
 					helper.InternalErr("Error assigning session ID", err)
