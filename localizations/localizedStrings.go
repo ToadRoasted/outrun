@@ -6,13 +6,17 @@ import (
 
 var LocalizedStrings = map[string]map[string]string{
 	"en": map[string]string{
-		"DailyBattleWinRewardLabel":          "A reward for winning a daily battle.",
-		"DailyBattleWinStreakRewardLabel":    "A reward for winning %v daily battles in a row.",
-		"DailyChallengeRewardLabel":          "A Daily Challenge Reward.",
-		"DefaultAnnouncementMessage":         "Welcome to Sonic Runners Revival!",
-		"DefaultLoginRouletteMessage":        "Earn some items to help you get a high score, and maybe even a top place in the rankings!",
-		"DefaultMaintenanceMessage":          "Sonic Runners Revival is currently in maintenance mode!\nPlease check our social media for more information!",
-		"DefaultRewardLabel":                 "A gift from the Revival Team.",
+		"DailyBattleWinRewardLabel":       "A reward for winning a daily battle.",
+		"DailyBattleWinStreakRewardLabel": "A reward for winning %v daily battles in a row.",
+		"DailyChallengeRewardLabel":       "A Daily Challenge Reward.",
+		"DefaultAnnouncementMessage":      "Welcome to Sonic Runners Revival!",
+		"DefaultLoginRouletteMessage":     "Earn some items to help you get a high score, and maybe even a top place in the rankings!",
+		"DefaultMaintenanceMessage":       "Sonic Runners Revival is currently in maintenance mode!\nPlease check our social media for more information!",
+		"DefaultRewardLabel":              "A gift from the Revival Team.",
+		"DeviceSuspensionNotice": "This device has been blocked from accessing the Sonic Runners Revival game server, likely due to repeated incidents of cheating.\n\n" +
+			"If you feel this is in error, please get in touch!\n" +
+			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Discord: https://discord.gg/T5ytR6T",
 		"FirstLoginBonusRewardLabel":         "A Debut Dash Login Bonus.", // TODO: Should this be corrected to "Start Dash Login Bonus" for consistency?
 		"LeagueHighRankingRewardLabel":       "A reward for getting the following position in the Runners' League High Score Ranking: %v.",
 		"LeaguePromotionRewardLabel":         "Runners' League Promotion Reward. Story Mode.",
