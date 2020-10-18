@@ -30,7 +30,7 @@ const (
 func NewAccountWithID(uid string) netobj.Player {
 	randChar := func(charset string, length int64) string {
 		runes := []rune(charset)
-		final := make([]rune, 10)
+		final := make([]rune, length)
 		for i := range final {
 			final[i] = runes[rand.Intn(len(runes))]
 		}
@@ -39,9 +39,9 @@ func NewAccountWithID(uid string) netobj.Player {
 
 	username := ""
 	password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
-	migrationPassword := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
+	migrationPassword := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 12)
 	userPassword := ""
-	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
+	key := randChar("0123456789ABCDEF", 32)
 	playerState := netobj.DefaultPlayerState()
 	characterState := netobj.DefaultCharacterState()
 	chaoState := constnetobjs.DefaultChaoState()

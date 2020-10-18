@@ -474,7 +474,7 @@ func GetCountry(helper *helper.Helper) {
 func GetMigrationPassword(helper *helper.Helper) {
 	randChar := func(charset string, length int64) string {
 		runes := []rune(charset)
-		final := make([]rune, 10)
+		final := make([]rune, 12)
 		for i := range final {
 			final[i] = runes[rand.Intn(len(runes))]
 		}
@@ -496,8 +496,8 @@ func GetMigrationPassword(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	if len(player.MigrationPassword) != 10 {
-		player.MigrationPassword = randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
+	if len(player.MigrationPassword) != 12 {
+		player.MigrationPassword = randChar("abcdefghijklmnopqrstuvwxyz1234567890", 12)
 	}
 	player.UserPassword = request.UserPassword
 	db.SavePlayer(player)
@@ -513,7 +513,7 @@ func GetMigrationPassword(helper *helper.Helper) {
 func Migration(helper *helper.Helper) {
 	randChar := func(charset string, length int64) string {
 		runes := []rune(charset)
-		final := make([]rune, 10)
+		final := make([]rune, 12)
 		for i := range final {
 			final[i] = runes[rand.Intn(len(runes))]
 		}
@@ -544,8 +544,11 @@ func Migration(helper *helper.Helper) {
 	if migrationUserPassword == playerInfo.UserPassword {
 		baseInfo.StatusCode = status.OK
 		baseInfo.SetErrorMessage(emess.OK)
-		playerInfo.MigrationPassword = randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10) //generate a brand new transfer ID
+
+		// TODO: Make clearing the migration password and user password a configurable option
+		playerInfo.MigrationPassword = randChar("abcdefghijklmnopqrstuvwxyz1234567890", 12) //generate a brand new transfer ID
 		playerInfo.UserPassword = ""                                                        //clear user password
+
 		playerInfo.LastLogin = time.Now().UTC().Unix()
 		err = dbaccess.SetPlayerInfo(consts.DBMySQLTableCorePlayerInfo, pid, playerInfo)
 		if err != nil {

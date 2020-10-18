@@ -298,9 +298,11 @@ type MigrationPasswordResponse struct {
 
 func MigrationPassword(base responseobjs.BaseInfo, player netobj.Player) MigrationPasswordResponse {
 	baseResponse := NewBaseResponse(base)
+	mpassword := player.MigrationPassword
+
 	return MigrationPasswordResponse{
 		baseResponse,
-		player.MigrationPassword,
+		mpassword,
 	}
 }
 

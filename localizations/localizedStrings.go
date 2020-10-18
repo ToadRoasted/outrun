@@ -6,6 +6,10 @@ import (
 
 var LocalizedStrings = map[string]map[string]string{
 	"en": map[string]string{
+		"URLChangeNotice": "Please update Sonic Runners Revival; this version of Sonic Runners Revival will soon no longer connect!\n\n" +
+			"Our website: https://sonic.runner.es/\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
+			"Discord: https://discord.gg/T5ytR6T",
 		"DailyBattleWinRewardLabel":       "A reward for winning a daily battle.",
 		"DailyBattleWinStreakRewardLabel": "A reward for winning %v daily battles in a row.",
 		"DailyChallengeRewardLabel":       "A Daily Challenge Reward.",
@@ -15,7 +19,7 @@ var LocalizedStrings = map[string]map[string]string{
 		"DefaultRewardLabel":              "A gift from the Revival Team.",
 		"DeviceSuspensionNotice": "This device has been blocked from accessing the Sonic Runners Revival game server, likely due to repeated incidents of cheating.\n\n" +
 			"If you feel this is in error, please get in touch!\n" +
-			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
 		"FirstLoginBonusRewardLabel":         "A Debut Dash Login Bonus.", // TODO: Should this be corrected to "Start Dash Login Bonus" for consistency?
 		"LeagueHighRankingRewardLabel":       "A reward for getting the following position in the Runners' League High Score Ranking: %v.",
@@ -28,12 +32,12 @@ var LocalizedStrings = map[string]map[string]string{
 		"SuspensionNotice_Temporary": "The account on this device has been temporarily suspended from Sonic Runners Revival until the following date: %s\n" +
 			"Reason: %s\n\n" +
 			"If you feel this is in error, please get in touch!\n" +
-			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
 		"SuspensionNotice_Permanent": "The account on this device has been permanently banned from Sonic Runners Revival.\n" +
 			"Reason: %s\n\n" +
 			"If you feel this is in error, please get in touch!\n" +
-			"Twitter: https://twitter.com/revivalsonic\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
 		"SuspensionReason_0": "(no reason specified)",
 		"SuspensionReason_1": "Cheating",
