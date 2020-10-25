@@ -6,22 +6,21 @@ import (
 
 var LocalizedStrings = map[string]map[string]string{
 	"en": map[string]string{
-		"URLChangeNotice": "Please update Sonic Runners Revival; this version of Sonic Runners Revival will soon no longer connect!\n\n" +
-			"Our website: https://sonic.runner.es/\n" +
-			"Twitter: https://twitter.com/runnersrevival\n" +
-			"Discord: https://discord.gg/T5ytR6T",
 		"DailyBattleWinRewardLabel":       "A reward for winning a daily battle.",
 		"DailyBattleWinStreakRewardLabel": "A reward for winning %v daily battles in a row.",
 		"DailyChallengeRewardLabel":       "A Daily Challenge Reward.",
 		"DefaultAnnouncementMessage":      "Welcome to Sonic Runners Revival!",
 		"DefaultLoginRouletteMessage":     "Earn some items to help you get a high score, and maybe even a top place in the rankings!",
-		"DefaultMaintenanceMessage":       "Sonic Runners Revival is currently in maintenance mode!\nPlease check our social media for more information!",
-		"DefaultRewardLabel":              "A gift from the Revival Team.",
+		"DefaultMaintenanceMessage": "Sonic Runners Revival is currently in maintenance mode!\nPlease check our social media for more information!\n\n" +
+			"Our website: https://sonic.runner.es/\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
+			"Discord: https://discord.gg/T5ytR6T",
+		"DefaultRewardLabel": "A gift from the Revival Team.",
 		"DeviceSuspensionNotice": "This device has been blocked from accessing the Sonic Runners Revival game server, likely due to repeated incidents of cheating.\n\n" +
 			"If you feel this is in error, please get in touch!\n" +
 			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
-		"FirstLoginBonusRewardLabel":         "A Debut Dash Login Bonus.", // TODO: Should this be corrected to "Start Dash Login Bonus" for consistency?
+		"FirstLoginBonusRewardLabel":         "A Start Dash Login Bonus.",
 		"LeagueHighRankingRewardLabel":       "A reward for getting the following position in the Runners' League High Score Ranking: %v.",
 		"LeaguePromotionRewardLabel":         "Runners' League Promotion Reward. Story Mode.",
 		"LeagueTotalRankingRewardLabel":      "A reward for getting the following position in the Runners' League Total Score Ranking: %v.",
@@ -42,18 +41,22 @@ var LocalizedStrings = map[string]map[string]string{
 		"SuspensionReason_0": "(no reason specified)",
 		"SuspensionReason_1": "Cheating",
 		"SuspensionReason_2": "Packet manipulation",
-		"SuspensionReason_3": "Account selling",
+		"SuspensionReason_3": "Account given away or sold",
 		"SuspensionReason_4": "Reserved for future use (Reason ID 4)",
 		"SuspensionReason_5": "Reserved for future use (Reason ID 5)",
 		"SuspensionReason_6": "Reserved for future use (Reason ID 6)",
 		"SuspensionReason_7": "Reserved for future use (Reason ID 7)",
 		"SuspensionReason_8": "Reserved for future use (Reason ID 8)",
 		"SuspensionReason_9": "Reserved for future use (Reason ID 9)",
-		"WatermarkTicker_1":  "This server is powered by [ff0000]Outrun for Revival!",
-		"WatermarkTicker_2":  "ID: [0000ff]%s",
-		"WatermarkTicker_3":  "High score (Timed Mode): [0000ff]%v",
-		"WatermarkTicker_4":  "High score (Story Mode): [0000ff]%v",
-		"WatermarkTicker_5":  "Total distance ran (Story Mode): [0000ff]%v",
+		"UpdateGameNotice": "Please update Sonic Runners Revival; this version is no longer supported on Sonic Runners Revival!\n\n" +
+			"Our website: https://sonic.runner.es/\n" +
+			"Twitter: https://twitter.com/runnersrevival\n" +
+			"Discord: https://discord.gg/T5ytR6T",
+		"WatermarkTicker_1": "This server is powered by [ff0000]Outrun for Revival!",
+		"WatermarkTicker_2": "ID: [0000ff]%s",
+		"WatermarkTicker_3": "High score (Timed Mode): [0000ff]%v",
+		"WatermarkTicker_4": "High score (Story Mode): [0000ff]%v",
+		"WatermarkTicker_5": "Total distance ran (Story Mode): [0000ff]%v",
 	},
 }
 
@@ -91,10 +94,10 @@ func GetStringByLanguage(language int64, key string, fallBackToEnglish bool) str
 		if fallBackToEnglish {
 			result = LocalizedStrings["en"][key]
 			if result == "" {
-				result = "ERROR: Key \"" + key + "\" does not exist or is empty!"
+				result = "ERR: Key \"" + key + "\" does not exist or is empty!"
 			}
 		} else {
-			result = "ERROR: Key \"" + key + "\" does not exist for the " + LanguageEnumToLanguageNameTable[language] + " language!"
+			result = "ERR: Key \"" + key + "\" does not exist in " + LanguageEnumToLanguageNameTable[language] + "!"
 		}
 	}
 	return result

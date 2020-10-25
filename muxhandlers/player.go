@@ -132,13 +132,17 @@ func SetUsername(helper *helper.Helper) {
 		return
 	}
 	// TODO: check if username is already taken
-	player.Username = request.Username
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	if len(request.Username) > 12 { // length checking, just in case someone hacks the name limit out of the game
+		baseInfo.StatusCode = status.ClientError
+	} else {
+		player.Username = request.Username
+	}
 	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.NewBaseResponse(baseInfo)
 	response.Seq, _ = db.BoltGetSessionIDSeq(sid)
 	err = helper.SendResponse(response)
