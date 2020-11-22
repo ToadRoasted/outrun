@@ -261,9 +261,9 @@ func main() {
 
 		// Store operations
 		router.HandleFunc(prefix+"/Store/getRedstarExchangeList/", h(muxhandlers.GetRedStarExchangeList, LogExecutionTime))
-		//router.HandleFunc(prefix+"/Store/getRingExchangeList/", h(muxhandlers.GetRingExchangeList, LogExecutionTime))
+		//router.HandleFunc(prefix+"/Store/getRingExchangeList/", h(muxhandlers.GetRingExchangeList, LogExecutionTime)) // Unused endpoint?
 		router.HandleFunc(prefix+"/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
-		//router.HandleFunc(prefix+"/Store/ringExchange/", h(muxhandlers.RingExchange, LogExecutionTime))
+		//router.HandleFunc(prefix+"/Store/ringExchange/", h(muxhandlers.RingExchange, LogExecutionTime)) // Unused endpoint?
 		router.HandleFunc(prefix+"/Store/setBirthday/", h(muxhandlers.SetBirthday, LogExecutionTime))
 
 		// Mileage operations
@@ -315,6 +315,10 @@ func main() {
 
 		// Misc. operations
 		router.HandleFunc(prefix+"/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
+		//router.HandleFunc(prefix+"/Sgn/setNoahId/", h(muxhandlers.SetNoahID, LogExecutionTime))
+		//router.HandleFunc(prefix+"/Sgn/setSerialCode/", h(muxhandlers.SetSerialCode, LogExecutionTime))
+
+		//router.HandleFunc(prefix+"/Boom/setDeviceId/", h(muxhandlers.SetBoomDeviceID, LogExecutionTime))
 
 		// Server information
 		if config.CFile.EnablePublicStats {

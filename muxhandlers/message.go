@@ -171,18 +171,19 @@ func GetMessage(helper *helper.Helper) {
 
 		} else if itemid[:2] == "30" { // ID is a character
 			charIndex := player.IndexOfChara(itemid)
-			if charIndex == -1 { // character index not found, should never happen
-				helper.InternalErr("cannot get index of character '"+strconv.Itoa(charIndex)+"'", err)
-				return
-			}
-			if player.CharacterState[charIndex].Status == enums.CharacterStatusLocked {
-				// unlock the character
-				player.CharacterState[charIndex].Status = enums.CharacterStatusUnlocked
+			if charIndex == -1 { // character index not found - append to character state
+				helper.DebugOut("Character ID %s is not in CharacterState; adding...", itemid)
+				player.CharacterState = append(player.CharacterState, netobj.DefaultCharacter(netobj.GenerateCharacterFromCharacterID(itemid)))
 			} else {
-				starUpCount := currentPresent.NumItem
-				for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
-					starUpCount--
-					player.CharacterState[charIndex].Star++
+				if player.CharacterState[charIndex].Status == enums.CharacterStatusLocked {
+					// unlock the character
+					player.CharacterState[charIndex].Status = enums.CharacterStatusUnlocked
+				} else {
+					starUpCount := currentPresent.NumItem
+					for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
+						starUpCount--
+						player.CharacterState[charIndex].Star++
+					}
 				}
 			}
 		} else {

@@ -138,7 +138,8 @@ func CommitWheelSpin(helper *helper.Helper) {
 				helper.DebugOut("amountOfItemWon: %v", amountOfItemWon)
 
 				chaoIndex := player.IndexOfChao(wonItem)
-				if chaoIndex == -1 { // chao index not found, should never happen
+				if chaoIndex == -1 { // chao index not found
+					// TODO: add to chao state?
 					helper.InternalErr("cannot get index of chao '"+strconv.Itoa(chaoIndex)+"' - something is going wrong!", err)
 					return
 				}

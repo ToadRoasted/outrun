@@ -1,5 +1,7 @@
 package battle
 
+// TODO: Work on this!
+
 /*
 import (
 	"log"

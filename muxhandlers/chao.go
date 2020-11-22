@@ -231,28 +231,29 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 			if prize.Rarity == 100 || prize.Rarity == 101 { // Character (and Promotion Egg)
 				// increase character level by (amount)
 				charIndex := player.IndexOfChara(prize.ID)
-				if charIndex == -1 { // character index not found, should never happen
-					helper.InternalErr("cannot get index of character '"+strconv.Itoa(charIndex)+"'", err)
-					return
-				}
-				if player.CharacterState[charIndex].Status == enums.CharacterStatusLocked {
-					// unlock the character
-					player.CharacterState[charIndex].Status = enums.CharacterStatusUnlocked
+				if charIndex == -1 { // character index not found - append to character state
+					helper.DebugOut("Character ID %s is not in CharacterState; adding...", prize.ID)
+					player.CharacterState = append(player.CharacterState, netobj.DefaultCharacter(netobj.GenerateCharacterFromCharacterID(prize.ID)))
 				} else {
-					starUpCount := consts.ChaoRouletteCharacterStarIncrease
-					for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
-						starUpCount--
-						player.CharacterState[charIndex].Star++
+					if player.CharacterState[charIndex].Status == enums.CharacterStatusLocked {
+						// unlock the character
+						player.CharacterState[charIndex].Status = enums.CharacterStatusUnlocked
+					} else {
+						starUpCount := consts.ChaoRouletteCharacterStarIncrease
+						for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
+							starUpCount--
+							player.CharacterState[charIndex].Star++
+						}
+						if starUpCount > 0 && player.CharacterState[charIndex].Star >= 10 {
+							player.PlayerState.ChaoEggs += 3 // maxed out; give 3 special eggs, 35000 rings, and 25 red rings as compensation
+							player.PlayerState.NumRings += 35000
+							player.PlayerState.NumRedRings += 25
+							spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDSpecialEgg), 3))
+							spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDRing), 35000))
+							spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDRedRing), 25))
+						}
+						spinResult.WonPrize.Level = player.CharacterState[charIndex].Level // set level of prize to character level
 					}
-					if starUpCount > 0 && player.CharacterState[charIndex].Star >= 10 {
-						player.PlayerState.ChaoEggs += 3 // maxed out; give 3 special eggs, 35000 rings, and 25 red rings as compensation
-						player.PlayerState.NumRings += 35000
-						player.PlayerState.NumRedRings += 25
-						spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDSpecialEgg), 3))
-						spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDRing), 35000))
-						spinResult.ItemList = append(spinResult.ItemList, obj.NewItem(strconv.Itoa(enums.IDRedRing), 25))
-					}
-					spinResult.WonPrize.Level = player.CharacterState[charIndex].Level // set level of prize to character level
 				}
 			} else if prize.Rarity == 2 || prize.Rarity == 1 || prize.Rarity == 0 { // Chao
 				chaoIndex := player.IndexOfChao(prize.ID)

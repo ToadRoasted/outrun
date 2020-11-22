@@ -34,10 +34,10 @@ func GetFacebookIncentive(helper *helper.Helper) {
 		helper.DebugOut("Type 2 - FEED (post to facebook feed)")
 		break
 	case 3:
-		helper.DebugOut("Type 3 - ACHIEVEMENT")
+		helper.DebugOut("Type 3 - ACHIEVEMENT (get achievement)")
 		break
 	case 4:
-		helper.DebugOut("Type 4 - PUSH_NOLOGIN")
+		helper.DebugOut("Type 4 - PUSH_NOLOGIN (respond to event push notif)")
 		break
 	default:
 		helper.DebugOut("Unknown incentive type %v", request.Type)
