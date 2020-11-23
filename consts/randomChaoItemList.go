@@ -39,9 +39,9 @@ var RandomChaoWheelCharacterPrizes = map[string]float64{
 	//enums.CTStrMetalSonic:   0.0, // Revival Event
 
 	// EXPERIMENTAL - Used for testing new roulette functionality
-	enums.CTStrXMasSonic:    1.0,
-	enums.CTStrXMasTails:    1.0,
-	enums.CTStrXMasKnuckles: 1.0,
+	//enums.CTStrXMasSonic:    1.0,
+	//enums.CTStrXMasTails:    1.0,
+	//enums.CTStrXMasKnuckles: 1.0,
 }
 
 var RandomChaoWheelChaoPrizes = map[string]float64{

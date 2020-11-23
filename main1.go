@@ -107,6 +107,14 @@ func checkArgs() bool {
 	args := os.Args[1:] // drop executable
 	amt := len(args)
 	if amt >= 1 {
+		if args[0] == "--help" {
+			fmt.Println("Valid command line arguments are:")
+			fmt.Println("	--help				Shows this list of command line arguments")
+			fmt.Println("	--maintenance		Launches Outrun in Maintenance Mode")
+			fmt.Println("	--migrate			Migrates the existing BoltDB database to MySQL (server will be launched in Maintenance Mode")
+			fmt.Println("	--version			Shows the version")
+			return true
+		}
 		if args[0] == "--version" {
 			fmt.Printf("Outrun for Revival %s\n", meta.Version)
 			return true
@@ -116,7 +124,12 @@ func checkArgs() bool {
 			MaintenanceMode = true
 			return false
 		}
-		fmt.Println("Unknown given arguments")
+		if args[0] == "--migrate" {
+			fmt.Println("This argument has not been implemented yet")
+			return true
+		}
+		fmt.Println("Unknown command line argument(s)")
+		fmt.Println("Type \"outrun --help\" for a list of valid arguments")
 		return true
 	}
 	return false
@@ -188,7 +201,7 @@ func main() {
 			if time.Now().UTC().Unix() > leagueendtime {
 				log.Printf("[WARN] League reset time has passed! %v - %v (Now: %v) Now resetting...\n", leaguestarttime, leagueendtime, time.Now().UTC().Unix())
 				excode, exmsg := logic.CalculateAndResetRunnersLeague()
-				log.Printf("[INFO] Result: Error code %v: %s", excode, exmsg)
+				log.Printf("[INFO] Result code %v: %s", excode, exmsg)
 			}
 		}
 	}
@@ -344,7 +357,7 @@ func SetupShutdownHandler() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println("\nShutting down...")
+		log.Println("Shutting down...")
 
 		dbaccess.CloseDB()
 		boltdbaccess.CloseDB()
