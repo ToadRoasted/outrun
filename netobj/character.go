@@ -124,6 +124,7 @@ func UnlockedCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterTikal),
 		DefaultCharacter(constobjs.CharacterMephiles),
 		DefaultCharacter(constobjs.CharacterPSISilver),
+		DefaultCharacter(constobjs.CharacterChrisThorndyke),
 		DefaultCharacter(constobjs.CharacterAmitieAmy),
 		DefaultCharacter(constobjs.CharacterGothicAmy),
 		DefaultCharacter(constobjs.CharacterHalloweenShadow),
@@ -161,6 +162,7 @@ func DefaultCharacterState() []Character {
 		DefaultLockedCharacter(constobjs.CharacterTikal),
 		DefaultLockedCharacter(constobjs.CharacterMephiles),
 		DefaultLockedCharacter(constobjs.CharacterPSISilver),
+		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterChrisThorndyke),
 		// other characters will be added to the CharacterState as they are obtained on the roulette
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterAmitieAmy),
 		DefaultGiftOnlyCharacter(constobjs.CharacterGothicAmy),
@@ -246,6 +248,8 @@ func GenerateCharacterFromCharacterID(charid string) obj.Character {
 		return constobjs.CharacterMephiles
 	case enums.CTStrPSISilver:
 		return constobjs.CharacterPSISilver
+	case enums.CTStrChrisThorndyke:
+		return constobjs.CharacterChrisThorndyke
 	case enums.CTStrAmitieAmy:
 		return constobjs.CharacterAmitieAmy
 	case enums.CTStrGothicAmy:

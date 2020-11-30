@@ -133,7 +133,9 @@ func SetUsername(helper *helper.Helper) {
 	}
 	// TODO: check if username is already taken
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	helper.DebugOut("Attempting to set username to \"%s\"", request.Username)
 	if len(request.Username) > 12 { // length checking, just in case someone hacks the name limit out of the game
+		helper.Warn("Username \"%s\" is too long!", request.Username)
 		baseInfo.StatusCode = status.ClientError
 	} else {
 		player.Username = request.Username

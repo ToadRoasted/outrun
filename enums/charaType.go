@@ -25,7 +25,8 @@ const (
 	CharaTypeTikal
 	CharaTypeMephiles
 	CharaTypePSISilver
-	CharaTypeAmitieAmy = iota + 301000 - 22 // 300021 is not the correct ID for Amitie Amy.
+	CharaTypeChrisThorndyke                      // New Character - COMING SOON:tm:
+	CharaTypeAmitieAmy      = iota + 301000 - 23 // 300021 is not the correct ID for Amitie Amy.
 	CharaTypeGothicAmy
 	CharaTypeHalloweenShadow
 	CharaTypeHalloweenRouge
@@ -57,6 +58,7 @@ const (
 	CTStrTikal           = "300018"
 	CTStrMephiles        = "300019"
 	CTStrPSISilver       = "300020"
+	CTStrChrisThorndyke  = "300021" // New character - COMING SOON:tm:
 	CTStrAmitieAmy       = "301000"
 	CTStrGothicAmy       = "301001"
 	CTStrHalloweenShadow = "301002"
