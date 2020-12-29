@@ -65,8 +65,8 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueF: obj.NewLeagueData(
 		1,
 		0,
-		20,
-		20,
+		40,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -82,8 +82,8 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueF_P: obj.NewLeagueData(
 		2,
 		0,
-		20,
-		20,
+		40,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -99,8 +99,8 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE_M: obj.NewLeagueData(
 		3,
 		0,
-		20,
-		20,
+		30,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -116,8 +116,8 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE: obj.NewLeagueData(
 		4,
 		0,
-		20,
-		20,
+		30,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -133,8 +133,8 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE_P: obj.NewLeagueData(
 		5,
 		0,
-		20,
-		20,
+		30,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -151,7 +151,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		6,
 		0,
 		20,
-		20,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -168,7 +168,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		7,
 		0,
 		20,
-		20,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
@@ -185,7 +185,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		8,
 		0,
 		20,
-		20,
+		0,
 		0,
 		0,
 		[]obj.OperatorScore{
