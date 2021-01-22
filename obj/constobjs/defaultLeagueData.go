@@ -41,7 +41,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		40,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(2, 40, []obj.Item{obj.NewItem("910000", 3000)}),
@@ -68,7 +68,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		40,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -85,7 +85,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		40,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -102,7 +102,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		30,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -119,7 +119,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		30,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -136,7 +136,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		30,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -153,7 +153,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -170,7 +170,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -187,7 +187,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -204,7 +204,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -221,7 +221,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -238,7 +238,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -255,7 +255,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -272,7 +272,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -289,7 +289,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -306,7 +306,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -323,7 +323,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -340,7 +340,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -357,7 +357,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -374,7 +374,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -391,7 +391,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		0,
 		25,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(2, 38, []obj.Item{obj.NewItem("910000", 10000)}),
@@ -425,7 +425,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		40,
 		0,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(2, 40, []obj.Item{obj.NewItem("900000", 5)}),
@@ -449,10 +449,10 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueF: obj.NewLeagueData(
 		1,
 		0,
-		20,
-		20,
+		40,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -466,10 +466,10 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueF_P: obj.NewLeagueData(
 		2,
 		0,
-		20,
-		20,
+		40,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -483,10 +483,10 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE_M: obj.NewLeagueData(
 		3,
 		0,
-		20,
-		20,
+		30,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -500,10 +500,10 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE: obj.NewLeagueData(
 		4,
 		0,
-		20,
-		20,
+		30,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -517,10 +517,10 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueE_P: obj.NewLeagueData(
 		5,
 		0,
-		20,
-		20,
+		30,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -535,9 +535,9 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		6,
 		0,
 		20,
-		20,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -552,9 +552,9 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		7,
 		0,
 		20,
-		20,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -569,9 +569,9 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		8,
 		0,
 		20,
-		20,
 		0,
 		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -588,7 +588,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -605,7 +605,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -622,7 +622,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -639,7 +639,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -656,7 +656,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -673,7 +673,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -690,7 +690,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -707,7 +707,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -724,7 +724,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -741,7 +741,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -758,7 +758,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		20,
 		20,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
@@ -775,7 +775,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 		0,
 		25,
 		0,
-		0,
+		50,
 		[]obj.OperatorScore{
 			obj.NewOperatorScore(2, 50, []obj.Item{}),
 			obj.NewOperatorScore(0, 1, []obj.Item{obj.NewItem(enums.ItemIDStrRing, 54321)}),
