@@ -133,7 +133,7 @@ func SetUsername(helper *helper.Helper) {
 	}
 	// TODO: check if username is already taken
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	if len(request.Username) > 12 { // length checking, just in case someone hacks the name limit out of the game
+	if len(request.Username) > 12 { // length checking, just in case someone hacks the name limit out of the game (NOTE: 2.0.4 will extend the name limit from 8 to 12 characters, hence why the check is for 12 characters)
 		baseInfo.StatusCode = status.ClientError
 	} else {
 		player.Username = request.Username

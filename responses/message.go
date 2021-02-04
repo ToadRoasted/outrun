@@ -32,8 +32,8 @@ func DefaultMessageList(base responseobjs.BaseInfo) MessageListResponse {
 		base,
 		[]obj.Message{},
 		[]obj.OperatorMessage{
-			//	obj.DefaultOperatorMessage(),
-			//	obj.DefaultUntimedOperatorMessage(),
+			obj.DefaultOperatorMessage(),
+			obj.DefaultUntimedOperatorMessage(),
 		},
 	)
 }

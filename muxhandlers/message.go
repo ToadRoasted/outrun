@@ -70,7 +70,7 @@ func GetMessage(helper *helper.Helper) {
 		helper.DebugOut("%v", messageIds)
 		for _, msgid := range messageIds {
 			helper.DebugOut("Accepting message ID %v", msgid)
-			// TODO: Put actual code here!
+			// TODO: Implement actual logic here!
 		}
 	case string:
 		if request.MessageIDs.(string) == "0" {
@@ -92,7 +92,7 @@ func GetMessage(helper *helper.Helper) {
 		helper.DebugOut("%v", operatorMessageIds)
 		for _, omsgid := range operatorMessageIds {
 			helper.DebugOut("Accepting operator message ID %v", omsgid)
-			// TODO: Put actual code here!
+			// TODO: Implement actual logic here!
 		}
 	case string:
 		if request.OperatorMessageIDs.(string) == "0" {

@@ -485,6 +485,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 			lvupCharacters[0].Exp += expIncrease
 			for lvupCharacters[0].Exp >= lvupCharacters[0].Cost {
 				// more exp than cost = level up
+				// FIXME: The level up logic seems to be not working correctly.
 				if lvupCharacters[0].Level < 100 {
 					lvupCharacters[0].Level++                       // increase level
 					lvupCharacters[0].AbilityLevel[abilityIndex]++  // increase ability level
@@ -513,6 +514,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 				lvupCharacters[1].Exp += expIncrease
 				for lvupCharacters[1].Exp >= lvupCharacters[1].Cost {
 					// more exp than cost = level up
+					// FIXME: The level up logic seems to be not working correctly.
 					if lvupCharacters[1].Level < 100 {
 						lvupCharacters[1].Level++                       // increase level
 						lvupCharacters[1].AbilityLevel[abilityIndex]++  // increase ability level
@@ -565,7 +567,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 
 	//helper.DebugOut("CheatResult: %s", request.CheatResult)
 	if request.CheatResult[0] != '0' { // unknown trigger
-		helper.DebugOut("(CheatResult) flag 1 set!!! (Possibly score to time mismatch?)")
+		helper.DebugOut("(CheatResult) flag 1 set!!!")
 	}
 	if request.CheatResult[1] != '0' { // unknown trigger
 		helper.DebugOut("(CheatResult) flag 2 set!!!")
@@ -866,6 +868,9 @@ func PostGameResults(helper *helper.Helper) {
 		player.MileageMapState.StageTotalScore += request.Score
 
 		goToNextChapter := request.ChapterClear == 1
+
+		player.MileageMapState.NumBossAttack = request.NumBossAttack // TODO: This is guesswork! See if this is correct behavior!
+
 		chaoEggs := request.GetChaoEgg
 		player.PlayerState.ChaoEggs += chaoEggs
 		if chaoEggs > 0 || player.PlayerState.ChaoEggs >= 10 {
