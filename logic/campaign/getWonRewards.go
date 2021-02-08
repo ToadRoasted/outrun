@@ -38,7 +38,11 @@ func GetWonRewards(oldEpisode, oldChapter, oldPoint, newEpisode, newChapter, new
 			if oldPoint == newPoint { // no movement at all
 				return wonRewards
 			} else if oldPoint > newPoint { // something fishy is happening...
-				log.Printf("[WARN] oldPoint (%v) > newPoint (%v), but still same area! Something weird is going on!\n", oldPoint, newPoint)
+				if oldPoint == 5 && newPoint == 0 {
+					log.Printf("[WARN] Point reset to 0 after boss, but chapter didn't change...? This is abnormal behavior; INVESTIGATE THIS!\n")
+				} else {
+					log.Printf("[WARN] oldPoint (%v) > newPoint (%v), but still same area! This is abnormal behavior; INVESTIGATE THIS!\n", oldPoint, newPoint)
+				}
 			} else if oldPoint < newPoint { // correct behavior, is moving along
 				for i := oldPoint + 1; i <= newPoint; i++ { // range (oldPoint, newPoint]
 					if i == 5 { // if boss point
@@ -57,7 +61,7 @@ func GetWonRewards(oldEpisode, oldChapter, oldPoint, newEpisode, newChapter, new
 			if config.CFile.DebugPrints {
 				log.Println("oldChapter > newChapter")
 			}
-			log.Printf("[WARN] Improper movement across chapters (%v to %v)!\n", oldChapter, newChapter)
+			log.Printf("[WARN] Unexpected jump from chapter %v to chapter %v! This is abnormal behavior; INVESTIGATE THIS!\n", oldChapter, newChapter)
 		} else if oldChapter < newChapter { // same episode, new chapter
 			if config.CFile.DebugPrints {
 				log.Println("oldChapter < newChapter")
@@ -78,7 +82,7 @@ func GetWonRewards(oldEpisode, oldChapter, oldPoint, newEpisode, newChapter, new
 		if config.CFile.DebugPrints {
 			log.Println("oldEpisode > newEpisode")
 		}
-		log.Printf("[WARN] oldEpisode (%v) > newEpisode (%v)! Something weird is going on!\n", oldEpisode, newEpisode)
+		log.Printf("[WARN] Player at episode %v jumped back to episode %v! This is abnormal behavior; INVESTIGATE THIS!\n", oldEpisode, newEpisode)
 	} else if oldEpisode < newEpisode { // crossed episodes, get all rewards from previous chapter [oldPoint, 5]
 		if config.CFile.DebugPrints {
 			log.Println("oldEpisode < newEpisode")

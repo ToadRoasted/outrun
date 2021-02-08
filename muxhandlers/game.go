@@ -866,6 +866,10 @@ func PostGameResults(helper *helper.Helper) {
 		}
 
 		player.MileageMapState.StageTotalScore += request.Score
+		player.MileageMapState.StageDistance += request.Distance
+		if request.Score > player.MileageMapState.StageMaxScore {
+			player.MileageMapState.StageMaxScore = request.Score
+		}
 
 		goToNextChapter := request.ChapterClear == 1
 
@@ -885,8 +889,12 @@ func PostGameResults(helper *helper.Helper) {
 
 		goToNextEpisode := false
 		if goToNextChapter {
+			helper.DebugOut("Chapter has been cleared")
 			player.MileageMapState.Point = 0
+			player.MileageMapState.StageMaxScore = 0
 			player.MileageMapState.StageTotalScore = 0
+			player.MileageMapState.StageDistance = 0
+			player.MileageMapState.ChapterStartTime = time.Now().Unix()
 			maxChapters, episodeHasMultipleChapters := consts.EpisodeWithChapters[player.MileageMapState.Episode]
 			if episodeHasMultipleChapters {
 				goToNextEpisode = false
@@ -904,6 +912,7 @@ func PostGameResults(helper *helper.Helper) {
 				player.PlayerState.Energy = player.PlayerVarious.EnergyRecoveryMax //restore energy
 			}
 		} else {
+			helper.DebugOut("Chapter has NOT been cleared")
 			player.MileageMapState.Point = newPoint
 		}
 		newRewardEpisode = player.MileageMapState.Episode
@@ -943,18 +952,17 @@ func PostGameResults(helper *helper.Helper) {
 			} else {
 				helper.Warn("Unknown reward '%s', ignoring", reward.ItemID)
 			}
-			// TODO: allow for any character joining the cast, as well as possibly chao?
+			// TODO: allow for any character joining the cast, as well as possibly chao? (no story mode episodes currently do this, but maybe for new episodes in future updates?)
 		}
 		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
 		helper.DebugOut("Current red rings: %v", player.PlayerState.NumRedRings)
 		player.PlayerState.Items = newItems
-
 		if goToNextEpisode {
 			player.MileageMapState.Episode++
 			player.MileageMapState.Chapter = 1
 			helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
 			if config.CFile.Debug {
-				player.MileageMapState.Episode = 11
+				//player.MileageMapState.Episode = 11
 			}
 
 			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1

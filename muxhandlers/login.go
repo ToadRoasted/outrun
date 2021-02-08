@@ -122,7 +122,7 @@ func Login(helper *helper.Helper) {
 					player.Username,
 					localizations.GetStringByLanguage(enums.LangJapanese, "SuspensionNotice_Temporary", true),
 					localizations.GetStringByLanguage(player.Language, "SuspensionNotice_Temporary", true),
-					"https://sonic.runner.es/",
+					"https://sonicrunners.com/",
 				))
 				if err != nil {
 					helper.InternalErr("Error sending response", err)
@@ -138,6 +138,9 @@ func Login(helper *helper.Helper) {
 				player.LastLogin = time.Now().UTC().Unix()
 				player.PlayerVarious.EnergyRecoveryMax = gameconf.CFile.EnergyRecoveryMax
 				player.PlayerVarious.EnergyRecoveryTime = gameconf.CFile.EnergyRecoveryTime
+				helper.DebugOut("Device: %s", request.Device)
+				helper.DebugOut("Platform: %v", request.Platform)
+				helper.DebugOut("Store ID: %v", request.StoreID)
 				err = db.SavePlayer(player)
 				if err != nil {
 					helper.InternalErr("Error saving player", err)
@@ -243,7 +246,7 @@ func LoginMaintenance(helper *helper.Helper) {
 				player.Username,
 				localizations.GetStringByLanguage(enums.LangJapanese, "DefaultMaintenanceMessage", true),
 				localizations.GetStringByLanguage(enums.LangEnglish, "DefaultMaintenanceMessage", true),
-				"https://sonic.runner.es/",
+				"https://sonicrunners.com/",
 			)
 			err = helper.SendResponse(response)
 			if err != nil {
