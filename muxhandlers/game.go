@@ -887,14 +887,9 @@ func PostGameResults(helper *helper.Helper) {
 		// TODO: Add chao eggs to player
 		newPoint := request.ReachPoint
 
-		goToNextEpisode := false
+		goToNextEpisode := true
 		if goToNextChapter {
 			helper.DebugOut("Chapter has been cleared")
-			player.MileageMapState.Point = 0
-			player.MileageMapState.StageMaxScore = 0
-			player.MileageMapState.StageTotalScore = 0
-			player.MileageMapState.StageDistance = 0
-			player.MileageMapState.ChapterStartTime = time.Now().Unix()
 			maxChapters, episodeHasMultipleChapters := consts.EpisodeWithChapters[player.MileageMapState.Episode]
 			if episodeHasMultipleChapters {
 				goToNextEpisode = false
@@ -904,6 +899,25 @@ func PostGameResults(helper *helper.Helper) {
 					goToNextEpisode = true
 				}
 			}
+			if goToNextEpisode {
+				player.MileageMapState.Episode++
+				player.MileageMapState.Chapter = 1
+				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
+				if config.CFile.Debug {
+					//player.MileageMapState.Episode = 11
+				}
+
+				if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
+					player.MileageMapState.Episode = 50
+					player.MileageMapState.Chapter = 1
+					helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
+				}
+			}
+			player.MileageMapState.Point = 0
+			player.MileageMapState.StageMaxScore = 0
+			player.MileageMapState.StageTotalScore = 0
+			player.MileageMapState.StageDistance = 0
+			player.MileageMapState.ChapterStartTime = time.Now().Unix()
 			player.PlayerState.Rank++
 			if player.PlayerState.Rank > 998 { // don't let rank go up past 999
 				player.PlayerState.Rank = 998
@@ -957,20 +971,6 @@ func PostGameResults(helper *helper.Helper) {
 		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
 		helper.DebugOut("Current red rings: %v", player.PlayerState.NumRedRings)
 		player.PlayerState.Items = newItems
-		if goToNextEpisode {
-			player.MileageMapState.Episode++
-			player.MileageMapState.Chapter = 1
-			helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
-			if config.CFile.Debug {
-				//player.MileageMapState.Episode = 11
-			}
-
-			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
-				player.MileageMapState.Episode = 50
-				player.MileageMapState.Chapter = 1
-				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
-			}
-		}
 	}
 
 	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
