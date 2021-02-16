@@ -6,8 +6,8 @@ import (
 
 var LocalizedStrings = map[string]map[string]string{
 	"en": map[string]string{
-		"DailyBattleWinRewardLabel":       "A reward for winning a daily battle.",
-		"DailyBattleWinStreakRewardLabel": "A reward for winning %v daily battles in a row.",
+		"DailyBattleWinRewardLabel":       "Daily Battle Reward.",
+		"DailyBattleWinStreakRewardLabel": "Daily Battle %v-Win Streak Reward.",
 		"DailyChallengeRewardLabel":       "A Daily Challenge Reward.",
 		"DefaultAnnouncementMessage":      "Welcome to Sonic Runners Revival!",
 		"DefaultLoginRouletteMessage":     "Earn some items to help you get a high score, and maybe even a top place in the rankings!",
@@ -15,16 +15,17 @@ var LocalizedStrings = map[string]map[string]string{
 			"Our website: https://sonic.runner.es/\n" +
 			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
-		"DefaultRewardLabel": "A gift from the Revival Team.",
+		"DefaultRewardLabel": "A gift from the Runners Revival Team.",
 		"DeviceSuspensionNotice": "This device has been blocked from accessing the Sonic Runners Revival game server.\n\n" +
 			"If you feel this is in error, please get in touch!\n" +
 			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",
-		"FirstLoginBonusRewardLabel":    "A Start Dash Login Bonus.",
-		"LeagueHighRankingRewardLabel":  "A reward for getting the following position in the Runners' League High Score Ranking: %v.",
-		"LeaguePromotionRewardLabel":    "Runners' League Promotion Reward. Story Mode.",
-		"LeagueTotalRankingRewardLabel": "A reward for getting the following position in the Runners' League Total Score Ranking: %v.",
-		"LoginBonusRewardLabel":         "A Login Bonus.",
+		"FirstBillionPointRunRewardLabel": "A reward for performing your first billion point run.",
+		"FirstLoginBonusRewardLabel":      "A Start Dash Login Bonus.",
+		"LeagueHighRankingRewardLabel":    "A reward for getting the following position in the Runners' League High Score Ranking: %v.",
+		"LeaguePromotionRewardLabel":      "Runners' League Promotion Reward. Story Mode.",
+		"LeagueTotalRankingRewardLabel":   "A reward for getting the following position in the Runners' League Total Score Ranking: %v.",
+		"LoginBonusRewardLabel":           "A Login Bonus.",
 		"NewAccountsDisabledNotice": "Registration of new accounts is disabled at the moment. For more information, please visit our Twitter or Discord.\n" +
 			"Twitter: https://twitter.com/runnersrevival\n" +
 			"Discord: https://discord.gg/T5ytR6T",

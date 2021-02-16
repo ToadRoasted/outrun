@@ -47,6 +47,9 @@ const (
 		characters JSON,
 		chao JSON,
 		suspended_until BIGINT UNSIGNED NOT NULL,
+		suspend_reason INTEGER NOT NULL,
+		last_login_device TEXT NOT NULL,
+		last_login_platform INTEGER NOT NULL,
 		PRIMARY KEY (id)
 	) ENGINE = InnoDB;`
 	SQLPlayerStatesSchema = `
