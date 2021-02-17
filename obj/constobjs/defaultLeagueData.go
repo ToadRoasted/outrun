@@ -202,7 +202,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		9,
 		0,
 		20,
-		20,
+		0,
 		0,
 		50,
 		[]obj.OperatorScore{
