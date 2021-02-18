@@ -906,12 +906,6 @@ func PostGameResults(helper *helper.Helper) {
 				if config.CFile.Debug {
 					//player.MileageMapState.Episode = 11
 				}
-
-				if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
-					player.MileageMapState.Episode = 50
-					player.MileageMapState.Chapter = 1
-					helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
-				}
 			}
 			player.MileageMapState.Point = 0
 			player.MileageMapState.StageMaxScore = 0
@@ -971,6 +965,12 @@ func PostGameResults(helper *helper.Helper) {
 		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
 		helper.DebugOut("Current red rings: %v", player.PlayerState.NumRedRings)
 		player.PlayerState.Items = newItems
+
+		if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
+			player.MileageMapState.Episode = 50
+			player.MileageMapState.Chapter = 1
+			helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
+		}
 	}
 
 	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
