@@ -7,12 +7,12 @@ import (
 
 // TODO: Remove! No longer used
 var DefaultLeagueDataMode1 = obj.NewLeagueData(
-	0,
-	0,
-	40,
-	0,
-	0,
-	0,
+	0, // league id
+	0, // group id
+	40, // number promoted
+	0, // number relegated
+	0, // number in group
+	0, // number in league
 	[]obj.OperatorScore{
 		obj.NewOperatorScore(2, 50, []obj.Item{}),
 		obj.NewOperatorScore(2, 40, []obj.Item{obj.NewItem("900000", 5)}),
@@ -150,7 +150,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueD_M: obj.NewLeagueData(
 		6,
 		0,
-		20,
+		25,
 		0,
 		0,
 		50,
@@ -167,7 +167,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueD: obj.NewLeagueData(
 		7,
 		0,
-		20,
+		25,
 		0,
 		0,
 		50,
@@ -184,7 +184,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueD_P: obj.NewLeagueData(
 		8,
 		0,
-		20,
+		25,
 		0,
 		0,
 		50,
@@ -202,7 +202,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		9,
 		0,
 		20,
-		20,
+		0,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -219,7 +219,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		10,
 		0,
 		20,
-		20,
+		10,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -236,7 +236,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		11,
 		0,
 		20,
-		20,
+		10,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -253,7 +253,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		12,
 		0,
 		20,
-		20,
+		15,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -270,7 +270,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		13,
 		0,
 		20,
-		20,
+		15,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -287,7 +287,7 @@ var LeagueDataDefinitions = map[int64]obj.LeagueData{
 		14,
 		0,
 		20,
-		20,
+		15,
 		0,
 		50,
 		[]obj.OperatorScore{
@@ -687,7 +687,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueA_M: obj.NewLeagueData(
 		15,
 		0,
-		20,
+		15,
 		20,
 		0,
 		50,
@@ -704,7 +704,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueA: obj.NewLeagueData(
 		16,
 		0,
-		20,
+		15,
 		20,
 		0,
 		50,
@@ -721,7 +721,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueA_P: obj.NewLeagueData(
 		17,
 		0,
-		20,
+		15,
 		20,
 		0,
 		50,
@@ -738,7 +738,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueS_M: obj.NewLeagueData(
 		18,
 		0,
-		20,
+		10,
 		20,
 		0,
 		50,
@@ -755,7 +755,7 @@ var QuickLeagueDataDefinitions = map[int64]obj.LeagueData{
 	enums.RankingLeagueS: obj.NewLeagueData(
 		19,
 		0,
-		20,
+		10,
 		20,
 		0,
 		50,
