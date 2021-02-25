@@ -3,11 +3,11 @@ package muxhandlers
 import (
 	"encoding/json"
 
-	"github.com/Mtbcooler/outrun/emess"
-	"github.com/Mtbcooler/outrun/helper"
-	"github.com/Mtbcooler/outrun/requests"
-	"github.com/Mtbcooler/outrun/responses"
-	"github.com/Mtbcooler/outrun/status"
+	"github.com/ToadRoasted/outrun/emess"
+	"github.com/ToadRoasted/outrun/helper"
+	"github.com/ToadRoasted/outrun/requests"
+	"github.com/ToadRoasted/outrun/responses"
+	"github.com/ToadRoasted/outrun/status"
 )
 
 func GetWeeklyLeaderboardOptions(helper *helper.Helper) {
