@@ -142,7 +142,7 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrKingBoomBoo:          1.5, // Event (Halloween)
 	//enums.ChaoIDStrOPapa:                2.0, // Event (Fantasy Zone)
 	//enums.ChaoIDStrOpaOpa:               2.0, // Event (Fantasy Zone)
-	enums.ChaoIDStrRCBlockFace:          10.0,
+	enums.ChaoIDStrRCBlockFace:          1.0,
 	enums.ChaoIDStrChristmasYeti:        0.1, // Event (Christmas)
 	enums.ChaoIDStrChristmasNiGHTS:      1.0, // Event (Christmas NiGHTS)
 	//enums.ChaoIDStrDFekt:                0.0, // DO NOT ENABLE YET - WE HAVE NOT CREATED ASSETS FOR THIS BUDDY YET
