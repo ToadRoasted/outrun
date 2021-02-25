@@ -1,9 +1,9 @@
 package responses
 
 import (
-    "github.com/Mtbcooler/outrun/obj"
-    "github.com/Mtbcooler/outrun/obj/constobjs"
-    "github.com/Mtbcooler/outrun/responses/responseobjs"
+    "github.com/ToadRoasted/outrun/obj"
+    "github.com/ToadRoasted/outrun/obj/constobjs"
+    "github.com/ToadRoasted/outrun/responses/responseobjs"
 )
 
 type ItemStockNumResponse struct {
