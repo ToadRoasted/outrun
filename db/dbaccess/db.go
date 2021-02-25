@@ -6,7 +6,7 @@ import (
 
 	bolt "go.etcd.io/bbolt"
 
-	"github.com/Mtbcooler/outrun/consts"
+	"github.com/ToadRoasted/outrun/consts"
 )
 
 var db *bolt.DB
