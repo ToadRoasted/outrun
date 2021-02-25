@@ -3,8 +3,8 @@ package conversion
 import (
     "time"
 
-    "github.com/Mtbcooler/outrun/config/infoconf"
-    "github.com/Mtbcooler/outrun/obj"
+    "github.com/ToadRoasted/outrun/config/infoconf"
+    "github.com/ToadRoasted/outrun/obj"
     "github.com/jinzhu/now"
 )
 
