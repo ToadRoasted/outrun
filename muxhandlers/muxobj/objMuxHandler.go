@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Mtbcooler/outrun/config"
-	"github.com/Mtbcooler/outrun/helper"
+	"github.com/ToadRoasted/outrun/config"
+	"github.com/ToadRoasted/outrun/helper"
 )
 
 var shuttingDown = false
