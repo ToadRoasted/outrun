@@ -19,24 +19,24 @@ var RandomChaoWheelCharacterPrizes = map[string]float64{
 	//enums.CTStrSonic:           0.7, // Initial character
 	//enums.CTStrTails:           0.7, // Obtained in story mode
 	//enums.CTStrKnuckles:        0.7, // Obtained in story mode
-	enums.CTStrAmy:             11.0,
-	enums.CTStrBig:             10.7,
-	enums.CTStrBlaze:           11.0, // Revival Event (Sonic Rush)
-	enums.CTStrCharmy:          11.0,
-	enums.CTStrCream:           10.7,
-	enums.CTStrEspio:           11.0,
-	enums.CTStrMephiles:        11.1, // Revival Event
-	enums.CTStrOmega:           10.5,
-	enums.CTStrPSISilver:       11.0, // Revival Event
-	enums.CTStrRouge:           10.5,
-	enums.CTStrShadow:          10.5,
-	enums.CTStrSilver:          10.7,
-	enums.CTStrSticks:          10.0, // Revival Event
-	enums.CTStrTikal:          10.1, // Event (Sonic Adventure)
-	enums.CTStrVector:          11.0,
-	enums.CTStrWerehog:         10.1, // Revival Event
+	enums.CTStrAmy:             1.0,
+	enums.CTStrBig:             1.7,
+	enums.CTStrBlaze:           1.0, // Revival Event (Sonic Rush)
+	enums.CTStrCharmy:          1.0,
+	enums.CTStrCream:           1.7,
+	enums.CTStrEspio:           1.0,
+	enums.CTStrMephiles:        1.1, // Revival Event
+	enums.CTStrOmega:           1.5,
+	enums.CTStrPSISilver:       1.0, // Revival Event
+	enums.CTStrRouge:           1.5,
+	enums.CTStrShadow:          1.5,
+	enums.CTStrSilver:          1.7,
+	enums.CTStrSticks:          1.0, // Revival Event
+	enums.CTStrTikal:          1.1, // Event (Sonic Adventure)
+	enums.CTStrVector:          1.0,
+	enums.CTStrWerehog:         1.1, // Revival Event
 	enums.CTStrClassicSonic:    0.01, // Event (Birthday)
-	enums.CTStrMetalSonic:      10.0, // Revival Event
+	enums.CTStrMetalSonic:      1.0, // Revival Event
 	
 	// The below characters shouldn't be activated until event characters are fixed!
 	//enums.CTStrAmitieAmy:       10.7, // Event (Puyo Puyo Quest)
