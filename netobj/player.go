@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Mtbcooler/outrun/config/eventconf"
-	"github.com/Mtbcooler/outrun/enums"
-	"github.com/Mtbcooler/outrun/obj"
-	"github.com/Mtbcooler/outrun/obj/constobjs"
+	"github.com/ToadRoasted/outrun/config/eventconf"
+	"github.com/ToadRoasted/outrun/enums"
+	"github.com/ToadRoasted/outrun/obj"
+	"github.com/ToadRoasted/outrun/obj/constobjs"
 )
 
 type Player struct {
