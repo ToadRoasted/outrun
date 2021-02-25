@@ -3,8 +3,8 @@ package rpcobj
 import (
     "encoding/json"
 
-    "github.com/Mtbcooler/outrun/config/eventconf"
-    "github.com/Mtbcooler/outrun/db"
+    "github.com/ToadRoasted/outrun/config/eventconf"
+    "github.com/ToadRoasted/outrun/db"
 )
 
 func (t *Toolbox) SetRings(args ChangeValueArgs, reply *ToolboxReply) error {
