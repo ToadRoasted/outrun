@@ -59,14 +59,14 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	enums.ChaoIDStrNormalChao:           3.0,
 	enums.ChaoIDStrOmochao:              3.0,
 	//enums.ChaoIDStrRCMonkey:             0.0, // Event (Animal Rescue event)
-	//enums.ChaoIDStrRCSpring:             2.0,
-	//enums.ChaoIDStrRCElectromagnet:      2.0,
-	//enums.ChaoIDStrBabyCyanWisp:         3.0,
-	//enums.ChaoIDStrBabyIndigoWisp:       3.0,
-	//enums.ChaoIDStrBabyYellowWisp:       3.0,
-	//enums.ChaoIDStrRCPinwheel:           2.0,
-	//enums.ChaoIDStrRCPiggyBank:          1.0,
-	//enums.ChaoIDStrRCBalloon:            2.0,
+	enums.ChaoIDStrRCSpring:             2.0,
+	enums.ChaoIDStrRCElectromagnet:      2.0,
+	enums.ChaoIDStrBabyCyanWisp:         3.0,
+	enums.ChaoIDStrBabyIndigoWisp:       3.0,
+	enums.ChaoIDStrBabyYellowWisp:       3.0,
+	enums.ChaoIDStrRCPinwheel:           2.0,
+	enums.ChaoIDStrRCPiggyBank:          1.0,
+	enums.ChaoIDStrRCBalloon:            2.0,
 	//enums.ChaoIDStrEasterChao:           1.0, // Event (Easter)
 	enums.ChaoIDStrPurplePapurisu:       1.5, // Event (Puyo Puyo Quest)
 	enums.ChaoIDStrMagLv1:               1.0, // Event (Phantasy Star Online 2)
@@ -119,8 +119,8 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	enums.ChaoIDStrShahra:               0.0, // Runners' League
 	enums.ChaoIDStrCaliburn:             1.2,
 	enums.ChaoIDStrKingArthursGhost:     1.0,
-	//enums.ChaoIDStrRCTornado:            1.0,
-	//enums.ChaoIDStrRCBattleCruiser:      1.0,
+	enums.ChaoIDStrRCTornado:            1.0,
+	enums.ChaoIDStrRCBattleCruiser:      1.0,
 	//enums.ChaoIDStrMerlina:              1.5, // Event (Easter)
 	//enums.ChaoIDStrErazorDjinn:          0.0, // Event (Desert Ruins)
 	//enums.ChaoIDStrRCMoonMech:           0.0, // Event (Zazz Raid Boss?)
@@ -128,11 +128,11 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrKuna:                 1.0, // Event (Phantasy Star Online 2)
 	enums.ChaoIDStrChaos:                2.0, // Event (Sonic Adventure)
 	enums.ChaoIDStrDeathEgg:             0.01, // Event (Birthday)
-	//enums.ChaoIDStrRedCrystalMonsterS:   1.0,
-	//enums.ChaoIDStrRedCrystalMonsterL:   1.0,
-	//enums.ChaoIDStrGoldenGoose:          1.0,
+	enums.ChaoIDStrRedCrystalMonsterS:   1.0,
+	enums.ChaoIDStrRedCrystalMonsterL:   1.0,
+	enums.ChaoIDStrGoldenGoose:          1.0,
 	//enums.ChaoIDStrMotherWisp:           1.2, // Event (Tropical Coast)
-	//enums.ChaoIDStrRCPirateSpaceship:    1.0,
+	enums.ChaoIDStrRCPirateSpaceship:    1.0,
 	enums.ChaoIDStrGoldenAngel:          1.0,
 	//enums.ChaoIDStrNiGHTS:               0.0, // Event (NiGHTS)
 	//enums.ChaoIDStrReala:                0.0, // Event (NiGHTS)
