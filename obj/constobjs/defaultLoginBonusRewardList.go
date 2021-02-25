@@ -1,8 +1,8 @@
 package constobjs
 
 import (
-	"github.com/Mtbcooler/outrun/enums"
-	"github.com/Mtbcooler/outrun/obj"
+	"github.com/ToadRoasted/outrun/enums"
+	"github.com/ToadRoasted/outrun/obj"
 )
 
 var DefaultLoginBonusRewardList = func() []obj.LoginBonusReward {
