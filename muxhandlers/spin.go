@@ -7,7 +7,7 @@ import (
 
 	"github.com/ToadRoasted/outrun/analytics"
 	"github.com/ToadRoasted/outrun/analytics/factors"
-	"github.com/ToadRoastedr/outrun/config/campaignconf"
+	"github.com/ToadRoasted/outrun/config/campaignconf"
 	"github.com/ToadRoasted/outrun/consts"
 	"github.com/ToadRoasted/outrun/db"
 	"github.com/ToadRoasted/outrun/emess"
