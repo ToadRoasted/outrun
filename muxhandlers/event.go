@@ -3,15 +3,15 @@ package muxhandlers
 import (
 	"encoding/json"
 
-	"github.com/Mtbcooler/outrun/config/eventconf"
-	"github.com/Mtbcooler/outrun/emess"
-	"github.com/Mtbcooler/outrun/enums"
-	"github.com/Mtbcooler/outrun/helper"
-	"github.com/Mtbcooler/outrun/logic/conversion"
-	"github.com/Mtbcooler/outrun/obj"
-	"github.com/Mtbcooler/outrun/requests"
-	"github.com/Mtbcooler/outrun/responses"
-	"github.com/Mtbcooler/outrun/status"
+	"github.com/ToadRoasted/outrun/config/eventconf"
+	"github.com/ToadRoasted/outrun/emess"
+	"github.com/ToadRoasted/outrun/enums"
+	"github.com/ToadRoasted/outrun/helper"
+	"github.com/ToadRoasted/outrun/logic/conversion"
+	"github.com/ToadRoasted/outrun/obj"
+	"github.com/ToadRoasted/outrun/requests"
+	"github.com/ToadRoasted/outrun/responses"
+	"github.com/ToadRoasted/outrun/status"
 )
 
 func IsEventTypeValidForGameVersion(gameVersion string, eventType int64) bool {
