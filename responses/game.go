@@ -5,12 +5,12 @@ import (
 
 	"github.com/jinzhu/now"
 
-	"github.com/Mtbcooler/outrun/consts"
-	"github.com/Mtbcooler/outrun/logic"
-	"github.com/Mtbcooler/outrun/netobj"
-	"github.com/Mtbcooler/outrun/obj"
-	"github.com/Mtbcooler/outrun/obj/constobjs"
-	"github.com/Mtbcooler/outrun/responses/responseobjs"
+	"github.com/ToadRoasted/outrun/consts"
+	"github.com/ToadRoasted/outrun/logic"
+	"github.com/ToadRoasted/outrun/netobj"
+	"github.com/ToadRoasted/outrun/obj"
+	"github.com/ToadRoasted/outrun/obj/constobjs"
+	"github.com/ToadRoasted/outrun/responses/responseobjs"
 )
 
 type DailyChallengeDataResponse struct {
