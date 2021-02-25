@@ -1,9 +1,9 @@
 package rpcobj
 
 import (
-    "github.com/Mtbcooler/outrun/config"
-    "github.com/Mtbcooler/outrun/config/eventconf"
-    "github.com/Mtbcooler/outrun/config/infoconf"
+    "github.com/ToadRoasted/outrun/config"
+    "github.com/ToadRoasted/outrun/config/eventconf"
+    "github.com/ToadRoasted/outrun/config/infoconf"
 )
 
 type Config struct {
