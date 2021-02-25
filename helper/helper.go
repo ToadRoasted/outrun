@@ -10,16 +10,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Mtbcooler/outrun/config"
-	"github.com/Mtbcooler/outrun/cryption"
-	"github.com/Mtbcooler/outrun/db"
-	"github.com/Mtbcooler/outrun/emess"
-	"github.com/Mtbcooler/outrun/netobj"
-	"github.com/Mtbcooler/outrun/netobj/constnetobjs"
-	"github.com/Mtbcooler/outrun/requests"
-	"github.com/Mtbcooler/outrun/responses"
-	"github.com/Mtbcooler/outrun/responses/responseobjs"
-	"github.com/Mtbcooler/outrun/status"
+	"github.com/Mtbcooler/ToadRoasted/config"
+	"github.com/Mtbcooler/ToadRoasted/cryption"
+	"github.com/Mtbcooler/ToadRoasted/db"
+	"github.com/Mtbcooler/ToadRoasted/emess"
+	"github.com/Mtbcooler/ToadRoasted/netobj"
+	"github.com/Mtbcooler/ToadRoasted/netobj/constnetobjs"
+	"github.com/Mtbcooler/ToadRoasted/requests"
+	"github.com/Mtbcooler/ToadRoasted/responses"
+	"github.com/Mtbcooler/ToadRoasted/responses/responseobjs"
+	"github.com/Mtbcooler/ToadRoasted/status"
 )
 
 const (
