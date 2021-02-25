@@ -17,7 +17,7 @@ import (
 	"github.com/ToadRoasted/outrun/logic/conversion"
 	"github.com/ToadRoasted/outrun/netobj"
 	"github.com/ToadRoasted/outrun/obj"
-	"github.com/ToadRoastedr/outrun/obj/constobjs"
+	"github.com/ToadRoasted/outrun/obj/constobjs"
 	"github.com/ToadRoasted/outrun/requests"
 	"github.com/ToadRoasted/outrun/responses"
 	"github.com/ToadRoasted/outrun/status"
