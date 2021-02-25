@@ -3,7 +3,7 @@ package consts
 import (
 	"math/rand"
 
-	"github.com/Mtbcooler/outrun/enums"
+	"github.com/ToadRoasted/outrun/enums"
 )
 
 type AmountRange struct {
