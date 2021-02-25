@@ -3,7 +3,7 @@ package bgtasks
 import (
 	"time"
 
-	"github.com/Mtbcooler/outrun/db"
+	"github.com/ToadRoasted/outrun/db"
 )
 
 func PurgeSessionIDs() {
