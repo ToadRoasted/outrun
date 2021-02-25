@@ -3,11 +3,11 @@ package responses
 import (
 	"strconv"
 
-	"github.com/Mtbcooler/outrun/consts"
-	"github.com/Mtbcooler/outrun/enums"
-	"github.com/Mtbcooler/outrun/netobj"
-	"github.com/Mtbcooler/outrun/obj"
-	"github.com/Mtbcooler/outrun/responses/responseobjs"
+	"github.com/ToadRoasted/outrun/consts"
+	"github.com/ToadRoasted/outrun/enums"
+	"github.com/ToadRoasted/outrun/netobj"
+	"github.com/ToadRoasted/outrun/obj"
+	"github.com/ToadRoasted/outrun/responses/responseobjs"
 )
 
 type ChaoWheelOptionsResponse struct {
