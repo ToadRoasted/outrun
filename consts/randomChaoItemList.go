@@ -108,7 +108,7 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	enums.ChaoIDStrYeti:                 2.0, // Event (Christmas)
 	enums.ChaoIDStrSnowChao:             2.0, // Event (Christmas)
 	//enums.ChaoIDStrIdeya:                0.0, // Event (Christmas NiGHTS)
-	enums.ChaoIDStrChristmasNightopian:  60.0, // Event (Christmas NiGHTS)
+	enums.ChaoIDStrChristmasNightopian:  6.0, // Event (Christmas NiGHTS)
 	//enums.ChaoIDStrOrbot:                1.0,
 	//enums.ChaoIDStrCubot:                1.0,
 	//enums.ChaoIDStrLightChaos:           1.5,
@@ -142,8 +142,8 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrOPapa:                2.0, // Event (Fantasy Zone)
 	//enums.ChaoIDStrOpaOpa:               2.0, // Event (Fantasy Zone)
 	enums.ChaoIDStrRCBlockFace:          10.0,
-	enums.ChaoIDStrChristmasYeti:        60.0, // Event (Christmas)
-	enums.ChaoIDStrChristmasNiGHTS:      50.0, // Event (Christmas NiGHTS)
+	enums.ChaoIDStrChristmasYeti:        5.0, // Event (Christmas)
+	enums.ChaoIDStrChristmasNiGHTS:      2.0, // Event (Christmas NiGHTS)
 	//enums.ChaoIDStrDFekt:                0.0, // DO NOT ENABLE YET - WE HAVE NOT CREATED ASSETS FOR THIS BUDDY YET
 	//enums.ChaoIDStrDarkChaoWalker:       0.0, // Daily Battle?
 }
