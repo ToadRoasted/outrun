@@ -13,41 +13,42 @@ type PrizeInfo struct {
 // is being chosen by the server.
 
 var RandomChaoWheelCharacterPrizes = map[string]float64{
-	// characterID: load
-	// Hopefully this should sum up to 100 just for
-	// simplicity, but it shouldn't be a requirement.
-	//enums.CTStrSonic:           0.7, // Initial character
-	//enums.CTStrTails:           0.7, // Obtained in story mode
-	//enums.CTStrKnuckles:        0.7, // Obtained in story mode
-	enums.CTStrAmy:             1.0,
-	enums.CTStrBig:             1.7,
-	enums.CTStrBlaze:           1.0, // Revival Event (Sonic Rush)
-	enums.CTStrCharmy:          1.0,
-	enums.CTStrCream:           1.7,
-	enums.CTStrEspio:           1.0,
-	enums.CTStrMephiles:        1.1, // Revival Event
-	enums.CTStrOmega:           1.5,
-	enums.CTStrPSISilver:       1.0, // Revival Event
-	enums.CTStrRouge:           1.5,
-	enums.CTStrShadow:          1.5,
-	enums.CTStrSilver:          1.7,
-	enums.CTStrSticks:          1.0, // Revival Event
-	enums.CTStrTikal:          1.1, // Event (Sonic Adventure)
-	enums.CTStrVector:          1.0,
-	enums.CTStrWerehog:         1.1, // Revival Event
-	enums.CTStrClassicSonic:    0.01, // Event (Birthday)
-	enums.CTStrMetalSonic:      1.0, // Revival Event
-	
-	// The below characters shouldn't be activated until event characters are fixed!
-	//enums.CTStrAmitieAmy:       10.7, // Event (Puyo Puyo Quest)
-	//enums.CTStrGothicAmy:       5.0, // Revival Event
-	//enums.CTStrHalloweenShadow: 0.1, // Event (Halloween)
-        //enums.CTStrHalloweenRouge:  0.1, // Event (Halloween)
-	//enums.CTStrHalloweenOmega:  0.1, // Event (Halloween)
-	enums.CTStrXMasSonic:       1.0, // Event (Christmas)
-	enums.CTStrXMasTails:       1.69, // Event (Christmas)
-	enums.CTStrXMasKnuckles:    1.69, // Event (Christmas)
+    // characterID: load
+    // Hopefully this should sum up to 100 just for
+    // simplicity, but it shouldn't be a requirement.
+    enums.CTStrSonic:           0.7, // Initial character
+    enums.CTStrTails:           0.7, // Obtained in story mode
+    enums.CTStrKnuckles:        0.7, // Obtained in story mode
+    enums.CTStrAmy:             1.0,
+    enums.CTStrBig:             0.7,
+    //enums.CTStrBlaze:           1.0, // Revival Event (Sonic Rush)
+    enums.CTStrCharmy:          1.0,
+    enums.CTStrCream:           0.7,
+    enums.CTStrEspio:           1.0,
+    //enums.CTStrMephiles:        0.0, // Revival Event
+    enums.CTStrOmega:           0.5,
+    //enums.CTStrPSISilver:       0.0, // Revival Event
+    enums.CTStrRouge:           0.5,
+    enums.CTStrShadow:          0.5,
+    enums.CTStrSilver:          0.7,
+    //enums.CTStrSticks:          0.0, // Revival Event
+    enums.CTStrTikal:           1.5, // Event (Sonic Adventure)
+    enums.CTStrVector:          1.0,
+    enums.CTStrWerehog:         1.5, // Revival Event
+    //enums.CTStrClassicSonic:    0.7, // Event (Birthday)
+    //enums.CTStrMetalSonic:      0.0, // Revival Event
+
+    // The below characters shouldn't be activated until event characters are fixed!
+    //enums.CTStrAmitieAmy:       1.0, // Event (Puyo Puyo Quest)
+    //enums.CTStrGothicAmy:       0.0, // Revival Event
+    //enums.CTStrHalloweenShadow: 1.0, // Event (Halloween)
+    //enums.CTStrHalloweenRouge:  1.0, // Event (Halloween)
+    //enums.CTStrHalloweenOmega:  1.0, // Event (Halloween)
+    enums.CTStrXMasSonic:       1.5, // Event (Christmas)
+    enums.CTStrXMasTails:       1.5, // Event (Christmas)
+    enums.CTStrXMasKnuckles:    1.5, // Event (Christmas)
 }
+
 
 var RandomChaoWheelChaoPrizes = map[string]float64{
 	// TODO: Balance these
