@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"github.com/ToadRoastedToadRoasted/outrun/config/campaignconf"
+	"github.com/ToadRoasted/outrun/config/campaignconf"
 	"github.com/ToadRoasted/outrun/consts"
 	"github.com/ToadRoasted/outrun/enums"
 	"github.com/ToadRoasted/outrun/logic/conversion"
