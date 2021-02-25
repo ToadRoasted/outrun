@@ -84,8 +84,8 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrSuketoudara:          1.5, // Event (Puyo Puyo Quest)
 	//enums.ChaoIDStrRappy:                1.0, // Event (Phantasy Star Online 2)
 	//enums.ChaoIDStrBlowfishTransporter:  2.0, // Event (Tropical Coast)
-	//enums.ChaoIDStrGenesis:              1.0, // Event (Birthday)
-	//enums.ChaoIDStrCartridge:            1.0, // Event (Birthday)
+	enums.ChaoIDStrGenesis:              1.0, // Event (Birthday)
+	enums.ChaoIDStrCartridge:            1.0, // Event (Birthday)
 	enums.ChaoIDStrRCFighter:            1.0,
 	enums.ChaoIDStrRCHovercraft:         1.0,
 	enums.ChaoIDStrRCHelicopter:         1.0,
@@ -126,7 +126,7 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrCarbuncle:            1.5, // Event (Puyo Puyo Quest)
 	//enums.ChaoIDStrKuna:                 1.0, // Event (Phantasy Star Online 2)
 	enums.ChaoIDStrChaos:                2.0, // Event (Sonic Adventure)
-	//enums.ChaoIDStrDeathEgg:             0.5, // Event (Birthday)
+	enums.ChaoIDStrDeathEgg:             0.00001, // Event (Birthday)
 	enums.ChaoIDStrRedCrystalMonsterS:   1.0,
 	enums.ChaoIDStrRedCrystalMonsterL:   1.0,
 	enums.ChaoIDStrGoldenGoose:          1.0,
