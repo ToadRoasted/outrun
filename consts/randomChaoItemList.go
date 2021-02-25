@@ -67,34 +67,34 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	//enums.ChaoIDStrRCPiggyBank:          1.0,
 	//enums.ChaoIDStrRCBalloon:            2.0,
 	//enums.ChaoIDStrEasterChao:           1.0, // Event (Easter)
-	//enums.ChaoIDStrPurplePapurisu:       1.5, // Event (Puyo Puyo Quest)
-	//enums.ChaoIDStrMagLv1:               1.0, // Event (Phantasy Star Online 2)
-	//enums.ChaoIDStrEggChao:              1.0,
-	//enums.ChaoIDStrPumpkinChao:          1.0,
-	//enums.ChaoIDStrSkullChao:            1.0,
-	//enums.ChaoIDStrYacker:               1.0,
-	//enums.ChaoIDStrRCGoldenPiggyBank:    1.0,
-	//enums.ChaoIDStrWizardChao:           1.0,
-	//enums.ChaoIDStrRCTurtle:             1.0,
-	//enums.ChaoIDStrRCUFO:                1.0,
-	//enums.ChaoIDStrRCBomber:             1.0,
-	//enums.ChaoIDStrEasterBunny:          1.0, // Event (Easter)
-	//enums.ChaoIDStrMagicLamp:            0.0, // Event (Desert Ruins)
-	//enums.ChaoIDStrStarShapedMissile:    0.0, // Event (Zazz Raid Boss)
-	//enums.ChaoIDStrSuketoudara:          1.5, // Event (Puyo Puyo Quest)
-	//enums.ChaoIDStrRappy:                1.0, // Event (Phantasy Star Online 2)
-	//enums.ChaoIDStrBlowfishTransporter:  2.0, // Event (Tropical Coast)
+	enums.ChaoIDStrPurplePapurisu:       1.5, // Event (Puyo Puyo Quest)
+	enums.ChaoIDStrMagLv1:               1.0, // Event (Phantasy Star Online 2)
+	enums.ChaoIDStrEggChao:              1.0,
+	enums.ChaoIDStrPumpkinChao:          1.0,
+	enums.ChaoIDStrSkullChao:            1.0,
+	enums.ChaoIDStrYacker:               1.0,
+	enums.ChaoIDStrRCGoldenPiggyBank:    1.0,
+	enums.ChaoIDStrWizardChao:           1.0,
+	enums.ChaoIDStrRCTurtle:             1.0,
+	enums.ChaoIDStrRCUFO:                1.0,
+	enums.ChaoIDStrRCBomber:             1.0,
+	enums.ChaoIDStrEasterBunny:          1.0, // Event (Easter)
+	enums.ChaoIDStrMagicLamp:            0.0, // Event (Desert Ruins)
+	enums.ChaoIDStrStarShapedMissile:    0.0, // Event (Zazz Raid Boss)
+	enums.ChaoIDStrSuketoudara:          1.5, // Event (Puyo Puyo Quest)
+	enums.ChaoIDStrRappy:                1.0, // Event (Phantasy Star Online 2)
+	enums.ChaoIDStrBlowfishTransporter:  2.0, // Event (Tropical Coast)
 	enums.ChaoIDStrGenesis:              0.01, // Event (Birthday)
 	enums.ChaoIDStrCartridge:            0.01, // Event (Birthday)
-	//enums.ChaoIDStrRCFighter:            1.0,
-	//enums.ChaoIDStrRCHovercraft:         1.0,
-	//enums.ChaoIDStrRCHelicopter:         1.0,
-	//enums.ChaoIDStrGreenCrystalMonsterS: 1.0,
-	//enums.ChaoIDStrGreenCrystalMonsterL: 1.0,
-	//enums.ChaoIDStrRCAirship:            1.0,
+	enums.ChaoIDStrRCFighter:            1.0,
+	enums.ChaoIDStrRCHovercraft:         1.0,
+	enums.ChaoIDStrRCHelicopter:         1.0,
+	enums.ChaoIDStrGreenCrystalMonsterS: 1.0,
+	enums.ChaoIDStrGreenCrystalMonsterL: 1.0,
+	enums.ChaoIDStrRCAirship:            1.0,
 	//enums.ChaoIDStrDesertChao:           0.0, // Event (Desert Ruins)
 	//enums.ChaoIDStrRCSatellite:          0.0, // Event (Zazz Raid Boss)
-	//enums.ChaoIDStrMarineChao:           2.0, // Event (Tropical Coast)
+	enums.ChaoIDStrMarineChao:           2.0, // Event (Tropical Coast)
 	//enums.ChaoIDStrNightopian:           0.0, // Event (NiGHTS)
 	enums.ChaoIDStrOrca:                 2.0, // Event (Sonic Adventure)
 	enums.ChaoIDStrSonicOmochao:         0.0, // Event (Team Sonic Omochao)
