@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Mtbcooler/outrun/config/gameconf"
-	"github.com/Mtbcooler/outrun/config/infoconf"
-	"github.com/Mtbcooler/outrun/logic/conversion"
-	"github.com/Mtbcooler/outrun/netobj"
-	"github.com/Mtbcooler/outrun/obj"
-	"github.com/Mtbcooler/outrun/obj/constobjs"
-	"github.com/Mtbcooler/outrun/responses/responseobjs"
+	"github.com/ToadRoasted/outrun/config/gameconf"
+	"github.com/ToadRoasted/outrun/config/infoconf"
+	"github.com/ToadRoasted/outrun/logic/conversion"
+	"github.com/ToadRoasted/outrun/netobj"
+	"github.com/ToadRoasted/outrun/obj"
+	"github.com/ToadRoasted/outrun/obj/constobjs"
+	"github.com/ToadRoasted/outrun/responses/responseobjs"
 )
 
 type LoginCheckKeyResponse struct {
