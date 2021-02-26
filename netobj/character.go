@@ -128,6 +128,7 @@ func UnlockedCharacterState() []Character { // every character
                 DefaultCharacter(constobjs.CharacterXMasSonic),
 		DefaultCharacter(constobjs.CharacterXMasTails),
 		DefaultCharacter(constobjs.CharacterXMasKnuckles),
+		DefaultCharacter(constobjs.CharacterGothicAmy),
 	}
 }
 
@@ -164,5 +165,6 @@ func DefaultCharacterState() []Character {
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasSonic),
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasTails),
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasKnuckles),
+		DefaultRouletteOnlyLockedCharacter(constobjs.constobjs.CharacterGothicAmy),
 	}
 }
