@@ -165,6 +165,6 @@ func DefaultCharacterState() []Character {
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasSonic),
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasTails),
 		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterXMasKnuckles),
-		DefaultRouletteOnlyLockedCharacter(constobjs.constobjs.CharacterGothicAmy),
+		DefaultRouletteOnlyLockedCharacter(constobjs.CharacterGothicAmy),
 	}
 }
